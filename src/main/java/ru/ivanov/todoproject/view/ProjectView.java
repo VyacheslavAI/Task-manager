@@ -18,7 +18,7 @@ public class ProjectView {
         this.controller = controller;
     }
 
-    public void showAndSelectProjects(List<Project> projects) {
+    public void showAndSelectProjects(final List<Project> projects) {
         ConsoleHelper.printDelimiter();
 
         if (projects.isEmpty()) {
@@ -28,11 +28,11 @@ public class ProjectView {
 
         ConsoleHelper.printMessage("Enter project number:");
         for (int i = 0; i < projects.size(); i++) {
-            Project project = projects.get(i);
+            final Project project = projects.get(i);
             ConsoleHelper.printMessage(String.format("\t %d: %s %s", i,
                     project.getName(), project.getCreated().toString()));
         }
-        int projectNumber = ConsoleHelper.readInt(0, projects.size() - 1);
+        final int projectNumber = ConsoleHelper.readInt(0, projects.size() - 1);
         controller.goToEditProjectForm(projects.get(projectNumber));
     }
 }

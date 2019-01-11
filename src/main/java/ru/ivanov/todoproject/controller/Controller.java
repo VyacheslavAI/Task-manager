@@ -1,12 +1,11 @@
 package ru.ivanov.todoproject.controller;
 
-import ru.ivanov.todoproject.api.IProjectDAO;
-import ru.ivanov.todoproject.api.ITaskDAO;
-import ru.ivanov.todoproject.dao.ProjectDAO;
-import ru.ivanov.todoproject.dao.TaskDAO;
+import ru.ivanov.todoproject.dao.ProjectRepository;
+import ru.ivanov.todoproject.dao.TaskRepository;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.util.ConsoleHelper;
+import ru.ivanov.todoproject.util.SerializationUtil;
 import ru.ivanov.todoproject.view.*;
 
 import java.io.IOException;
@@ -16,9 +15,9 @@ import java.util.List;
 
 public class Controller {
 
-    private IProjectDAO projectDAO = new ProjectDAO();
+    private ProjectRepository projectRepo = new ProjectRepository();
 
-    private ITaskDAO taskDAO = new TaskDAO();
+    private TaskRepository taskRepo = new TaskRepository();
 
     private MainView mainView = new MainView();
 
@@ -39,38 +38,94 @@ public class Controller {
         mainView.setController(this);
     }
 
+    public ProjectRepository getProjectRepo() {
+        return projectRepo;
+    }
+
+    public void setProjectRepo(ProjectRepository projectRepo) {
+        this.projectRepo = projectRepo;
+    }
+
+    public TaskRepository getTaskRepo() {
+        return taskRepo;
+    }
+
+    public void setTaskRepo(TaskRepository taskRepo) {
+        this.taskRepo = taskRepo;
+    }
+
+    public MainView getMainView() {
+        return mainView;
+    }
+
+    public void setMainView(MainView mainView) {
+        this.mainView = mainView;
+    }
+
+    public ProjectView getProjectView() {
+        return projectView;
+    }
+
+    public void setProjectView(ProjectView projectView) {
+        this.projectView = projectView;
+    }
+
+    public ProjectEditView getProjectEditView() {
+        return projectEditView;
+    }
+
+    public void setProjectEditView(ProjectEditView projectEditView) {
+        this.projectEditView = projectEditView;
+    }
+
+    public TaskView getTaskView() {
+        return taskView;
+    }
+
+    public void setTaskView(TaskView taskView) {
+        this.taskView = taskView;
+    }
+
+    public TaskEditView getTaskEditView() {
+        return taskEditView;
+    }
+
+    public void setTaskEditView(TaskEditView taskEditView) {
+        this.taskEditView = taskEditView;
+    }
+
     public List<Project> loadProjectsByName(String name) {
-        return projectDAO.getProjectsByName(name);
+        return projectRepo.getProjectsByName(name);
     }
 
     public Project changeProjectData(String id, String name, Date created) {
         Project project = new Project(id, name, created);
-        return projectDAO.createOrUpdateProject(project);
+        return projectRepo.createOrUpdateProject(project);
     }
 
     public List<Project> loadAllProjects() {
-        return projectDAO.getAllProjects();
+        return projectRepo.getAllProjects();
     }
 
     public Project deleteProject(Project project) {
-        return projectDAO.deleteProject(project);
+        return projectRepo.deleteProject(project);
     }
 
     public List<Task> loadTaskByName(String name) {
-        return taskDAO.getTasksByName(name);
+        return taskRepo.getTasksByName(name);
     }
 
     public Task changeTaskData(String id, String projectId, String name, Date created) {
         Task task = new Task(id, projectId, name, created);
-        return taskDAO.createOrUpdateTask(task);
+        return taskRepo.createOrUpdateTask(task);
     }
 
     public List<Task> loadAllTasks() {
-        return taskDAO.getAllTasks();
+        return taskRepo.getAllTasks();
     }
 
     public Task deleteTask(Task task) {
-        return taskDAO.deleteTask(task);
+        return taskRepo.deleteTask(task);
     }
 
     public void goToMainMenu() {
@@ -93,9 +148,9 @@ public class Controller {
         taskEditView.editTaskForm(task);
     }
 
-    public List<Task> loadTasksByProject(Project project) {
-        List<Task> tasks = taskDAO.getAllTasks();
-        for (Task task : tasks) {
+    public List<Task> loadTasksByProject(final Project project) {
+        final List<Task> tasks = taskRepo.getAllTasks();
+        for (final Task task : tasks) {
             if (project.getId().equals(task.getProjectId())) {
                 tasks.add(task);
             }
@@ -103,7 +158,7 @@ public class Controller {
         return tasks;
     }
 
-    public void showTasksForProject(Project project) {
+    public void showTasksForProject(final Project project) {
         taskView.showAndSelectTask(loadTasksByProject(project));
     }
 
@@ -111,16 +166,16 @@ public class Controller {
         projectEditView.addProjectForm();
     }
 
-    public void addTaskForProject(Project project) {
+    public void addTaskForProject(final Project project) {
         taskEditView.addTaskForm(project);
     }
 
     public void saveState() {
         try {
-            List<List> data = new ArrayList<>();
+            final List<List> data = new ArrayList<>();
             data.add(loadAllProjects());
             data.add(loadAllTasks());
-            SerializationUtils.serialize(new SerializationUtils.Domen(data));
+            SerializationUtil.serialize(new SerializationUtil.Domain(data));
         } catch (IOException e) {
             ConsoleHelper.printMessage("An error occurred during serialization");
         }
@@ -128,14 +183,13 @@ public class Controller {
 
     public void loadState() {
         try {
-            taskDAO.deleteAllTasks();
-            projectDAO.deleteAllProjects();
-            List<List> data = null;
-            data = SerializationUtils.deserialize();
-            List<Project> projects = (List<Project>) data.get(0);
-            List<Task> tasks = (List<Task>) data.get(1);
-            projectDAO.addAllProjects(projects);
-            taskDAO.addAllTasks(tasks);
+            taskRepo.deleteAllTasks();
+            projectRepo.deleteAllProjects();
+            final List<List> data = SerializationUtil.deserialize();
+            final List<Project> projects = (List<Project>) data.get(0);
+            final List<Task> tasks = (List<Task>) data.get(1);
+            projectRepo.addAllProjects(projects);
+            taskRepo.addAllTasks(tasks);
         } catch (Exception e) {
             ConsoleHelper.printMessage("An error occurred during deserialization");
         }

@@ -20,7 +20,7 @@ public class ProjectEditView {
         this.controller = controller;
     }
 
-    public void editProjectForm(Project project) {
+    public void editProjectForm(final Project project) {
         ConsoleHelper.printDelimiter();
         ConsoleHelper.printMessage("Id: " + project.getId());
         ConsoleHelper.printMessage("Name: " + project.getName());
@@ -32,7 +32,7 @@ public class ProjectEditView {
         ConsoleHelper.printMessage("4: Delete project");
         ConsoleHelper.printMessage("5: Return to main menu");
 
-        int sectionNumber = ConsoleHelper.readInt(1, 5);
+        final int sectionNumber = ConsoleHelper.readInt(1, 5);
 
         switch (sectionNumber) {
             case 1:
@@ -49,10 +49,11 @@ public class ProjectEditView {
                 break;
             case 5:
                 controller.goToMainMenu();
+                break;
         }
     }
 
-    public void editProjectData(Project project) {
+    public void editProjectData(final Project project) {
         int sectionNumber = 0;
 
         String projectName = project.getName();
@@ -87,16 +88,16 @@ public class ProjectEditView {
         controller.goToEditProjectForm(project);
     }
 
-    public void deleteProjectForm(Project project) {
+    public void deleteProjectForm(final Project project) {
         controller.deleteProject(project);
         ConsoleHelper.printMessage("Project has been deleted");
         controller.goToMainMenu();
     }
 
-    public void addProjectForm()  {
+    public void addProjectForm() {
         ConsoleHelper.printDelimiter();
         ConsoleHelper.printMessage("Enter project name:");
-        String name = ConsoleHelper.readString();
+        final String name = ConsoleHelper.readString();
         controller.changeProjectData("0", name, new Date());
         ConsoleHelper.printMessage("Project has been added");
         controller.goToMainMenu();

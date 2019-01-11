@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-class AllId {
+class IdRepository {
 
-    static List<String> listId = new ArrayList<>();
+    static final List<String> listId = new ArrayList<>();
 
     static String generateId() {
         String id = UUID.randomUUID().toString();

@@ -5,13 +5,13 @@ import ru.ivanov.todoproject.entity.Project;
 import java.util.ArrayList;
 import java.util.List;
 
-class AllProjects {
+public class ProjectRepository {
 
-    private List<Project> projects = new ArrayList<>();
+    private final List<Project> projects = new ArrayList<>();
 
-    public List<Project> withName(String name) {
-        List<Project> result = new ArrayList<>();
-        for (Project project : projects) {
+    public List<Project> getProjectsByName(final String name) {
+        final List<Project> result = new ArrayList<>();
+        for (final Project project : projects) {
             if (project.getName().equals(name)) {
                 result.add(project);
             }
@@ -19,24 +19,24 @@ class AllProjects {
         return result;
     }
 
-    public Project createOrUpdateProject(Project project) {
+    public Project createOrUpdateProject(final Project project) {
         if (project.getId().equals("0"))
             return createNewProject(project);
         else
             return updateProject(project);
     }
 
-    private Project createNewProject(Project project) {
-        Project persistentProject = new Project();
-        persistentProject.setId(AllId.generateId());
+    private Project createNewProject(final Project project) {
+        final Project persistentProject = new Project();
+        persistentProject.setId(IdRepository.generateId());
         persistentProject.setName(project.getName());
         persistentProject.setCreated(project.getCreated());
         projects.add(persistentProject);
         return persistentProject;
     }
 
-    private Project updateProject(Project project) {
-        for (Project persistentProject : projects) {
+    private Project updateProject(final Project project) {
+        for (final Project persistentProject : projects) {
             if (persistentProject.getId().equals(project.getId())) {
                 persistentProject.setName(project.getName());
                 persistentProject.setCreated(project.getCreated());
@@ -46,9 +46,9 @@ class AllProjects {
         return null;
     }
 
-    public Project deleteProject(Project project) {
+    public Project deleteProject(final Project project) {
         for (int i = 0; i < projects.size(); i++) {
-            Project persistentProject = projects.get(i);
+            final Project persistentProject = projects.get(i);
             if (persistentProject.getId().equals(project.getId())) {
                 projects.remove(persistentProject);
                 break;
@@ -61,11 +61,11 @@ class AllProjects {
         return new ArrayList<>(projects);
     }
 
-    public void addAll(List<Project> projects) {
+    public void addAllProjects(final List<Project> projects) {
         this.projects.addAll(projects);
     }
 
-    public void clearAll() {
+    public void deleteAllProjects() {
         projects.removeAll(projects);
     }
 }

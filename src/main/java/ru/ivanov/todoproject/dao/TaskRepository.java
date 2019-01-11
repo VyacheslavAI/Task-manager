@@ -5,13 +5,13 @@ import ru.ivanov.todoproject.entity.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-class AllTasks {
+public class TaskRepository {
 
-    private List<Task> tasks = new ArrayList<>();
+    private final List<Task> tasks = new ArrayList<>();
 
-    public List<Task> withName(String name) {
-        List<Task> result = new ArrayList<>();
-        for (Task task : tasks) {
+    public List<Task> getTasksByName(final String name) {
+        final List<Task> result = new ArrayList<>();
+        for (final Task task : tasks) {
             if (task.getName().equals(name)) {
                 result.add(task);
             }
@@ -19,24 +19,24 @@ class AllTasks {
         return result;
     }
 
-    public Task createOrUpdateTask(Task task) {
+    public Task createOrUpdateTask(final Task task) {
         if (task.getId().equals("0"))
             return createNewTask(task);
         else
             return updateTask(task);
     }
 
-    private Task createNewTask(Task task) {
-        Task persistentTask = new Task();
-        persistentTask.setId(AllId.generateId());
+    private Task createNewTask(final Task task) {
+        final Task persistentTask = new Task();
+        persistentTask.setId(IdRepository.generateId());
         persistentTask.setName(task.getName());
         persistentTask.setCreated(task.getCreated());
         tasks.add(persistentTask);
         return persistentTask;
     }
 
-    private Task updateTask(Task task) {
-        for (Task persistentTask : tasks) {
+    private Task updateTask(final Task task) {
+        for (final Task persistentTask : tasks) {
             if (persistentTask.getId().equals(task.getId())) {
                 persistentTask.setName(task.getName());
                 persistentTask.setCreated(task.getCreated());
@@ -46,9 +46,9 @@ class AllTasks {
         return null;
     }
 
-    public Task deleteTask(Task task) {
+    public Task deleteTask(final Task task) {
         for (int i = 0; i < tasks.size(); i++) {
-            Task persistentTask = tasks.get(i);
+            final Task persistentTask = tasks.get(i);
             if (persistentTask.getId().equals(task.getId())) {
                 tasks.remove(persistentTask);
                 break;
@@ -61,11 +61,11 @@ class AllTasks {
         return new ArrayList<>(tasks);
     }
 
-    public void addAll(List<Task> tasks) {
+    public void addAllTasks(final List<Task> tasks) {
         this.tasks.addAll(tasks);
     }
 
-    public void clearAll() {
+    public void deleteAllTasks() {
         tasks.removeAll(tasks);
     }
 }

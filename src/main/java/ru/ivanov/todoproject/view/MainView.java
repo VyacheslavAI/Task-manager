@@ -25,7 +25,7 @@ public class MainView {
         ConsoleHelper.printMessage("4: Save");
         ConsoleHelper.printMessage("5: Load");
         ConsoleHelper.printMessage("6: Exit");
-        int selectMenuItem = ConsoleHelper.readInt(1, 6);
+        final int selectMenuItem = ConsoleHelper.readInt(1, 6);
         switch (selectMenuItem) {
             case 1:
                 controller.addProject();

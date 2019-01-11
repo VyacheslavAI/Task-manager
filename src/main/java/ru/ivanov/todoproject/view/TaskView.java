@@ -18,7 +18,7 @@ public class TaskView {
         this.controller = controller;
     }
 
-    public void showAndSelectTask(List<Task> tasks) {
+    public void showAndSelectTask(final List<Task> tasks) {
         ConsoleHelper.printDelimiter();
 
         if (tasks.isEmpty()) {
@@ -28,11 +28,11 @@ public class TaskView {
 
         ConsoleHelper.printMessage("Enter task number:");
         for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
+            final Task task = tasks.get(i);
             ConsoleHelper.printMessage(String.format("\t %d %s %s", i,
                     task.getName(), task.getCreated().toString()));
         }
-        int taskNumber = ConsoleHelper.readInt(0, tasks.size() - 1);
+        final int taskNumber = ConsoleHelper.readInt(0, tasks.size() - 1);
         controller.goToEditTaskForm(tasks.get(taskNumber));
     }
 }

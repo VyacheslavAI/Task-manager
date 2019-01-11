@@ -21,7 +21,7 @@ public class TaskEditView {
         this.controller = controller;
     }
 
-    public void editTaskForm(Task task) {
+    public void editTaskForm(final Task task) {
         ConsoleHelper.printDelimiter();
         ConsoleHelper.printMessage("Id: " + task.getId());
         ConsoleHelper.printMessage("Name: " + task.getName());
@@ -31,7 +31,7 @@ public class TaskEditView {
         ConsoleHelper.printMessage("2: Delete task");
         ConsoleHelper.printMessage("3: Return to main menu");
 
-        int sectionNumber = ConsoleHelper.readInt(1, 3);
+        final int sectionNumber = ConsoleHelper.readInt(1, 3);
 
         switch (sectionNumber) {
             case 1:
@@ -42,10 +42,11 @@ public class TaskEditView {
                 break;
             case 3:
                 controller.goToMainMenu();
+                break;
         }
     }
 
-    public void editTaskData(Task task) {
+    public void editTaskData(final Task task) {
         int sectionNumber = 0;
 
         String taskName = task.getName();
@@ -80,16 +81,16 @@ public class TaskEditView {
         controller.goToEditTaskForm(task);
     }
 
-    public void deleteTaskForm(Task task) {
+    public void deleteTaskForm(final Task task) {
         controller.deleteTask(task);
         ConsoleHelper.printMessage("Task has been deleted");
         controller.goToMainMenu();
     }
 
-    public void addTaskForm(Project project) {
+    public void addTaskForm(final Project project) {
         ConsoleHelper.printDelimiter();
         ConsoleHelper.printMessage("Enter task name:");
-        String name = ConsoleHelper.readString();
+        final String name = ConsoleHelper.readString();
         controller.changeTaskData("0", project.getId(), name, new Date());
         ConsoleHelper.printMessage("Task has been added");
         controller.goToEditProjectForm(project);
