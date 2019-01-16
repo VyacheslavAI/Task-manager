@@ -32,6 +32,10 @@ public class Controller {
         commands.put(PROJECT_SHOW, new ProjectShowCommand());
         commands.put(BIN_SAVE, new DataBinarySave());
         commands.put(BIN_LOAD, new DataBinaryLoad());
+        commands.put(JSON_SAVE, new DataJsonSave());
+        commands.put(JSON_LOAD, new DataJsonLoad());
+        commands.put(XML_SAVE, new DataXmlSave());
+        commands.put(XML_LOAD, new DataXmlLoad());
         commands.put(EXIT, new ExitCommand());
     }
 

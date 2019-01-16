@@ -39,7 +39,7 @@ public class Operation {
 
     public static final String JSON_SAVE = "save json";
 
-    public static final String JSON_LOAD = "loadjson";
+    public static final String JSON_LOAD = "load json";
 
     public static final String EXIT = "exit";
 
@@ -57,6 +57,10 @@ public class Operation {
         commands.add(TASK_SHOW);
         commands.add(BIN_SAVE);
         commands.add(BIN_LOAD);
+        commands.add(JSON_SAVE);
+        commands.add(JSON_LOAD);
+        commands.add(XML_SAVE);
+        commands.add(XML_LOAD);
         commands.add(EXIT);
     }
 

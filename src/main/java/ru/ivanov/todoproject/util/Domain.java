@@ -7,17 +7,17 @@ import ru.ivanov.todoproject.entity.Task;
 import java.io.Serializable;
 import java.util.List;
 
-class Domain implements Serializable {
+public class Domain implements Serializable {
 
     private List<Project> projects;
 
     private List<Task> tasks;
 
-    List<Project> getProjects() {
+    public List<Project> getProjects() {
         return projects;
     }
 
-    List<Task> getTasks() {
+    public List<Task> getTasks() {
         return tasks;
     }
 
@@ -32,7 +32,7 @@ class Domain implements Serializable {
     public Domain() {
     }
 
-    static Domain createDomain(final Controller controller) {
+    public static Domain createDomain(final Controller controller) {
         final Domain domain = new Domain();
         domain.setProjects(controller.getProjectService().loadAllProject());
         domain.setTasks(controller.getTaskService().loadAllTask());
