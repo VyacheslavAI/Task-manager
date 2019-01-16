@@ -1,10 +1,10 @@
-#Task Manager
+# Task Manager
 
 ##### Task Manager is a software project for creating and viewing information about projects and their tasks
 If you think you have found a bug, please send an error message to the email address: vyacheslavivanov93@gmail.com
 
 ***
-###Project Structure
+### Project Structure
 **Main class:** TaskManager - class with psvm
 - **entry package**
   + Project - project entity
@@ -24,13 +24,13 @@ If you think you have found a bug, please send an error message to the email add
     + "This package contains executable commands that implement the command interface."
   
 ***
-###Base Functional
+### Base Functional
 
 You can create and manage information about existing projects and their tasks.
 
 ***
 
-###Building from Source
+### Building from Source
 You need to build Task Manager: 
 * [Java SE 7](https://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html) to build Task Manager.
 * [Maven](https://maven.apache.org/download.cgi#) 3.5.4 or higher
@@ -38,7 +38,7 @@ You need to build Task Manager:
 ```Build command: mvn clean install```
 
 ***
-###How to start application by console
+### How to start application by console
 ```java -start```
 
 
