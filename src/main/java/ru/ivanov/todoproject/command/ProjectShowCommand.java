@@ -12,6 +12,7 @@ public class ProjectShowCommand implements Command {
     public void execute(final Controller controller) {
         ConsoleHelper.printMessage("All available projects: \r\n");
         final List<Project> projects = controller.getProjectService().loadAllProject();
+        controller.filterDataForActiveUser(projects);
         for (final Project project : projects) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Name: %s %n Date of creation: %s",
                     project.getId(),

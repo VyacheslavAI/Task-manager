@@ -15,6 +15,7 @@ public class TaskDeleteCommand implements Command {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = controller.getProjectService().loadProjectByName(projectName);
+        controller.filterDataForActiveUser(projects);
         final Project selectedProject = CommandHelper.selectProject(projects);
 
         if (selectedProject == null) {
@@ -25,6 +26,7 @@ public class TaskDeleteCommand implements Command {
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
         final List<Task> projectTask = controller.getTaskService().loadTasksByProject(selectedProject);
+        controller.filterDataForActiveUser(projectTask);
 
         Task taskForDelete = null;
         for (final Task persistentTask : projectTask) {

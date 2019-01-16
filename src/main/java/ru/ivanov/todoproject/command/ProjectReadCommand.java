@@ -14,6 +14,7 @@ public class ProjectReadCommand implements Command {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = controller.getProjectService().loadProjectByName(projectName);
+        controller.getUserService().filterDataForActiveUser(projects, controller.getActiveUser());
         final Project selectedProject = CommandHelper.selectProject(projects);
 
         if (selectedProject == null) {

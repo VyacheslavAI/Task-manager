@@ -15,6 +15,7 @@ public class TaskShowByProjectCommand implements Command {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = controller.getProjectService().loadProjectByName(projectName);
+        controller.filterDataForActiveUser(projects);
         final Project selectedProject = CommandHelper.selectProject(projects);
 
         if (selectedProject == null) {
@@ -23,6 +24,7 @@ public class TaskShowByProjectCommand implements Command {
         }
 
         final List<Task> tasks = controller.getTaskService().loadTasksByProject(selectedProject);
+        controller.filterDataForActiveUser(tasks);
         for (final Task persistentTask : tasks) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Project id: %s %n Name: %s %n Date of creation: %s",
                     persistentTask.getId(),

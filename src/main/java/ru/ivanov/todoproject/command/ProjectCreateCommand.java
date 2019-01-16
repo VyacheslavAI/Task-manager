@@ -12,6 +12,7 @@ public class ProjectCreateCommand implements Command {
         final String projectName = ConsoleHelper.readString();
         final Project project = new Project();
         project.setName(projectName);
+        project.setUserId(controller.getActiveUser().getId());
         controller.getProjectService().createOrUpdateProject(project);
         ConsoleHelper.printMessage(String.format("Project %s has been added", project.getName()));
     }

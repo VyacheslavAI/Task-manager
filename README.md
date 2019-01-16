@@ -5,7 +5,7 @@ If you think you have found a bug, please send an error message to the email add
 
 ***
 ###Project Structure
-**Main class:** App - class with psvm
+**Main class:** TaskManager - class with psvm
 - **entry package**
   + Project - project entity
   + Task - task entity

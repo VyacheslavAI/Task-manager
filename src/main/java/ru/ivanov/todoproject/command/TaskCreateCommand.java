@@ -15,6 +15,7 @@ public class TaskCreateCommand implements Command {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = controller.getProjectService().loadProjectByName(projectName);
+        controller.filterDataForActiveUser(projects);
         final Project selectedProject = CommandHelper.selectProject(projects);
 
         if (selectedProject == null) {
@@ -27,6 +28,7 @@ public class TaskCreateCommand implements Command {
         final Task task = new Task();
         task.setName(taskName);
         task.setProjectId(selectedProject.getId());
+        task.setUserId(controller.getActiveUser().getId());
         controller.getTaskService().createOrUpdateTask(task);
         ConsoleHelper.printMessage(String.format("Task %s has been added", taskName));
     }

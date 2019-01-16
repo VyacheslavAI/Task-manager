@@ -1,20 +1,29 @@
 package ru.ivanov.todoproject.controller;
 
+import ru.ivanov.todoproject.api.IProjectService;
+import ru.ivanov.todoproject.api.ITaskService;
+import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.command.*;
+import ru.ivanov.todoproject.entity.AbstractEntity;
+import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.TaskService;
+import ru.ivanov.todoproject.service.UserService;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static ru.ivanov.todoproject.Operation.*;
 
-public class Controller {
+public class Controller<E extends AbstractEntity> {
 
-    private ProjectService projectService = new ProjectService();
+    private IProjectService projectService = new ProjectService();
 
-    private TaskService taskService = new TaskService();
+    private ITaskService taskService = new TaskService();
+
+    private IUserService userService = new UserService();
+
+    private User activeUser;
 
     private static final Map<String, Command> commands = new HashMap<>();
 
@@ -61,7 +70,21 @@ public class Controller {
         taskService.deleteAllTask();
     }
 
-    public ProjectService getProjectService() {
+    public void filterDataForActiveUser(List<E> entities) {
+        Iterator<E> iterator = entities.iterator();
+        while (iterator.hasNext()) {
+            E entry = iterator.next();
+            if (entry.getUserId().equals(activeUser.getId())) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public static Map<String, Command> getCommands() {
+        return commands;
+    }
+
+    public IProjectService getProjectService() {
         return projectService;
     }
 
@@ -69,7 +92,7 @@ public class Controller {
         this.projectService = projectService;
     }
 
-    public TaskService getTaskService() {
+    public ITaskService getTaskService() {
         return taskService;
     }
 
@@ -77,7 +100,19 @@ public class Controller {
         this.taskService = taskService;
     }
 
-    public static Map<String, Command> getCommands() {
-        return commands;
+    public IUserService getUserService() {
+        return userService;
+    }
+
+    public void setUserService(IUserService userService) {
+        this.userService = userService;
+    }
+
+    public User getActiveUser() {
+        return activeUser;
+    }
+
+    public void setActiveUser(User activeUser) {
+        this.activeUser = activeUser;
     }
 }
