@@ -2,10 +2,10 @@ package ru.ivanov.todoproject;
 
 import ru.ivanov.todoproject.controller.Controller;
 
-public class App {
+public class TaskManager {
 
     public static void main(String[] args) {
-        Controller controller = new Controller();
-        controller.goToMainMenu();
+        final Controller controller = new Controller();
+        controller.run();
     }
 }

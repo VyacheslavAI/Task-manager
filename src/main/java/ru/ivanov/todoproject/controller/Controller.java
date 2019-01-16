@@ -1,197 +1,79 @@
 package ru.ivanov.todoproject.controller;
 
-import ru.ivanov.todoproject.dao.ProjectRepository;
-import ru.ivanov.todoproject.dao.TaskRepository;
-import ru.ivanov.todoproject.entity.Project;
-import ru.ivanov.todoproject.entity.Task;
+import ru.ivanov.todoproject.command.*;
+import ru.ivanov.todoproject.service.ProjectService;
+import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.util.ConsoleHelper;
-import ru.ivanov.todoproject.util.SerializationUtil;
-import ru.ivanov.todoproject.view.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
+import static ru.ivanov.todoproject.Operation.*;
 
 public class Controller {
 
-    private ProjectRepository projectRepo = new ProjectRepository();
+    private ProjectService projectService = new ProjectService();
 
-    private TaskRepository taskRepo = new TaskRepository();
+    private TaskService taskService = new TaskService();
 
-    private MainView mainView = new MainView();
+    private static final Map<String, Command> commands = new HashMap<>();
 
-    private ProjectView projectView = new ProjectView();
-
-    private ProjectEditView projectEditView = new ProjectEditView();
-
-    private TaskView taskView = new TaskView();
-
-    private TaskEditView taskEditView = new TaskEditView();
-
-    //TESTINIT
-    public Controller() {
-        projectView.setController(this);
-        taskView.setController(this);
-        projectEditView.setController(this);
-        taskEditView.setController(this);
-        mainView.setController(this);
+    static {
+        commands.put(HELP, new HelpCommand());
+        commands.put(PROJECT_CREATE, new ProjectCreateCommand());
+        commands.put(PROJECT_READ, new ProjectReadCommand());
+        commands.put(PROJECT_UPDATE, new ProjectUpdateCommand());
+        commands.put(PROJECT_DELETE, new ProjectDeleteCommand());
+        commands.put(TASK_CREATE, new TaskCreateCommand());
+        commands.put(TASK_READ, new TaskReadCommand());
+        commands.put(TASK_UPDATE, new TaskUpdateCommand());
+        commands.put(TASK_DELETE, new TaskDeleteCommand());
+        commands.put(TASK_SHOW, new TaskShowByProjectCommand());
+        commands.put(PROJECT_SHOW, new ProjectShowCommand());
+        commands.put(BIN_SAVE, new DataBinarySave());
+        commands.put(BIN_LOAD, new DataBinaryLoad());
+        commands.put(EXIT, new ExitCommand());
     }
 
-    public ProjectRepository getProjectRepo() {
-        return projectRepo;
+    public void execute(String operation) {
+        operation = commands.containsKey(operation) ? operation : "help";
+        commands.get(operation).execute(this);
     }
 
-    public void setProjectRepo(ProjectRepository projectRepo) {
-        this.projectRepo = projectRepo;
+    public void run() {
+        ConsoleHelper.printMessage("Welcome to Task Manager Application! \r\n" +
+                "Enter \"help\" show list of available commands");
+
+        String operation;
+        do {
+            operation = ConsoleHelper.readString();
+            execute(operation);
+            ConsoleHelper.printDelimiter();
+        } while (!operation.equals(EXIT));
     }
 
-    public TaskRepository getTaskRepo() {
-        return taskRepo;
+    public void clearAllEntity() {
+        projectService.deleteAllProject();
+        taskService.deleteAllTask();
     }
 
-    public void setTaskRepo(TaskRepository taskRepo) {
-        this.taskRepo = taskRepo;
+    public ProjectService getProjectService() {
+        return projectService;
     }
 
-    public MainView getMainView() {
-        return mainView;
+    public void setProjectService(ProjectService projectService) {
+        this.projectService = projectService;
     }
 
-    public void setMainView(MainView mainView) {
-        this.mainView = mainView;
+    public TaskService getTaskService() {
+        return taskService;
     }
 
-    public ProjectView getProjectView() {
-        return projectView;
+    public void setTaskService(TaskService taskService) {
+        this.taskService = taskService;
     }
 
-    public void setProjectView(ProjectView projectView) {
-        this.projectView = projectView;
-    }
-
-    public ProjectEditView getProjectEditView() {
-        return projectEditView;
-    }
-
-    public void setProjectEditView(ProjectEditView projectEditView) {
-        this.projectEditView = projectEditView;
-    }
-
-    public TaskView getTaskView() {
-        return taskView;
-    }
-
-    public void setTaskView(TaskView taskView) {
-        this.taskView = taskView;
-    }
-
-    public TaskEditView getTaskEditView() {
-        return taskEditView;
-    }
-
-    public void setTaskEditView(TaskEditView taskEditView) {
-        this.taskEditView = taskEditView;
-    }
-
-    public List<Project> loadProjectsByName(String name) {
-        return projectRepo.getProjectsByName(name);
-    }
-
-    public Project changeProjectData(String id, String name, Date created) {
-        Project project = new Project(id, name, created);
-        return projectRepo.createOrUpdateProject(project);
-    }
-
-    public List<Project> loadAllProjects() {
-        return projectRepo.getAllProjects();
-    }
-
-    public Project deleteProject(Project project) {
-        return projectRepo.deleteProject(project);
-    }
-
-    public List<Task> loadTaskByName(String name) {
-        return taskRepo.getTasksByName(name);
-    }
-
-    public Task changeTaskData(String id, String projectId, String name, Date created) {
-        Task task = new Task(id, projectId, name, created);
-        return taskRepo.createOrUpdateTask(task);
-    }
-
-    public List<Task> loadAllTasks() {
-        return taskRepo.getAllTasks();
-    }
-
-    public Task deleteTask(Task task) {
-        return taskRepo.deleteTask(task);
-    }
-
-    public void goToMainMenu() {
-        mainView.showMainMenu();
-    }
-
-    public void showProjects() {
-        projectView.showAndSelectProjects(loadAllProjects());
-    }
-
-    public void showTasks() {
-        taskView.showAndSelectTask(loadAllTasks());
-    }
-
-    public void goToEditProjectForm(Project project) {
-        projectEditView.editProjectForm(project);
-    }
-
-    public void goToEditTaskForm(Task task) {
-        taskEditView.editTaskForm(task);
-    }
-
-    public List<Task> loadTasksByProject(final Project project) {
-        final List<Task> tasks = taskRepo.getAllTasks();
-        for (final Task task : tasks) {
-            if (project.getId().equals(task.getProjectId())) {
-                tasks.add(task);
-            }
-        }
-        return tasks;
-    }
-
-    public void showTasksForProject(final Project project) {
-        taskView.showAndSelectTask(loadTasksByProject(project));
-    }
-
-    public void addProject() {
-        projectEditView.addProjectForm();
-    }
-
-    public void addTaskForProject(final Project project) {
-        taskEditView.addTaskForm(project);
-    }
-
-    public void saveState() {
-        try {
-            final List<List> data = new ArrayList<>();
-            data.add(loadAllProjects());
-            data.add(loadAllTasks());
-            SerializationUtil.serialize(new SerializationUtil.Domain(data));
-        } catch (IOException e) {
-            ConsoleHelper.printMessage("An error occurred during serialization");
-        }
-    }
-
-    public void loadState() {
-        try {
-            taskRepo.deleteAllTasks();
-            projectRepo.deleteAllProjects();
-            final List<List> data = SerializationUtil.deserialize();
-            final List<Project> projects = (List<Project>) data.get(0);
-            final List<Task> tasks = (List<Task>) data.get(1);
-            projectRepo.addAllProjects(projects);
-            taskRepo.addAllTasks(tasks);
-        } catch (Exception e) {
-            ConsoleHelper.printMessage("An error occurred during deserialization");
-        }
+    public static Map<String, Command> getCommands() {
+        return commands;
     }
 }
