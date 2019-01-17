@@ -1,8 +1,9 @@
-package ru.ivanov.todoproject.util;
+package ru.ivanov.todoproject.dto;
 
-import ru.ivanov.todoproject.controller.Controller;
+import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
+import ru.ivanov.todoproject.entity.User;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +13,8 @@ public class Domain implements Serializable {
     private List<Project> projects;
 
     private List<Task> tasks;
+
+    private List<User> users;
 
     public List<Project> getProjects() {
         return projects;
@@ -29,13 +32,22 @@ public class Domain implements Serializable {
         this.tasks = tasks;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     public Domain() {
     }
 
-    public static Domain createDomain(final Controller controller) {
+    public static Domain createDomain(final Bootstrap bootstrap) {
         final Domain domain = new Domain();
-        domain.setProjects(controller.getProjectService().loadAllProject());
-        domain.setTasks(controller.getTaskService().loadAllTask());
+        domain.setProjects(bootstrap.getProjectService().loadAllProject());
+        domain.setTasks(bootstrap.getTaskService().loadAllTask());
+        domain.setUsers(bootstrap.getUserService().loadAllUser());
         return domain;
     }
 }

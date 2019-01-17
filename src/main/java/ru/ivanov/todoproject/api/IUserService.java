@@ -8,13 +8,15 @@ public interface IUserService {
 
     User createOrUpdateUser(final User user);
 
-    void addAllUser(List<User> users);
+    void addAllUser(final List<User> users);
 
-    List<User> loadUserByName(final String name);
+    User loadById(final String id);
+
+    User loadUserByLogin(final String login);
 
     List<User> loadAllUser();
 
-    User deleteUser(User user);
+    User deleteUser(final User user);
 
     void deleteAllUser();
 }

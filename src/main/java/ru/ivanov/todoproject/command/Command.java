@@ -1,8 +1,14 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.controller.Controller;
+import ru.ivanov.todoproject.bootstrap.Bootstrap;
 
 public interface Command {
 
-    void execute(Controller controller);
+    String getConsoleCommand();
+
+    String getDescription();
+
+    boolean isAuthorizationRequired();
+
+    void execute(final Bootstrap bootstrap);
 }

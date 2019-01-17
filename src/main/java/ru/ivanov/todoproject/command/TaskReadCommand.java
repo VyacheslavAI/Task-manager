@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.controller.Controller;
+import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.util.CommandHelper;
@@ -11,11 +11,26 @@ import java.util.List;
 public class TaskReadCommand implements Command {
 
     @Override
-    public void execute(final Controller controller) {
+    public String getConsoleCommand() {
+        return "read task";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Command to print information about available tasks for project";
+    }
+
+    @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
+    public void execute(final Bootstrap bootstrap) {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = controller.getProjectService().loadProjectByName(projectName);
-        controller.filterDataForActiveUser(projects);
+        final List<Project> projects = bootstrap.getProjectService().loadProjectByName(projectName);
+        bootstrap.filterProjectsForActiveUser(projects);
         Project selectedProject = CommandHelper.selectProject(projects);
 
         if (selectedProject == null) {
@@ -25,8 +40,8 @@ public class TaskReadCommand implements Command {
 
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
-        final List<Task> tasks = controller.getTaskService().loadTasksByProject(selectedProject);
-        controller.filterDataForActiveUser(tasks);
+        final List<Task> tasks = bootstrap.getTaskService().loadTasksByProject(selectedProject);
+        bootstrap.filterTasksForActiveUser(tasks);
 
         Task taskForRead = null;
         for (final Task persistentTask : tasks) {
@@ -41,7 +56,8 @@ public class TaskReadCommand implements Command {
             return;
         }
 
-        ConsoleHelper.printMessage(String.format("Id: %s %nProject id: %s %nName: %s %nDate of creation: %s",
+        final String format = "Id: %s %nProject id: %s %nName: %s %nDate of creation: %s";
+        ConsoleHelper.printMessage(String.format(format,
                 taskForRead.getId(),
                 taskForRead.getProjectId(),
                 taskForRead.getName(),

@@ -8,13 +8,15 @@ public interface IProjectService {
 
     Project createOrUpdateProject(final Project project);
 
-    void addAllProject(List<Project> projects);
+    Project loadById(final String id);
+
+    void addAllProject(final List<Project> projects);
 
     List<Project> loadProjectByName(final String name);
 
     List<Project> loadAllProject();
 
-    Project deleteProject(Project project);
+    Project deleteProject(final Project project);
 
     void deleteAllProject();
 }

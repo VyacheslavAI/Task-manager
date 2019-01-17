@@ -10,37 +10,38 @@ import java.util.Map;
 
 public abstract class AbstractRepository<E extends AbstractEntity> implements IRepository<E> {
 
-    private final Map<String, E> entities = new HashMap<>();
+    final Map<String, E> entities = new HashMap<>();
 
     public E merge(final E entity) {
         entities.put(entity.getId(), entity);
         return entity;
     }
 
-    public List<E> getEntitiesByName(final String name) {
-        final List<E> result = new ArrayList<>();
-        for (final E entity : entities.values()) {
-            if (entity.getName().equals(name)) {
-                result.add(entity);
+    public E findById(final String id) {
+        for (final Map.Entry<String, E> entry : entities.entrySet()) {
+            final String entityId = entry.getKey();
+            final E entity = entry.getValue();
+            if (entityId.equals(id)) {
+                return entity;
             }
         }
-        return result;
+        return null;
     }
 
-    public E deleteEntity(final E entity) {
+    public List<E> findAll() {
+        return new ArrayList<>(entities.values());
+    }
+
+    public E delete(final E entity) {
         entities.remove(entity.getId());
         return entity;
     }
 
-    public List<E> getAllEntity() {
-        return new ArrayList<>(entities.values());
-    }
-
-    public void deleteAllEntity() {
+    public void deleteAll() {
         entities.clear();
     }
 
-    public void addAllEntity(final List<E> entityList) {
+    public void addAll(final List<E> entityList) {
         for (final E entity : entityList) {
             entities.put(entity.getId(), entity);
         }

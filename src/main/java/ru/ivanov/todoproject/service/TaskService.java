@@ -12,33 +12,32 @@ import java.util.List;
 
 public class TaskService implements ITaskService {
 
-    private ITaskRepository taskRepo = new TaskRepository();
+    private final ITaskRepository taskRepository = new TaskRepository();
 
     public Task createOrUpdateTask(final Task task) {
-        if (task == null)
-            return null;
-
-        return taskRepo.merge(task);
+        if (task == null) return null;
+        return taskRepository.merge(task);
     }
 
     public void addAllTask(final List<Task> tasks) {
         if (tasks == null || tasks.isEmpty()) return;
-
-        taskRepo.addAllEntity(tasks);
+        taskRepository.addAll(tasks);
     }
 
-    public List<Task> loadTaskByName(final String name) {
-        if (name == null || name.isEmpty())
-            return Collections.emptyList();
+    @Override
+    public Task loadById(final String id) {
+        if (id == null || id.isEmpty()) return null;
+        return taskRepository.findById(id);
+    }
 
-        return taskRepo.getEntitiesByName(name);
+    public List<Task> loadTasksByName(final String name) {
+        if (name == null || name.isEmpty()) return Collections.emptyList();
+        return taskRepository.findByName(name);
     }
 
     public List<Task> loadTasksByProject(final Project project) {
-        if (project == null)
-            return null;
-
-        final List<Task> tasks = taskRepo.getAllEntity();
+        if (project == null) return null;
+        final List<Task> tasks = taskRepository.findAll();
         final List<Task> result = new ArrayList<>();
         for (final Task task : tasks) {
             if (project.getId().equals(task.getProjectId())) {
@@ -49,17 +48,15 @@ public class TaskService implements ITaskService {
     }
 
     public List<Task> loadAllTask() {
-        return taskRepo.getAllEntity();
+        return taskRepository.findAll();
     }
 
     public Task deleteTask(final Task task) {
-        if (task == null)
-            return null;
-
-        return taskRepo.deleteEntity(task);
+        if (task == null) return null;
+        return taskRepository.delete(task);
     }
 
     public void deleteAllTask() {
-        taskRepo.deleteAllEntity();
+        taskRepository.deleteAll();
     }
 }

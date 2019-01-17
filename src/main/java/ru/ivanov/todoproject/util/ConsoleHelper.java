@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ConsoleHelper {
+public final class ConsoleHelper {
 
     private ConsoleHelper() {
     }
@@ -53,10 +53,6 @@ public class ConsoleHelper {
 
     public static String formatDate(final Date date) {
         return simpleDateFormat.format(date);
-    }
-
-    public static void printDate(final Date date) {
-        System.out.println(formatDate(date));
     }
 
     public static Date parseDate(String date) {

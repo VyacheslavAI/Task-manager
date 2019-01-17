@@ -6,13 +6,13 @@ public interface IRepository<E> {
 
     E merge(final E entity);
 
-    List<E> getEntitiesByName(final String name);
+    E delete(final E entity);
 
-    E deleteEntity(final E entity);
+    List<E> findAll();
 
-    List<E> getAllEntity();
+    E findById(final String id);
 
-    void deleteAllEntity();
+    void deleteAll();
 
-    void addAllEntity(final List<E> entityList);
+    void addAll(final List<E> entityList);
 }

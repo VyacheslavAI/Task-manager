@@ -10,40 +10,38 @@ import java.util.List;
 
 public class ProjectService implements IProjectService {
 
-    private IProjectRepository projectRepo = new ProjectRepository();
+    private final IProjectRepository projectRepository = new ProjectRepository();
 
     public Project createOrUpdateProject(final Project project) {
-        if (project == null)
-            return null;
-
-        return projectRepo.merge(project);
+        if (project == null) return null;
+        return projectRepository.merge(project);
     }
 
     public void addAllProject(final List<Project> projects) {
         if (projects == null || projects.isEmpty()) return;
+        projectRepository.addAll(projects);
+    }
 
-        projectRepo.addAllEntity(projects);
+    @Override
+    public Project loadById(final String id) {
+        return projectRepository.findById(id);
     }
 
     public List<Project> loadProjectByName(final String name) {
-        if (name == null || name.isEmpty())
-            return Collections.emptyList();
-
-        return projectRepo.getEntitiesByName(name);
+        if (name == null || name.isEmpty()) return Collections.emptyList();
+        return projectRepository.findByName(name);
     }
 
     public List<Project> loadAllProject() {
-        return projectRepo.getAllEntity();
+        return projectRepository.findAll();
     }
 
     public Project deleteProject(final Project project) {
-        if (project == null)
-            return null;
-
-        return projectRepo.deleteEntity(project);
+        if (project == null) return null;
+        return projectRepository.delete(project);
     }
 
     public void deleteAllProject() {
-        projectRepo.deleteAllEntity();
+        projectRepository.deleteAll();
     }
 }

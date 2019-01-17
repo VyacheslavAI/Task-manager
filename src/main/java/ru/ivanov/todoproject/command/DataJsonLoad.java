@@ -2,8 +2,8 @@ package ru.ivanov.todoproject.command;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import ru.ivanov.todoproject.util.Domain;
-import ru.ivanov.todoproject.controller.Controller;
+import ru.ivanov.todoproject.dto.Domain;
+import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.io.IOException;
@@ -14,17 +14,32 @@ import java.nio.file.Paths;
 public class DataJsonLoad implements Command {
 
     @Override
-    public void execute(final Controller controller) {
+    public String getConsoleCommand() {
+        return "load json";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Command for load application state from json file";
+    }
+
+    @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
+    public void execute(final Bootstrap bootstrap) {
         try (final InputStream inputStream = Files.newInputStream(Paths.get("data.json"))) {
-            controller.clearAllEntity();
+            bootstrap.clearAllProjectAndTask();
             ObjectReader objectReader = new ObjectMapper().reader().forType(Domain.class);
             Domain domain = objectReader.readValue(inputStream);
-            controller.getProjectService().addAllProject(domain.getProjects());
-            controller.getTaskService().addAllTask(domain.getTasks());
-            ConsoleHelper.printMessage("Loading from json was successful");
+            bootstrap.getProjectService().addAllProject(domain.getProjects());
+            bootstrap.getTaskService().addAllTask(domain.getTasks());
+            bootstrap.getUserService().addAllUser(domain.getUsers());
+            ConsoleHelper.printMessage("Loading from json file was successful");
         } catch (IOException e) {
-            ConsoleHelper.printMessage("An error has occurred during read json");
-            System.out.println(e.getMessage());
+            ConsoleHelper.printMessage("An error has occurred during loading from json file");
         }
     }
 }
