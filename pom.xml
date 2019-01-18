@@ -48,7 +48,13 @@
                             <sourceRoot>${project.basedir}/src/main/java</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
-                                    <wsdl>http://localhost:8080/CalcEndpoint?wsdl</wsdl>
+                                    <wsdl>http://localhost:8080/project?wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>http://localhost:8080/task?wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>http://localhost:8080/user?wsdl</wsdl>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
