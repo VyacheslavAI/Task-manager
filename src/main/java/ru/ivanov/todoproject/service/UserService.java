@@ -3,13 +3,18 @@ package ru.ivanov.todoproject.service;
 import ru.ivanov.todoproject.api.IUserRepository;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.dao.UserRepository;
+import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository = new UserRepository();
+
+    private User activeUser;
 
     @Override
     public User createOrUpdateUser(final User user) {
@@ -47,5 +52,37 @@ public class UserService implements IUserService {
     @Override
     public void deleteAllUser() {
         userRepository.deleteAll();
+    }
+
+    public void filterProjectsForActiveUser(final List<Project> projects) {
+        final Iterator<Project> iterator = projects.iterator();
+        while (iterator.hasNext()) {
+            final Project project = iterator.next();
+            if (!project.getUserId().equals(activeUser.getId())) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public void filterTasksForActiveUser(final List<Task> tasks) {
+        final Iterator<Task> iterator = tasks.iterator();
+        while (iterator.hasNext()) {
+            final Task task = iterator.next();
+            if (!task.getUserId().equals(activeUser.getId())) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public User getActiveUser() {
+        return activeUser;
+    }
+
+    public void setActiveUser(User activeUser) {
+        this.activeUser = activeUser;
+    }
+
+    public boolean hasUserAuthorized() {
+        return activeUser != null;
     }
 }

@@ -1,7 +1,5 @@
 package ru.ivanov.todoproject.entity;
 
-import java.io.Serializable;
-
 public class User extends AbstractEntity {
 
     private String login;

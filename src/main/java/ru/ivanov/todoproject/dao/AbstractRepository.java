@@ -18,14 +18,7 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
     }
 
     public E findById(final String id) {
-        for (final Map.Entry<String, E> entry : entities.entrySet()) {
-            final String entityId = entry.getKey();
-            final E entity = entry.getValue();
-            if (entityId.equals(id)) {
-                return entity;
-            }
-        }
-        return null;
+        return entities.get(id);
     }
 
     public List<E> findAll() {

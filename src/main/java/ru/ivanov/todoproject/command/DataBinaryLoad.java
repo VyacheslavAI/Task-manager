@@ -28,7 +28,7 @@ public class DataBinaryLoad implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
+    public void execute(final Bootstrap bootstrap) {
         try (final InputStream inputStream = Files.newInputStream(Paths.get("data.bin"));
              final ObjectInput objectInput = new ObjectInputStream(inputStream)) {
             bootstrap.clearAllProjectAndTask();
