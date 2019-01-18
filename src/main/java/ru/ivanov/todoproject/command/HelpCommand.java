@@ -1,11 +1,10 @@
 package ru.ivanov.todoproject.command;
 
 import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class HelpCommand extends Command {
 
@@ -26,18 +25,22 @@ public class HelpCommand extends Command {
 
     @Override
     public void execute(final ServiceLocator serviceLocator) {
-        final boolean hasAuthorizedUser = serviceLocator.getUserService().hasUserAuthorized();
-        final List<Command> availableCommands = new ArrayList<>();
-        final Iterator<Command> commandIterator = availableCommands.iterator();
-        while (commandIterator.hasNext()) {
-            final Command command = commandIterator.next();
-            if (command.isAuthorizationRequired() && !hasAuthorizedUser) {
-                commandIterator.remove();
-            }
-        }
-
         ConsoleHelper.printMessage("The following commands are available to you:");
-        for (Command command : availableCommands) {
+        final Map<String, Command> commands = ((Bootstrap) serviceLocator).getCommands();
+        final List<Command> availableCommands = new ArrayList<>(commands.values());
+        final boolean hasAuthorizedUser = serviceLocator.getUserService().hasUserAuthorized();
+
+        Collections.sort(availableCommands, new Comparator<Command>() {
+            @Override
+            public int compare(final Command c1, final Command c2) {
+                final String consoleCommandOne = c1.getConsoleCommand();
+                final String consoleCommandTwo = c2.getConsoleCommand();
+                return consoleCommandOne.compareTo(consoleCommandTwo);
+            }
+        });
+
+        for (final Command command : availableCommands) {
+            if (command.isAuthorizationRequired() && !hasAuthorizedUser) continue;
             final String consoleCommand = command.getConsoleCommand();
             final String description = command.getDescription();
             ConsoleHelper.printMessage(String.format("%s - %s", consoleCommand, description));

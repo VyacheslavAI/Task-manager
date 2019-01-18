@@ -30,7 +30,7 @@ public class TaskReadCommand extends Command {
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
         serviceLocator.getUserService().filterProjectsForActiveUser(projects);
-        Project selectedProject = selectProject(projects);
+        Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
             ConsoleHelper.printMessage(String.format("Project %s not found", projectName));

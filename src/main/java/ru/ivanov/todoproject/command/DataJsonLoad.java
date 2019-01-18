@@ -33,8 +33,8 @@ public class DataJsonLoad extends Command {
         try (final InputStream inputStream = Files.newInputStream(Paths.get("data.json"))) {
             serviceLocator.getProjectService().deleteAllProject();
             serviceLocator.getTaskService().deleteAllTask();
-            ObjectReader objectReader = new ObjectMapper().reader().forType(Domain.class);
-            Domain domain = objectReader.readValue(inputStream);
+            final ObjectReader objectReader = new ObjectMapper().reader().forType(Domain.class);
+            final Domain domain = objectReader.readValue(inputStream);
             domain.loadFromDomain(serviceLocator);
             ConsoleHelper.printMessage("Loading from json file was successful");
         } catch (IOException e) {

@@ -11,7 +11,7 @@ public abstract class Command {
     private static final String warningString = "Several projects found with data name. \n" +
             "Select the creation date of the desired project.";
 
-    Project selectProject(final List<Project> projects) {
+    Project tryFindProject(final List<Project> projects) {
         if (projects == null || projects.isEmpty()) return null;
         if (projects.size() == 1) return projects.get(0);
 

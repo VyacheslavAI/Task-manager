@@ -22,10 +22,10 @@ public class UserDeleteCommand extends Command {
     }
 
     @Override
-    public void execute(ServiceLocator serviceLocator) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter user login for delete:");
         final String userLogin = ConsoleHelper.readString();
-        User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
+        final User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
         if (user == null) {
             ConsoleHelper.printMessage(String.format("User %s not found", userLogin));
             return;

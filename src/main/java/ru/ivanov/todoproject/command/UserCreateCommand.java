@@ -22,12 +22,12 @@ public class UserCreateCommand extends Command {
     }
 
     @Override
-    public void execute(ServiceLocator serviceLocator) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter new user login:");
-        String userLogin = ConsoleHelper.readString();
+        final String userLogin = ConsoleHelper.readString();
         ConsoleHelper.printMessage("Enter new user password:");
-        String userPassword = ConsoleHelper.readString();
-        User user = new User();
+        final String userPassword = ConsoleHelper.readString();
+        final User user = new User();
         user.setLogin(userLogin);
         user.setPassword(userPassword);
         serviceLocator.getUserService().createOrUpdateUser(user);

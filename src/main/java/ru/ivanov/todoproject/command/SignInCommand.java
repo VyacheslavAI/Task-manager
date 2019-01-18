@@ -25,7 +25,7 @@ public class SignInCommand extends Command {
     public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Please enter your login:");
         final String userLogin = ConsoleHelper.readString();
-        User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
+        final User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
         ConsoleHelper.printMessage("Please enter your password");
         final String userPassword = ConsoleHelper.readString();
         if (user == null || !user.getPassword().equals(userPassword)) {

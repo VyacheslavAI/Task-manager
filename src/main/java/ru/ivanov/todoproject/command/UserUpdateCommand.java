@@ -10,7 +10,7 @@ public class UserUpdateCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
-        return "update user";
+        return "edit user";
     }
 
     @Override
@@ -27,7 +27,7 @@ public class UserUpdateCommand extends Command {
     public void execute(ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter user login for update:");
         final String userLogin = ConsoleHelper.readString();
-        User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
+        final User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
         if (user == null) {
             ConsoleHelper.printMessage(String.format("User %s not found", userLogin));
             return;

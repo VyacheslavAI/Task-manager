@@ -10,8 +10,7 @@ import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Bootstrap implements ServiceLocator {
 
@@ -23,15 +22,11 @@ public class Bootstrap implements ServiceLocator {
 
     private final Map<String, Command> commands = new HashMap<>();
 
-    public void register(final Class<?>[] commandClasses) {
-        try {
-            for (Class commandClass : commandClasses) {
-                final Command command = (Command) commandClass.newInstance();
-                final String consoleCommand = command.getConsoleCommand();
-                commands.put(consoleCommand, command);
-            }
-        } catch (InstantiationException | IllegalAccessException e) {
-            ConsoleHelper.printMessage("An error has occurred during commands registration");
+    public void register(final Class<?>[] commandClasses) throws IllegalAccessException, InstantiationException {
+        for (Class commandClass : commandClasses) {
+            final Command command = (Command) commandClass.newInstance();
+            final String consoleCommand = command.getConsoleCommand();
+            commands.put(consoleCommand, command);
         }
     }
 
@@ -40,16 +35,16 @@ public class Bootstrap implements ServiceLocator {
     }
 
     public void run() {
-        userService.adminInitialization();
         loadData();
+        userService.adminInitialization();
         String welcomeString = "Welcome to Task Manager Application! \r\n" +
                 "Enter \"help\" show list of available commands";
         ConsoleHelper.printMessage(welcomeString);
         String operation;
         do {
+            final boolean hasAuthorizedUser = userService.hasUserAuthorized();
             operation = ConsoleHelper.readString();
             Command command = commands.containsKey(operation) ? commands.get(operation) : commands.get("help");
-            boolean hasAuthorizedUser = userService.hasUserAuthorized();
             if (command.isAuthorizationRequired() && !hasAuthorizedUser) {
                 command = commands.get("help");
             }

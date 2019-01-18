@@ -29,11 +29,11 @@ public class DataXmlLoad extends Command {
 
     @Override
     public void execute(final ServiceLocator serviceLocator) {
-        try (InputStream inputStream = Files.newInputStream(Paths.get("data.xml"))) {
+        try (final InputStream inputStream = Files.newInputStream(Paths.get("data.xml"))) {
             serviceLocator.getProjectService().deleteAllProject();
             serviceLocator.getTaskService().deleteAllTask();
-            XmlMapper xmlMapper = new XmlMapper();
-            Domain domain = xmlMapper.readValue(inputStream, Domain.class);
+            final XmlMapper xmlMapper = new XmlMapper();
+            final Domain domain = xmlMapper.readValue(inputStream, Domain.class);
             domain.loadFromDomain(serviceLocator);
             ConsoleHelper.printMessage("Loading from xml file was successful");
         } catch (IOException e) {

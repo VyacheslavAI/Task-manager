@@ -1,7 +1,6 @@
 package ru.ivanov.todoproject.command;
 
 import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -30,7 +29,7 @@ public class ProjectReadCommand extends Command {
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
         serviceLocator.getUserService().filterProjectsForActiveUser(projects);
-        final Project selectedProject = selectProject(projects);
+        final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
             ConsoleHelper.printMessage(String.format("Project %s not found", projectName));

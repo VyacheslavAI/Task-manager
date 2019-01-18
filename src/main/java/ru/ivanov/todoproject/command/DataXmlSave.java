@@ -19,7 +19,7 @@ public class DataXmlSave extends Command {
 
     @Override
     public String getDescription() {
-        return "Command for save application state in xml file";
+        return "Command to save application state in xml file";
     }
 
     @Override
@@ -29,9 +29,9 @@ public class DataXmlSave extends Command {
 
     @Override
     public void execute(final ServiceLocator serviceLocator) {
-        try (OutputStream outputStream = Files.newOutputStream(Paths.get("data.xml"))) {
-            Domain domain = Domain.createDomain(serviceLocator);
-            XmlMapper xmlMapper = new XmlMapper();
+        try (final OutputStream outputStream = Files.newOutputStream(Paths.get("data.xml"))) {
+            final Domain domain = Domain.createDomain(serviceLocator);
+            final XmlMapper xmlMapper = new XmlMapper();
             xmlMapper.writeValue(outputStream, domain);
             ConsoleHelper.printMessage("Saving in xml file was successful");
         } catch (IOException e) {

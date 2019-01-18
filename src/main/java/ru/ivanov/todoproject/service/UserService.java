@@ -87,9 +87,12 @@ public class UserService implements IUserService {
     }
 
     public void adminInitialization() {
-        final User admin = new User();
-        admin.setLogin("admin");
-        admin.setPassword("admin");
-        createOrUpdateUser(admin);
+        User admin = loadUserByLogin("admin");
+        if (admin == null) {
+            admin = new User();
+            admin.setLogin("admin");
+            admin.setPassword("admin");
+            createOrUpdateUser(admin);
+        }
     }
 }
