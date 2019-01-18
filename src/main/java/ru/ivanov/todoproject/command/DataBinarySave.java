@@ -1,8 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
-import ru.ivanov.todoproject.util.ConsoleHelper;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.dto.Domain;
+import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataBinarySave implements Command {
+public class DataBinarySave extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -28,10 +28,10 @@ public class DataBinarySave implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         try (final OutputStream outputStream = Files.newOutputStream(Paths.get("data.bin"));
              final ObjectOutput objectOutput = new ObjectOutputStream(outputStream)) {
-            Domain domain = Domain.createDomain(bootstrap);
+            final Domain domain = Domain.createDomain(serviceLocator);
             objectOutput.writeObject(domain);
             ConsoleHelper.printMessage("Saving in binary file was successful");
         } catch (Exception e) {

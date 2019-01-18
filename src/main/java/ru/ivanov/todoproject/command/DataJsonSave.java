@@ -2,15 +2,15 @@ package ru.ivanov.todoproject.command;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.dto.Domain;
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataJsonSave implements Command {
+public class DataJsonSave extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -28,10 +28,10 @@ public class DataJsonSave implements Command {
     }
 
     @Override
-    public void execute(final Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         try (final OutputStream outputStream = Files.newOutputStream(Paths.get("data.json"))) {
             final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            final Domain domain = Domain.createDomain(bootstrap);
+            final Domain domain = Domain.createDomain(serviceLocator);
             objectWriter.writeValue(outputStream, domain);
             ConsoleHelper.printMessage("Saving in json file was successful");
         } catch (Exception e) {

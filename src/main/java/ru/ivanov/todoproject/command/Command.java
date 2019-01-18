@@ -1,14 +1,39 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public interface Command {
+import java.util.List;
 
-    String getConsoleCommand();
+public abstract class Command {
 
-    String getDescription();
+    private static final String warningString = "Several projects found with data name. \n" +
+            "Select the creation date of the desired project.";
 
-    boolean isAuthorizationRequired();
+    Project selectProject(final List<Project> projects) {
+        if (projects == null || projects.isEmpty()) return null;
+        if (projects.size() == 1) return projects.get(0);
 
-    void execute(final Bootstrap bootstrap);
+        ConsoleHelper.printMessage(warningString);
+        for (int i = 0; i < projects.size(); i++) {
+            final Project project = projects.get(i);
+            final String created = ConsoleHelper.formatDate(project.getCreated());
+            final String indexAndDate = String.format("%d %s", i, created);
+            ConsoleHelper.printMessage(indexAndDate);
+        }
+
+        final int firstIndex = 0;
+        final int lastIndex = projects.size() - 1;
+        final int indexOfProject = ConsoleHelper.readInt(firstIndex, lastIndex);
+        return projects.get(indexOfProject);
+    }
+
+    public abstract String getConsoleCommand();
+
+    public abstract String getDescription();
+
+    public abstract boolean isAuthorizationRequired();
+
+    public abstract void execute(final ServiceLocator serviceLocator);
 }

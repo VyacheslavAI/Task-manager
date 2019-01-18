@@ -1,10 +1,10 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class UserCreateCommand implements Command {
+public class UserCreateCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -22,7 +22,7 @@ public class UserCreateCommand implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
+    public void execute(ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter new user login:");
         String userLogin = ConsoleHelper.readString();
         ConsoleHelper.printMessage("Enter new user password:");
@@ -30,7 +30,7 @@ public class UserCreateCommand implements Command {
         User user = new User();
         user.setLogin(userLogin);
         user.setPassword(userPassword);
-        bootstrap.getUserService().createOrUpdateUser(user);
+        serviceLocator.getUserService().createOrUpdateUser(user);
         ConsoleHelper.printMessage(String.format("User %s has been added", userLogin));
     }
 }

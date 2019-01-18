@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.dto;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
@@ -43,11 +43,17 @@ public class Domain implements Serializable {
     public Domain() {
     }
 
-    public static Domain createDomain(final Bootstrap bootstrap) {
+    public static Domain createDomain(final ServiceLocator serviceLocator) {
         final Domain domain = new Domain();
-        domain.setProjects(bootstrap.getProjectService().loadAllProject());
-        domain.setTasks(bootstrap.getTaskService().loadAllTask());
-        domain.setUsers(bootstrap.getUserService().loadAllUser());
+        domain.setProjects(serviceLocator.getProjectService().loadAllProject());
+        domain.setTasks(serviceLocator.getTaskService().loadAllTask());
+        domain.setUsers(serviceLocator.getUserService().loadAllUser());
         return domain;
+    }
+
+    public void loadFromDomain(final ServiceLocator serviceLocator) {
+        serviceLocator.getUserService().addAllUser(getUsers());
+        serviceLocator.getProjectService().addAllProject(getProjects());
+        serviceLocator.getTaskService().addAllTask(getTasks());
     }
 }

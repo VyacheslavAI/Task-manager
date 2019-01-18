@@ -5,7 +5,7 @@ import ru.ivanov.todoproject.entity.Task;
 
 import java.util.List;
 
-public interface ITaskService {
+public interface ITaskService extends IService {
 
     Task createOrUpdateTask(final Task task);
 

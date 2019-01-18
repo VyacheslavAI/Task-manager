@@ -1,14 +1,13 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
-import ru.ivanov.todoproject.util.CommandHelper;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public class TaskShowByProjectCommand implements Command {
+public class TaskShowByProjectCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -26,20 +25,20 @@ public class TaskShowByProjectCommand implements Command {
     }
 
     @Override
-    public void execute(final Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = bootstrap.getProjectService().loadProjectByName(projectName);
-        bootstrap.filterProjectsForActiveUser(projects);
-        final Project selectedProject = CommandHelper.selectProject(projects);
+        final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
+        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        final Project selectedProject = selectProject(projects);
 
         if (selectedProject == null) {
             ConsoleHelper.printMessage(String.format("Project %s not found", projectName));
             return;
         }
 
-        final List<Task> tasks = bootstrap.getTaskService().loadTasksByProject(selectedProject);
-        bootstrap.filterTasksForActiveUser(tasks);
+        final List<Task> tasks = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
+        serviceLocator.getUserService().filterTasksForActiveUser(tasks);
         for (final Task persistentTask : tasks) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Project id: %s %n Name: %s %n Date of creation: %s",
                     persistentTask.getId(),

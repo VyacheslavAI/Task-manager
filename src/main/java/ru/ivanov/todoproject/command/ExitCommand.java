@@ -1,9 +1,9 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class ExitCommand implements Command {
+public class ExitCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -21,7 +21,7 @@ public class ExitCommand implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Good bye!");
     }
 }

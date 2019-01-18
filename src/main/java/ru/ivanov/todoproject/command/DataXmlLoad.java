@@ -1,16 +1,16 @@
 package ru.ivanov.todoproject.command;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
-import ru.ivanov.todoproject.util.ConsoleHelper;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.dto.Domain;
+import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataXmlLoad implements Command {
+public class DataXmlLoad extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -28,14 +28,13 @@ public class DataXmlLoad implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         try (InputStream inputStream = Files.newInputStream(Paths.get("data.xml"))) {
-            bootstrap.clearAllProjectAndTask();
+            serviceLocator.getProjectService().deleteAllProject();
+            serviceLocator.getTaskService().deleteAllTask();
             XmlMapper xmlMapper = new XmlMapper();
             Domain domain = xmlMapper.readValue(inputStream, Domain.class);
-            bootstrap.getProjectService().addAllProject(domain.getProjects());
-            bootstrap.getTaskService().addAllTask(domain.getTasks());
-            bootstrap.getUserService().addAllUser(domain.getUsers());
+            domain.loadFromDomain(serviceLocator);
             ConsoleHelper.printMessage("Loading from xml file was successful");
         } catch (IOException e) {
             ConsoleHelper.printMessage("An error has occurred during loading from xml file");

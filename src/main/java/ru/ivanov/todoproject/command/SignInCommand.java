@@ -1,10 +1,10 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class SignInCommand implements Command {
+public class SignInCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -22,17 +22,17 @@ public class SignInCommand implements Command {
     }
 
     @Override
-    public void execute(final Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Please enter your login:");
         final String userLogin = ConsoleHelper.readString();
-        User user = bootstrap.getUserService().loadUserByLogin(userLogin);
+        User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
         ConsoleHelper.printMessage("Please enter your password");
         final String userPassword = ConsoleHelper.readString();
         if (user == null || !user.getPassword().equals(userPassword)) {
             ConsoleHelper.printMessage("Wrong login or password");
             return;
         }
-        bootstrap.setActiveUser(user);
+        serviceLocator.getUserService().setActiveUser(user);
         ConsoleHelper.printMessage(String.format("Welcome, %s", userLogin));
     }
 }

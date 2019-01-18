@@ -4,7 +4,7 @@ import ru.ivanov.todoproject.entity.Project;
 
 import java.util.List;
 
-public interface IProjectService {
+public interface IProjectService extends IService {
 
     Project createOrUpdateProject(final Project project);
 

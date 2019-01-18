@@ -1,13 +1,13 @@
 package ru.ivanov.todoproject.command;
 
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.entity.Project;
-import ru.ivanov.todoproject.util.CommandHelper;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public class ProjectReadCommand implements Command {
+public class ProjectReadCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -25,12 +25,12 @@ public class ProjectReadCommand implements Command {
     }
 
     @Override
-    public void execute(final Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = bootstrap.getProjectService().loadProjectByName(projectName);
-        bootstrap.filterProjectsForActiveUser(projects);
-        final Project selectedProject = CommandHelper.selectProject(projects);
+        final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
+        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        final Project selectedProject = selectProject(projects);
 
         if (selectedProject == null) {
             ConsoleHelper.printMessage(String.format("Project %s not found", projectName));

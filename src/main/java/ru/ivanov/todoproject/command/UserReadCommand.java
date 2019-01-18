@@ -1,10 +1,10 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class UserReadCommand implements Command {
+public class UserReadCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -22,10 +22,10 @@ public class UserReadCommand implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
+    public void execute(ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter user login:");
         final String userLogin = ConsoleHelper.readString();
-        User user = bootstrap.getUserService().loadUserByLogin(userLogin);
+        User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
         if (user == null) {
             ConsoleHelper.printMessage(String.format("User %s not found", userLogin));
             return;

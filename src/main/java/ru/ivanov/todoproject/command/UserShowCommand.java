@@ -1,8 +1,9 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
 
-public class UserShowCommand implements Command {
+import ru.ivanov.todoproject.api.ServiceLocator;
+
+public class UserShowCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -20,7 +21,7 @@ public class UserShowCommand implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
+    public void execute(ServiceLocator serviceLocator) {
 
     }
 }

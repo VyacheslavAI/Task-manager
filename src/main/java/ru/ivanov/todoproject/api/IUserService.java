@@ -6,7 +6,7 @@ import ru.ivanov.todoproject.entity.User;
 
 import java.util.List;
 
-public interface IUserService {
+public interface IUserService extends IService {
 
     User createOrUpdateUser(final User user);
 
@@ -27,4 +27,10 @@ public interface IUserService {
     void filterProjectsForActiveUser(final List<Project> projects);
 
     void filterTasksForActiveUser(final List<Task> tasks);
+
+    void setActiveUser(User user);
+
+    User getActiveUser();
+
+    void adminInitialization();
 }

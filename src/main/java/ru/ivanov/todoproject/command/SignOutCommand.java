@@ -1,9 +1,9 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class SignOutCommand implements Command {
+public class SignOutCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -21,8 +21,8 @@ public class SignOutCommand implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
-        bootstrap.setActiveUser(null);
+    public void execute(final ServiceLocator serviceLocator) {
+        serviceLocator.getUserService().setActiveUser(null);
         ConsoleHelper.printMessage("Logout successful");
     }
 }

@@ -1,12 +1,12 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public class ProjectShowCommand implements Command {
+public class ProjectShowCommand extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -24,10 +24,10 @@ public class ProjectShowCommand implements Command {
     }
 
     @Override
-    public void execute(final Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("All available projects: \r\n");
-        final List<Project> projects = bootstrap.getProjectService().loadAllProject();
-        bootstrap.filterProjectsForActiveUser(projects);
+        final List<Project> projects = serviceLocator.getProjectService().loadAllProject();
+        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
         for (final Project project : projects) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Name: %s %n Date of creation: %s",
                     project.getId(),

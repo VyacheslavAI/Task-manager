@@ -1,16 +1,16 @@
 package ru.ivanov.todoproject.command;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
-import ru.ivanov.todoproject.util.ConsoleHelper;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.dto.Domain;
+import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataXmlSave implements Command {
+public class DataXmlSave extends Command {
 
     @Override
     public String getConsoleCommand() {
@@ -28,9 +28,9 @@ public class DataXmlSave implements Command {
     }
 
     @Override
-    public void execute(Bootstrap bootstrap) {
+    public void execute(final ServiceLocator serviceLocator) {
         try (OutputStream outputStream = Files.newOutputStream(Paths.get("data.xml"))) {
-            Domain domain = Domain.createDomain(bootstrap);
+            Domain domain = Domain.createDomain(serviceLocator);
             XmlMapper xmlMapper = new XmlMapper();
             xmlMapper.writeValue(outputStream, domain);
             ConsoleHelper.printMessage("Saving in xml file was successful");

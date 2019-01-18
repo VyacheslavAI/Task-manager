@@ -85,4 +85,11 @@ public class UserService implements IUserService {
     public boolean hasUserAuthorized() {
         return activeUser != null;
     }
+
+    public void adminInitialization() {
+        final User admin = new User();
+        admin.setLogin("admin");
+        admin.setPassword("admin");
+        createOrUpdateUser(admin);
+    }
 }
