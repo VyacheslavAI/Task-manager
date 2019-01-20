@@ -1,8 +1,10 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
-import ru.ivanov.todoproject.entity.Task;
+import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
+import ru.ivanov.todoproject.api.ITaskSOAPEndpoint;
+import ru.ivanov.todoproject.api.Project;
+import ru.ivanov.todoproject.api.Task;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.Date;
@@ -21,16 +23,12 @@ public class TaskUpdateCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return true;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
+        ITaskSOAPEndpoint taskSOAPEndpoint = soapServiceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
+        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        final List<Project> projects = projectSOAPEndpoint.readProject(projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -40,8 +38,7 @@ public class TaskUpdateCommand extends Command {
 
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
-        final List<Task> tasks = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
-        serviceLocator.getUserService().filterTasksForActiveUser(tasks);
+        final List<Task> tasks = taskSOAPEndpoint.getTasksByProject(selectedProject);
 
         Task taskForUpdate = null;
         for (final Task persistentTask : tasks) {
@@ -62,7 +59,7 @@ public class TaskUpdateCommand extends Command {
         final String date = ConsoleHelper.readString();
         final Date newDate = ConsoleHelper.parseDate(date);
         taskForUpdate.setName(newName);
-        taskForUpdate.setCreated(newDate);
+        taskForUpdate.setCreated(ConsoleHelper.convertDateToXMLCalendar(newDate));
 
         ConsoleHelper.printMessage(String.format("Task %s has been updated", taskName));
     }

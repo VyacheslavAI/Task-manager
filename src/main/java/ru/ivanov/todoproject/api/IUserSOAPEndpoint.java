@@ -23,4 +23,7 @@ public interface IUserSOAPEndpoint {
 
     @WebMethod
     List<User> showUsers();
+
+    @WebMethod
+    User getActiveUser();
 }

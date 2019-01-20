@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.SOAPServiceLocator;
 import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -19,16 +19,10 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return false;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
         ConsoleHelper.printMessage("The following commands are available to you:");
-        final Map<String, Command> commands = ((Bootstrap) serviceLocator).getCommands();
+        final Map<String, Command> commands = ((Bootstrap) soapServiceLocator).getCommands();
         final List<Command> availableCommands = new ArrayList<>(commands.values());
-        final boolean hasAuthorizedUser = serviceLocator.getUserService().hasUserAuthorized();
 
         Collections.sort(availableCommands, new Comparator<Command>() {
             @Override
@@ -40,7 +34,6 @@ public class HelpCommand extends Command {
         });
 
         for (final Command command : availableCommands) {
-            if (command.isAuthorizationRequired() && !hasAuthorizedUser) continue;
             final String consoleCommand = command.getConsoleCommand();
             final String description = command.getDescription();
             ConsoleHelper.printMessage(String.format("%s - %s", consoleCommand, description));

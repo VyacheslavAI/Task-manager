@@ -1,7 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
+import ru.ivanov.todoproject.api.Project;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
@@ -19,21 +20,15 @@ public class ProjectShowCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return true;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
+        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         ConsoleHelper.printMessage("All available projects: \r\n");
-        final List<Project> projects = serviceLocator.getProjectService().loadAllProject();
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        final List<Project> projects = projectSOAPEndpoint.showProjects();
         for (final Project project : projects) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Name: %s %n Date of creation: %s",
                     project.getId(),
                     project.getName(),
                     project.getCreated()));
-
             ConsoleHelper.printDelimiter();
         }
     }

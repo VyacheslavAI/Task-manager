@@ -33,7 +33,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     }
 
     @Override
-    public List<Project> showProjects(final Project project) {
+    public List<Project> showProjects() {
         return serviceLocator.getProjectService().loadAllProject();
     }
 }

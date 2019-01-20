@@ -1,11 +1,10 @@
 package ru.ivanov.todoproject.bootstrap;
 
-import ru.ivanov.todoproject.api.SOAPServiceLocator;
+import ru.ivanov.todoproject.SOAPServiceLocator;
 import ru.ivanov.todoproject.command.Command;
-import ru.ivanov.todoproject.endpoint.IProjectSOAPEndpoint;
-import ru.ivanov.todoproject.endpoint.ITaskSOAPEndpoint;
-import ru.ivanov.todoproject.endpoint.IUserSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
+import ru.ivanov.todoproject.endpoint.TaskSOAPEndpointService;
+import ru.ivanov.todoproject.endpoint.UserSOAPEndpointService;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.HashMap;
@@ -15,7 +14,9 @@ public class Bootstrap implements SOAPServiceLocator {
 
     private ProjectSOAPEndpointService projectSOAPEndpoint = new ProjectSOAPEndpointService();
 
-    private P
+    private TaskSOAPEndpointService taskSOAPEndpoint = new TaskSOAPEndpointService();
+
+    private UserSOAPEndpointService userSOAPEndpoint = new UserSOAPEndpointService();
 
     private final Map<String, Command> commands = new HashMap<>();
 
@@ -44,27 +45,33 @@ public class Bootstrap implements SOAPServiceLocator {
         return commands;
     }
 
-    public IProjectSOAPEndpoint getProjectSOAPEndpoint() {
+    @Override
+    public ProjectSOAPEndpointService getProjectSOAPEndpointService() {
         return projectSOAPEndpoint;
     }
 
-    public void setProjectSOAPEndpoint(IProjectSOAPEndpoint projectSOAPEndpoint) {
+    @Override
+    public void setProjectSOAPEndpointService(ProjectSOAPEndpointService projectSOAPEndpoint) {
         this.projectSOAPEndpoint = projectSOAPEndpoint;
     }
 
-    public ITaskSOAPEndpoint getTaskSOAPEndpoint() {
+    @Override
+    public TaskSOAPEndpointService getTaskSOAPEndpointService() {
         return taskSOAPEndpoint;
     }
 
-    public void setTaskSOAPEndpoint(ITaskSOAPEndpoint taskSOAPEndpoint) {
+    @Override
+    public void setTaskSOAPEndpointService(TaskSOAPEndpointService taskSOAPEndpoint) {
         this.taskSOAPEndpoint = taskSOAPEndpoint;
     }
 
-    public IUserSOAPEndpoint getUserSOAPEndpoint() {
+    @Override
+    public UserSOAPEndpointService getUserSOAPEndpointService() {
         return userSOAPEndpoint;
     }
 
-    public void setUserSOAPEndpoint(IUserSOAPEndpoint userSOAPEndpoint) {
+    @Override
+    public void setUserSOAPEndpointService(UserSOAPEndpointService userSOAPEndpoint) {
         this.userSOAPEndpoint = userSOAPEndpoint;
     }
 }

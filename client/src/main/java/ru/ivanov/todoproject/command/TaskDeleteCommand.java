@@ -1,8 +1,7 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
-import ru.ivanov.todoproject.entity.Task;
+import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
@@ -20,16 +19,12 @@ public class TaskDeleteCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return true;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
+        ITaskSOAPEndpoint taskSOAPEndpoint = soapServiceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
+        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        final List<Project> projects = projectSOAPEndpoint.readProject(projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -39,8 +34,7 @@ public class TaskDeleteCommand extends Command {
 
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
-        final List<Task> projectTask = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
-        serviceLocator.getUserService().filterTasksForActiveUser(projectTask);
+        final List<Task> projectTask = taskSOAPEndpoint.getTasksByProject(selectedProject);
 
         Task taskForDelete = null;
         for (final Task persistentTask : projectTask) {
@@ -54,7 +48,7 @@ public class TaskDeleteCommand extends Command {
                     taskName, selectedProject.getName()));
         }
 
-        serviceLocator.getTaskService().deleteTask(taskForDelete);
+        taskSOAPEndpoint.deleteTask(taskForDelete);
         ConsoleHelper.printMessage(String.format("Task %s has been deleted", taskName));
     }
 }

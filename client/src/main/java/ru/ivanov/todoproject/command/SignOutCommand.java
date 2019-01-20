@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.SOAPServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 public class SignOutCommand extends Command {
@@ -15,14 +15,9 @@ public class SignOutCommand extends Command {
         return "Command to logout user";
     }
 
-    @Override
-    public boolean isAuthorizationRequired() {
-        return true;
-    }
 
     @Override
-    public void execute(final ServiceLocator serviceLocator) {
-        serviceLocator.getUserService().setActiveUser(null);
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
         ConsoleHelper.printMessage("Logout successful");
     }
 }

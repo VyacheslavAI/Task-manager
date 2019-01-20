@@ -1,7 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
+import ru.ivanov.todoproject.api.Project;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
@@ -19,16 +20,11 @@ public class ProjectDeleteCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return true;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
+        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        final List<Project> projects = projectSOAPEndpoint.readProject(projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -36,7 +32,7 @@ public class ProjectDeleteCommand extends Command {
             return;
         }
 
-        serviceLocator.getProjectService().deleteProject(selectedProject);
+        projectSOAPEndpoint.deleteProject(selectedProject);
         ConsoleHelper.printMessage(String.format("Project %s has been deleted", selectedProject.getName()));
     }
 }

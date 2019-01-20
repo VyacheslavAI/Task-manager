@@ -2,6 +2,7 @@ package ru.ivanov.todoproject.endpoint;
 
 import ru.ivanov.todoproject.api.ITaskSOAPEndpoint;
 import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 
 import javax.jws.WebService;
@@ -16,6 +17,8 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     public Task createTask(final Task task) {
         return serviceLocator.getTaskService().createOrUpdateTask(task);
     }
+
+
 
     @Override
     public List<Task> readTask(final String name) {
@@ -35,5 +38,10 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     @Override
     public List<Task> showTasks() {
         return serviceLocator.getTaskService().loadAllTask();
+    }
+
+    @Override
+    public List<Task> getTasksByProject(Project project) {
+        return serviceLocator.getTaskService().loadTasksByProject(project);
     }
 }

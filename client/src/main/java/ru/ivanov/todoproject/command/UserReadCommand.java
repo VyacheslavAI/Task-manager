@@ -1,7 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
+import ru.ivanov.todoproject.api.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 public class UserReadCommand extends Command {
@@ -17,22 +18,17 @@ public class UserReadCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return true;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
+        IUserSOAPEndpoint userSOAPEndpoint = soapServiceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
         ConsoleHelper.printMessage("Enter user login:");
         final String userLogin = ConsoleHelper.readString();
-        final User user = serviceLocator.getUserService().loadUserByLogin(userLogin);
+        final User user = userSOAPEndpoint.readUser(userLogin);
         if (user == null) {
             ConsoleHelper.printMessage(String.format("User %s not found", userLogin));
             return;
         }
-        final String format = "Id: %s %nLogin: %s %nPassword: %s %nDate of creation: %s";
+        final String format = "Login: %s %nPassword: %s %nDate of creation: %s";
         ConsoleHelper.printMessage(String.format(format,
-                user.getId(),
                 user.getLogin(),
                 user.getPassword(),
                 ConsoleHelper.formatDate(user.getCreated())));

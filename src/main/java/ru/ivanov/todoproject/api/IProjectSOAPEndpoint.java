@@ -22,5 +22,5 @@ public interface IProjectSOAPEndpoint {
     Project deleteProject(Project project);
 
     @WebMethod
-    List<Project> showProjects(Project project);
+    List<Project> showProjects();
 }

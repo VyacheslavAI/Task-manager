@@ -1,8 +1,7 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
-import ru.ivanov.todoproject.entity.Task;
+import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
@@ -20,16 +19,13 @@ public class TaskCreateCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return true;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
+        ITaskSOAPEndpoint taskSOAPEndpoint = soapServiceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
+        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
+        IUserSOAPEndpoint userSOAPEndpoint = soapServiceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        final List<Project> projects = projectSOAPEndpoint.readProject(projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -42,8 +38,8 @@ public class TaskCreateCommand extends Command {
         final Task task = new Task();
         task.setName(taskName);
         task.setProjectId(selectedProject.getId());
-        task.setUserId(serviceLocator.getUserService().getActiveUser().getId());
-        serviceLocator.getTaskService().createOrUpdateTask(task);
+        task.setUserId(userSOAPEndpoint.getActiveUser().getId());
+        taskSOAPEndpoint.createTask(task);
         ConsoleHelper.printMessage(String.format("Task %s has been added", taskName));
     }
 }

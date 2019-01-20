@@ -36,4 +36,9 @@ public class UserSOAPEndpoint implements IUserSOAPEndpoint {
     public List<User> showUsers() {
         return serviceLocator.getUserService().loadAllUser();
     }
+
+    @Override
+    public User getActiveUser() {
+        return serviceLocator.getUserService().getActiveUser();
+    }
 }

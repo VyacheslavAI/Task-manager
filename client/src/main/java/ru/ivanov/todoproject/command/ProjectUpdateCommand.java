@@ -1,7 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
+import ru.ivanov.todoproject.api.Project;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.Date;
@@ -20,16 +21,11 @@ public class ProjectUpdateCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return true;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
+        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        final List<Project> projects = projectSOAPEndpoint.readProject(projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -43,9 +39,9 @@ public class ProjectUpdateCommand extends Command {
         final String date = ConsoleHelper.readString();
         final Date newDate = ConsoleHelper.parseDate(date);
         selectedProject.setName(newName);
-        selectedProject.setCreated(newDate);
+        selectedProject.setCreated(ConsoleHelper.convertDateToXMLCalendar(newDate));
 
-        serviceLocator.getProjectService().createOrUpdateProject(selectedProject);
+        projectSOAPEndpoint.updateProject(selectedProject);
         ConsoleHelper.printMessage(String.format("Project %s has been updated", selectedProject.getName()));
     }
 }

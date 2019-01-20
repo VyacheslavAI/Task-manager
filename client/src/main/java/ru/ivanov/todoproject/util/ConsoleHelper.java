@@ -1,12 +1,16 @@
 package ru.ivanov.todoproject.util;
 
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public final class ConsoleHelper {
 
@@ -52,8 +56,8 @@ public final class ConsoleHelper {
         System.out.println("=================================================");
     }
 
-    public static String formatDate(final Date date) {
-        return simpleDateFormat.format(date);
+    public static String formatDate(final XMLGregorianCalendar calendar) {
+        return simpleDateFormat.format(calendar);
     }
 
     public static Date parseDate(final String date) {
@@ -62,6 +66,12 @@ public final class ConsoleHelper {
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    public static XMLGregorianCalendar convertDateToXMLCalendar(final Date date) {
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setGregorianChange(date);
+        return new XMLGregorianCalendarImpl(gregorianCalendar);
     }
 
     public static Date readDate() {

@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.SOAPServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 public class ExitCommand extends Command {
@@ -16,12 +16,7 @@ public class ExitCommand extends Command {
     }
 
     @Override
-    public boolean isAuthorizationRequired() {
-        return false;
-    }
-
-    @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute(final SOAPServiceLocator soapServiceLocator) {
         ConsoleHelper.printMessage("Good bye!");
     }
 }
