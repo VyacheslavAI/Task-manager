@@ -3,7 +3,7 @@ package ru.ivanov.todoproject;
 import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.command.*;
 
-public class TaskManager {
+public class TaskManagerServer {
 
     private static Class<?>[] commands = {DataBinaryLoad.class, DataBinarySave.class, DataJsonSave.class,
             DataJsonLoad.class, DataXmlLoad.class, DataXmlSave.class, ExitCommand.class,

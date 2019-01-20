@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.util;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -65,7 +66,7 @@ public final class ConsoleHelper {
 
     public static Date readDate() {
         Date date = null;
-        while(date == null) {
+        while (date == null) {
             try {
                 final String stringDate = readString();
                 date = simpleDateFormat.parse(stringDate);
@@ -76,3 +77,4 @@ public final class ConsoleHelper {
         return date;
     }
 }
+
