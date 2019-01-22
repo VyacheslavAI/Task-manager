@@ -7,6 +7,7 @@ import ru.ivanov.todoproject.entity.User;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService extends IService {
 
@@ -35,4 +36,10 @@ public interface IUserService extends IService {
     void filterProjectsForUser(final List<Project> projects);
 
     void filterTasksForUser(final List<Task> tasks);
+
+    Map<User, List<Session>> getAuthorizedUsers();
+
+    void setAuthorizedUsers(Map<User, List<Session>> authorizedUsers);
+
+    User getUserBySession(final Session session);
 }

@@ -1,10 +1,11 @@
 package ru.ivanov.todoproject.entity;
 
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
-public final class Session {
+public final class Session extends AbstractEntity implements Serializable {
 
     private String signature;
 

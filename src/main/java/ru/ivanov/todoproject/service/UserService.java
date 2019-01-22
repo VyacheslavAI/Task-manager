@@ -4,15 +4,20 @@ import ru.ivanov.todoproject.api.IUserRepository;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.dao.UserRepository;
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository = new UserRepository();
+
+    private Map<User, List<Session>> authorizedUsers = new HashMap<>();
 
     private User activeUser;
 
@@ -56,28 +61,29 @@ public class UserService implements IUserService {
         userRepository.deleteAll();
     }
 
-    public User getActiveUser() {
-        return activeUser;
-    }
-
-    public void setActiveUser(final User activeUser) {
-        this.activeUser = activeUser;
-    }
-
-    public boolean hasUserAuthorized() {
-        return activeUser != null;
-    }
-
-    public void adminInitialization() {
-        User admin = loadUserByLogin("admin");
-        if (admin == null) {
-            admin = new User();
-            admin.setLogin("admin");
-            admin.setPassword("admin");
-            createOrUpdateUser(admin);
+    @Override
+    public User getUserBySession(final Session session) {
+        if (session == null) return null;
+        for (final Map.Entry<User, List<Session>> authorizedUser : authorizedUsers.entrySet()) {
+            List<Session> userSessions = authorizedUser.getValue();
+            if (userSessions.contains(session)) {
+                return authorizedUser.getKey();
+            }
         }
+        return null;
     }
 
+    @Override
+    public Map<User, List<Session>> getAuthorizedUsers() {
+        return authorizedUsers;
+    }
+
+    @Override
+    public void setAuthorizedUsers(Map<User, List<Session>> authorizedUsers) {
+        this.authorizedUsers = authorizedUsers;
+    }
+
+    @Override
     public void filterProjectsForUser(final List<Project> projects) {
         final Iterator<Project> iterator = projects.iterator();
         while (iterator.hasNext()) {
@@ -88,6 +94,7 @@ public class UserService implements IUserService {
         }
     }
 
+    @Override
     public void filterTasksForUser(final List<Task> tasks) {
         final Iterator<Task> iterator = tasks.iterator();
         while (iterator.hasNext()) {
@@ -95,6 +102,32 @@ public class UserService implements IUserService {
             if (!task.getUserId().equals(activeUser.getId())) {
                 iterator.remove();
             }
+        }
+    }
+
+    @Override
+    public User getActiveUser() {
+        return activeUser;
+    }
+
+    @Override
+    public void setActiveUser(final User activeUser) {
+        this.activeUser = activeUser;
+    }
+
+    @Override
+    public boolean hasUserAuthorized() {
+        return activeUser != null;
+    }
+
+    @Override
+    public void adminInitialization() {
+        User admin = loadUserByLogin("admin");
+        if (admin == null) {
+            admin = new User();
+            admin.setLogin("admin");
+            admin.setPassword("admin");
+            createOrUpdateUser(admin);
         }
     }
 }

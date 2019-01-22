@@ -15,12 +15,10 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
 
     private ServiceLocator serviceLocator;
 
-    private final SessionSOAPEndpoint SESSION_SOAP_ENDPOINT = SessionSOAPEndpoint.getInstance();
-
     @Override
     public Project createProject(final Session session, final Project project) {
         if (session == null || project == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null || !project.getUserId().equals(user.getId())) return null;
         return serviceLocator.getProjectService().createOrUpdateProject(project);
     }
@@ -28,9 +26,9 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public List<Project> readProject(final Session session, final String name) {
         if (session == null || name == null || name.isEmpty()) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null) return null;
-        final List<Project> projects = serviceLocator.getProjectService().findProjectsByUser(user);
+        final List<Project> projects = serviceLocator.getProjectService().loadProjectsByUser(user);
         final List<Project> result = new ArrayList<>();
         for (Project project : projects) {
             if (project.getName().equals(name)) {
@@ -43,7 +41,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public Project updateProject(final Session session, final Project project) {
         if (session == null || project == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null || !project.getUserId().equals(user.getId())) return null;
         return serviceLocator.getProjectService().createOrUpdateProject(project);
     }
@@ -51,7 +49,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public Project deleteProject(final Session session, final Project project) {
         if (session == null || project == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null || !project.getUserId().equals(user.getId())) return null;
         return serviceLocator.getProjectService().deleteProject(project);
     }
@@ -59,7 +57,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public List<Project> showProjects(final Session session) {
         if (session == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null) return null;
         return serviceLocator.getProjectService().loadAllProject();
     }

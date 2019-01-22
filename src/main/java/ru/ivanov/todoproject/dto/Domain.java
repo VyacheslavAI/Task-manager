@@ -2,6 +2,7 @@ package ru.ivanov.todoproject.dto;
 
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
@@ -15,6 +16,8 @@ public class Domain implements Serializable {
     private List<Task> tasks;
 
     private List<User> users;
+
+    private List<Session> sessions;
 
     public List<Project> getProjects() {
         return projects;
@@ -40,6 +43,14 @@ public class Domain implements Serializable {
         this.users = users;
     }
 
+    public List<Session> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(List<Session> sessions) {
+        this.sessions = sessions;
+    }
+
     public Domain() {
     }
 
@@ -48,6 +59,7 @@ public class Domain implements Serializable {
         domain.setProjects(serviceLocator.getProjectService().loadAllProject());
         domain.setTasks(serviceLocator.getTaskService().loadAllTask());
         domain.setUsers(serviceLocator.getUserService().loadAllUser());
+        domain.setSessions(serviceLocator.getSessionService().loadAllSession());
         return domain;
     }
 
@@ -55,5 +67,6 @@ public class Domain implements Serializable {
         serviceLocator.getUserService().addAllUser(getUsers());
         serviceLocator.getProjectService().addAllProject(getProjects());
         serviceLocator.getTaskService().addAllTask(getTasks());
+        serviceLocator.getSessionService().addAllSession(getSessions());
     }
 }

@@ -1,11 +1,9 @@
 package ru.ivanov.todoproject.bootstrap;
 
-import ru.ivanov.todoproject.api.IProjectService;
-import ru.ivanov.todoproject.api.ITaskService;
-import ru.ivanov.todoproject.api.IUserService;
-import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.command.Command;
 import ru.ivanov.todoproject.service.ProjectService;
+import ru.ivanov.todoproject.service.SessionService;
 import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
 import ru.ivanov.todoproject.util.ConsoleHelper;
@@ -19,6 +17,8 @@ public class Bootstrap implements ServiceLocator {
     private ITaskService taskService = new TaskService();
 
     private IUserService userService = new UserService();
+
+    private ISessionService sessionService = new SessionService();
 
     private final Map<String, Command> commands = new HashMap<>();
 
@@ -57,27 +57,43 @@ public class Bootstrap implements ServiceLocator {
         return commands;
     }
 
+    @Override
     public IProjectService getProjectService() {
         return projectService;
     }
 
+    @Override
     public void setProjectService(IProjectService projectService) {
         this.projectService = projectService;
     }
 
+    @Override
     public ITaskService getTaskService() {
         return taskService;
     }
 
+    @Override
     public void setTaskService(ITaskService taskService) {
         this.taskService = taskService;
     }
 
+    @Override
     public IUserService getUserService() {
         return userService;
     }
 
+    @Override
     public void setUserService(IUserService userService) {
         this.userService = userService;
+    }
+
+    @Override
+    public ISessionService getSessionService() {
+        return sessionService;
+    }
+
+    @Override
+    public void setSessionService(SessionService sessionService) {
+        this.sessionService = sessionService;
     }
 }

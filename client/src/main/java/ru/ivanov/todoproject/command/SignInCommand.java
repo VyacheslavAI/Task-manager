@@ -17,6 +17,7 @@ public class SignInCommand extends Command {
 
     @Override
     public void execute(final SOAPServiceLocator soapServiceLocator) {
+
         ConsoleHelper.printMessage("Welcome");
     }
 }

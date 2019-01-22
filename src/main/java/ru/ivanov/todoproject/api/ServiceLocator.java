@@ -1,5 +1,7 @@
 package ru.ivanov.todoproject.api;
 
+import ru.ivanov.todoproject.service.SessionService;
+
 public interface ServiceLocator {
 
     IUserService getUserService();
@@ -8,9 +10,13 @@ public interface ServiceLocator {
 
     ITaskService getTaskService();
 
-    void setUserService(IUserService userService);
+    ISessionService getSessionService();
 
-    void setProjectService(IProjectService projectService);
+    void setUserService(final IUserService userService);
 
-    void setTaskService(ITaskService taskService);
+    void setProjectService(final IProjectService projectService);
+
+    void setTaskService(final ITaskService taskService);
+
+    void setSessionService(final SessionService sessionService);
 }

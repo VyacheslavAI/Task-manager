@@ -16,12 +16,10 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
 
     private ServiceLocator serviceLocator;
 
-    private final SessionSOAPEndpoint SESSION_SOAP_ENDPOINT = SessionSOAPEndpoint.getInstance();
-
     @Override
     public Task createTask(final Session session, final Task task) {
         if (session == null || task == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null || !task.getUserId().equals(user.getId())) return null;
         return serviceLocator.getTaskService().createOrUpdateTask(task);
     }
@@ -29,7 +27,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     @Override
     public List<Task> readTask(final Session session, final String name) {
         if (session == null || name == null || name.isEmpty()) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null) return null;
         final List<Task> tasks = serviceLocator.getTaskService().findTasksByUser(user);
         final List<Task> result = new ArrayList<>();
@@ -44,7 +42,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     @Override
     public Task updateTask(final Session session, final Task task) {
         if (session == null || task == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null || !task.getUserId().equals(user.getId())) return null;
         return serviceLocator.getTaskService().createOrUpdateTask(task);
     }
@@ -52,7 +50,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     @Override
     public Task deleteTask(final Session session, final Task task) {
         if (session == null || task == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null || !task.getUserId().equals(user.getId())) return null;
         return serviceLocator.getTaskService().deleteTask(task);
     }
@@ -60,14 +58,14 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     @Override
     public List<Task> showTasks(final Session session) {
         if (session == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         return serviceLocator.getTaskService().findTasksByUser(user);
     }
 
     @Override
     public List<Task> getTasksByProject(final Session session, final Project project) {
         if (session == null || project == null) return null;
-        final User user = SESSION_SOAP_ENDPOINT.getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null || !project.getUserId().equals(user.getId())) return null;
         List<Task> tasks = serviceLocator.getTaskService().findTasksByUser(user);
         List<Task> result = new ArrayList<>();

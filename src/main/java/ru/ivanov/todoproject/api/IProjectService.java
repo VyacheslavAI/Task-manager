@@ -21,5 +21,5 @@ public interface IProjectService extends IService {
 
     void deleteAllProject();
 
-    List<Project> findProjectsByUser(final User user);
+    List<Project> loadProjectsByUser(final User user);
 }

@@ -5,27 +5,23 @@ import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public final class SessionSOAPEndpoint {
+public class SessionSOAPEndpoint {
 
     private ServiceLocator serviceLocator;
 
-    private Map<User, List<Session>> authorizedUsers = new HashMap<>();
-
-    private static final SessionSOAPEndpoint SESSION_SOAP_ENDPOINT = new SessionSOAPEndpoint();
-
-    public static SessionSOAPEndpoint getInstance() {
-        return SESSION_SOAP_ENDPOINT;
-    }
-
-    private SessionSOAPEndpoint() {
-    }
+    private Map<User, List<Session>> authorizedUsers = serviceLocator.getUserService().getAuthorizedUsers();
 
     public boolean userRegistry(final String login, final String password) {
-        return false;
+        if (login == null || login.isEmpty()) return false;
+        if (password == null || password.isEmpty()) return false;
+        final User user = new User();
+        user.setLogin(login);
+        user.setPassword(password);
+        serviceLocator.getUserService().createOrUpdateUser(user);
+        return true;
     }
 
     public Session singIn(final String login, final String password) {
@@ -42,25 +38,14 @@ public final class SessionSOAPEndpoint {
     }
 
     public boolean signOut(final Session session) {
-        final User user = getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         return authorizedUsers.get(user).remove(session);
     }
 
     public boolean fullSignOut(final Session session) {
-        final User user = getUserBySession(session);
+        final User user = serviceLocator.getUserService().getUserBySession(session);
         authorizedUsers.remove(user);
         return true;
-    }
-
-    User getUserBySession(final Session session) {
-        if (session == null) return null;
-        for (final Map.Entry<User, List<Session>> authorizedUser : authorizedUsers.entrySet()) {
-            List<Session> userSessions = authorizedUser.getValue();
-            if (userSessions.contains(session)) {
-                return authorizedUser.getKey();
-            }
-        }
-        return null;
     }
 
     public ServiceLocator getServiceLocator() {
