@@ -1,6 +1,7 @@
 package ru.ivanov.todoproject.api;
 
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
@@ -24,9 +25,9 @@ public interface IUserService extends IService {
 
     boolean hasUserAuthorized();
 
-    void filterProjectsForActiveUser(final List<Project> projects);
+    void filterProjectsForUser(final Session session, final List<Project> projects);
 
-    void filterTasksForActiveUser(final List<Task> tasks);
+    void filterTasksForUser(final Session session, final List<Task> tasks);
 
     void setActiveUser(User user);
 

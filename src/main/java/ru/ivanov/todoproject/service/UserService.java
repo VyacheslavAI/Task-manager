@@ -4,9 +4,11 @@ import ru.ivanov.todoproject.api.IUserRepository;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.dao.UserRepository;
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,11 +26,13 @@ public class UserService implements IUserService {
 
     @Override
     public User loadById(final String id) {
+        if (id == null || id.isEmpty()) return null;
         return userRepository.findById(id);
     }
 
     @Override
     public User loadUserByLogin(final String login) {
+        if (login == null || login.isEmpty()) return null;
         return userRepository.findByLogin(login);
     }
 
@@ -54,21 +58,23 @@ public class UserService implements IUserService {
         userRepository.deleteAll();
     }
 
-    public void filterProjectsForActiveUser(final List<Project> projects) {
+    public void filterProjectsForUser(final Session session, final List<Project> projects) {
+        final String userId = session.getUserId();
         final Iterator<Project> iterator = projects.iterator();
         while (iterator.hasNext()) {
             final Project project = iterator.next();
-            if (!project.getUserId().equals(activeUser.getId())) {
+            if (!project.getUserId().equals(userId)) {
                 iterator.remove();
             }
         }
     }
 
-    public void filterTasksForActiveUser(final List<Task> tasks) {
+    public void filterTasksForUser(final Session session, final List<Task> tasks) {
+        final String userId = session.getUserId();
         final Iterator<Task> iterator = tasks.iterator();
         while (iterator.hasNext()) {
             final Task task = iterator.next();
-            if (!task.getUserId().equals(activeUser.getId())) {
+            if (!task.getUserId().equals(userId)) {
                 iterator.remove();
             }
         }
@@ -78,7 +84,7 @@ public class UserService implements IUserService {
         return activeUser;
     }
 
-    public void setActiveUser(User activeUser) {
+    public void setActiveUser(final User activeUser) {
         this.activeUser = activeUser;
     }
 

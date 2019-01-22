@@ -15,7 +15,6 @@ public class SignOutCommand extends Command {
         return "Command to logout user";
     }
 
-
     @Override
     public void execute(final SOAPServiceLocator soapServiceLocator) {
         ConsoleHelper.printMessage("Logout successful");

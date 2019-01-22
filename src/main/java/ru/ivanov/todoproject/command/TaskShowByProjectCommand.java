@@ -29,7 +29,7 @@ public class TaskShowByProjectCommand extends Command {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        serviceLocator.getUserService().filterProjectsForUser(projects);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -38,7 +38,7 @@ public class TaskShowByProjectCommand extends Command {
         }
 
         final List<Task> tasks = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
-        serviceLocator.getUserService().filterTasksForActiveUser(tasks);
+        serviceLocator.getUserService().filterTasksForUser(tasks);
         for (final Task persistentTask : tasks) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Project id: %s %n Name: %s %n Date of creation: %s",
                     persistentTask.getId(),

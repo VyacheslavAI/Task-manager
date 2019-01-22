@@ -29,7 +29,7 @@ public class TaskDeleteCommand extends Command {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        serviceLocator.getUserService().filterProjectsForUser(projects);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -40,7 +40,7 @@ public class TaskDeleteCommand extends Command {
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
         final List<Task> projectTask = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
-        serviceLocator.getUserService().filterTasksForActiveUser(projectTask);
+        serviceLocator.getUserService().filterTasksForUser(projectTask);
 
         Task taskForDelete = null;
         for (final Task persistentTask : projectTask) {

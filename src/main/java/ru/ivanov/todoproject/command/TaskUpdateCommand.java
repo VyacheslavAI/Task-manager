@@ -30,7 +30,7 @@ public class TaskUpdateCommand extends Command {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        serviceLocator.getUserService().filterProjectsForUser(projects);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -41,7 +41,7 @@ public class TaskUpdateCommand extends Command {
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
         final List<Task> tasks = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
-        serviceLocator.getUserService().filterTasksForActiveUser(tasks);
+        serviceLocator.getUserService().filterTasksForUser(tasks);
 
         Task taskForUpdate = null;
         for (final Task persistentTask : tasks) {

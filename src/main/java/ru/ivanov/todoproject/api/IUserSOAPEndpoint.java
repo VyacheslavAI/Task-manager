@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.api;
 
+import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 
 import javax.jws.WebMethod;
@@ -10,20 +11,26 @@ import java.util.List;
 public interface IUserSOAPEndpoint {
 
     @WebMethod
-    User createUser(User user);
+    User createUser(final Session session, final User user);
 
     @WebMethod
-    User readUser(String login);
+    User readUser(final Session session, final String login);
 
     @WebMethod
-    User updateUser(User user);
+    User updateUser(final Session session, final User user);
 
     @WebMethod
-    User deleteUser(User user);
+    User deleteUser(final Session session, final User user);
 
     @WebMethod
-    List<User> showUsers();
+    List<User> showUsers(final Session session);
 
     @WebMethod
-    User getActiveUser();
+    User getUser(final Session session);
+
+    @WebMethod
+    void login();
+
+    @WebMethod
+    void logout(final Session session);
 }

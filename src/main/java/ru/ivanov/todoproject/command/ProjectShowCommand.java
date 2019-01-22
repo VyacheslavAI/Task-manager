@@ -27,7 +27,7 @@ public class ProjectShowCommand extends Command {
     public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("All available projects: \r\n");
         final List<Project> projects = serviceLocator.getProjectService().loadAllProject();
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        serviceLocator.getUserService().filterProjectsForUser(projects);
         for (final Project project : projects) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Name: %s %n Date of creation: %s",
                     project.getId(),

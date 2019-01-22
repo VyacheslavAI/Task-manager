@@ -1,6 +1,7 @@
 package ru.ivanov.todoproject.api;
 
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.Session;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -10,17 +11,17 @@ import java.util.List;
 public interface IProjectSOAPEndpoint {
 
     @WebMethod
-    Project createProject(Project project);
+    Project createProject(final Session session, final Project project);
 
     @WebMethod
-    List<Project> readProject(String name);
+    List<Project> readProject(final Session session, final String name);
 
     @WebMethod
-    Project updateProject(Project project);
+    Project updateProject(final Session session, final Project project);
 
     @WebMethod
-    Project deleteProject(Project project);
+    Project deleteProject(final Session session, final Project project);
 
     @WebMethod
-    List<Project> showProjects();
+    List<Project> showProjects(final Session session);
 }

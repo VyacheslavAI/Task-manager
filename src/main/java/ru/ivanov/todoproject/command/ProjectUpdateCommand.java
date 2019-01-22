@@ -29,7 +29,7 @@ public class ProjectUpdateCommand extends Command {
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = serviceLocator.getProjectService().loadProjectByName(projectName);
-        serviceLocator.getUserService().filterProjectsForActiveUser(projects);
+        serviceLocator.getUserService().filterProjectsForUser(projects);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
