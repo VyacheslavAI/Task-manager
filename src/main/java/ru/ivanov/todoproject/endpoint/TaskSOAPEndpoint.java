@@ -76,4 +76,12 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
         }
         return result;
     }
+
+    public ServiceLocator getServiceLocator() {
+        return serviceLocator;
+    }
+
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
 }

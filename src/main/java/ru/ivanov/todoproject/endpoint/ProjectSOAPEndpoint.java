@@ -61,4 +61,12 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
         if (user == null) return null;
         return serviceLocator.getProjectService().loadAllProject();
     }
+
+    public ServiceLocator getServiceLocator() {
+        return serviceLocator;
+    }
+
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
 }

@@ -42,4 +42,12 @@ public class UserSOAPEndpoint implements IUserSOAPEndpoint {
     public User getUser(final Session session) {
         return serviceLocator.getUserService().getActiveUser();
     }
+
+    public ServiceLocator getServiceLocator() {
+        return serviceLocator;
+    }
+
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
 }
