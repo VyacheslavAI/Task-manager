@@ -9,11 +9,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SessionSOAPEndpoint {
+public final class SessionSOAPEndpoint {
 
     private ServiceLocator serviceLocator;
 
     private Map<User, List<Session>> authorizedUsers = new HashMap<>();
+
+    private static final SessionSOAPEndpoint SESSION_SOAP_ENDPOINT = new SessionSOAPEndpoint();
+
+    public static SessionSOAPEndpoint getInstance() {
+        return SESSION_SOAP_ENDPOINT;
+    }
+
+    private SessionSOAPEndpoint() {
+    }
+
+    public boolean userRegistry(final String login, final String password) {
+        return false;
+    }
 
     public Session singIn(final String login, final String password) {
         final User user = serviceLocator.getUserService().loadUserByLogin(login);
@@ -39,25 +52,15 @@ public class SessionSOAPEndpoint {
         return true;
     }
 
-    public User getUserBySession(final Session session) {
+    User getUserBySession(final Session session) {
         if (session == null) return null;
         for (final Map.Entry<User, List<Session>> authorizedUser : authorizedUsers.entrySet()) {
-            final User user = authorizedUser.getKey();
-            if (user.getId().equals(session.getUserId())) {
-                final List<Session> sessions = authorizedUser.getValue();
-
+            List<Session> userSessions = authorizedUser.getValue();
+            if (userSessions.contains(session)) {
+                return authorizedUser.getKey();
             }
         }
         return null;
-    }
-
-    public boolean isUserAuthorized(final Session session) {
-        for (Map.Entry<User, List<Session>> users : authorizedUsers.entrySet()) {
-            final Session userSession = users.getValue();
-            if (userSession.getSignature().equals(session.getSignature()))
-                return true;
-        }
-        return false;
     }
 
     public ServiceLocator getServiceLocator() {

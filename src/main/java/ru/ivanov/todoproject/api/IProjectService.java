@@ -1,6 +1,7 @@
 package ru.ivanov.todoproject.api;
 
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.User;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface IProjectService extends IService {
     Project deleteProject(final Project project);
 
     void deleteAllProject();
+
+    List<Project> findProjectsByUser(final User user);
 }

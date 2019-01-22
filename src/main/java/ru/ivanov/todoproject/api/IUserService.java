@@ -5,6 +5,7 @@ import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
+import java.util.Iterator;
 import java.util.List;
 
 public interface IUserService extends IService {
@@ -25,13 +26,13 @@ public interface IUserService extends IService {
 
     boolean hasUserAuthorized();
 
-    void filterProjectsForUser(final Session session, final List<Project> projects);
-
-    void filterTasksForUser(final Session session, final List<Task> tasks);
-
     void setActiveUser(User user);
 
     User getActiveUser();
 
     void adminInitialization();
+
+    void filterProjectsForUser(final List<Project> projects);
+
+    void filterTasksForUser(final List<Task> tasks);
 }

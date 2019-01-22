@@ -27,10 +27,4 @@ public interface IUserSOAPEndpoint {
 
     @WebMethod
     User getUser(final Session session);
-
-    @WebMethod
-    void login();
-
-    @WebMethod
-    void logout(final Session session);
 }

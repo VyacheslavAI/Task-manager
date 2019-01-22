@@ -42,14 +42,4 @@ public class UserSOAPEndpoint implements IUserSOAPEndpoint {
     public User getUser(final Session session) {
         return serviceLocator.getUserService().getActiveUser();
     }
-
-    @Override
-    public void login() {
-
-    }
-
-    @Override
-    public void logout(final Session session) {
-
-    }
 }

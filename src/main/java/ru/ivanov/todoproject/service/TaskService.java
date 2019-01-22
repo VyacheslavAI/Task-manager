@@ -5,6 +5,7 @@ import ru.ivanov.todoproject.api.ITaskService;
 import ru.ivanov.todoproject.dao.TaskRepository;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
+import ru.ivanov.todoproject.entity.User;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,5 +59,17 @@ public class TaskService implements ITaskService {
 
     public void deleteAllTask() {
         taskRepository.deleteAll();
+    }
+
+    public List<Task> findTasksByUser(final User user) {
+        if (user == null) return null;
+        final List<Task> tasks = loadAllTask();
+        final List<Task> result = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getUserId().equals(user.getId())) {
+                result.add(task);
+            }
+        }
+        return result;
     }
 }

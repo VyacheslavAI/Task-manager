@@ -20,7 +20,7 @@ public final class Session {
     public static Session createSession() {
         try {
             String signature = UUID.randomUUID().toString();
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             byte[] hashResult = null;
             for (int i = 0; i < 14; i++) {
                 hashResult = messageDigest.digest(signature.getBytes());

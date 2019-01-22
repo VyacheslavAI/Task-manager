@@ -4,7 +4,9 @@ import ru.ivanov.todoproject.api.IProjectRepository;
 import ru.ivanov.todoproject.api.IProjectService;
 import ru.ivanov.todoproject.dao.ProjectRepository;
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.User;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,5 +44,17 @@ public class ProjectService implements IProjectService {
 
     public void deleteAllProject() {
         projectRepository.deleteAll();
+    }
+
+    public List<Project> findProjectsByUser(final User user) {
+        if (user == null) return null;
+        final List<Project> projects = loadAllProject();
+        final List<Project> result = new ArrayList<>();
+        for (Project project : projects) {
+            if (project.getUserId().equals(user.getId())) {
+                result.add(project);
+            }
+        }
+        return result;
     }
 }
