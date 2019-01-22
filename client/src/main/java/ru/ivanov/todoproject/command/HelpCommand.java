@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -19,9 +19,9 @@ public class HelpCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("The following commands are available to you:");
-        final Map<String, Command> commands = ((Bootstrap) soapServiceLocator).getCommands();
+        final Map<String, Command> commands = ((Bootstrap) serviceLocator).getCommands();
         final List<Command> availableCommands = new ArrayList<>(commands.values());
 
         Collections.sort(availableCommands, new Comparator<Command>() {

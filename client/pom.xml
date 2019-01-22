@@ -34,6 +34,9 @@
                                 <wsdlOption>
                                     <wsdl>http://localhost/8080/user?wsdl</wsdl>
                                 </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>http://localhost/8080/session?wsdl</wsdl>
+                                </wsdlOption>
                             </wsdlOptions>
                         </configuration>
                         <goals>

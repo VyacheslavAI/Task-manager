@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -19,13 +19,14 @@ public class TaskCreateCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
-        ITaskSOAPEndpoint taskSOAPEndpoint = soapServiceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
-        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
-        IUserSOAPEndpoint userSOAPEndpoint = soapServiceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+    public void execute(final ServiceLocator serviceLocator) {
+        ITaskSOAPEndpoint taskSOAPEndpoint = serviceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
+        IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
+        IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+        final Session session = serviceLocator.getSession();
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = projectSOAPEndpoint.readProject(projectName);
+        final List<Project> projects = projectSOAPEndpoint.readProject(session, projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -36,10 +37,11 @@ public class TaskCreateCommand extends Command {
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
         final Task task = new Task();
+        final User user = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort().getUser(session);
         task.setName(taskName);
         task.setProjectId(selectedProject.getId());
-        task.setUserId(userSOAPEndpoint.getActiveUser().getId());
-        taskSOAPEndpoint.createTask(task);
+        task.setUserId(user.getId());
+        taskSOAPEndpoint.createTask(session, task);
         ConsoleHelper.printMessage(String.format("Task %s has been added", taskName));
     }
 }

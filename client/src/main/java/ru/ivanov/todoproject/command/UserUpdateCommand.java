@@ -1,7 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
+import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.api.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -20,11 +21,12 @@ public class UserUpdateCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
-        final IUserSOAPEndpoint userSOAPEndpoint = soapServiceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+    public void execute(final ServiceLocator serviceLocator) {
+        final IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+        final Session session = serviceLocator.getSession();
         ConsoleHelper.printMessage("Enter user login for update:");
         final String userLogin = ConsoleHelper.readString();
-        final User user = userSOAPEndpoint.readUser(userLogin);
+        final User user = userSOAPEndpoint.readUser(session, userLogin);
         if (user == null) {
             ConsoleHelper.printMessage(String.format("User %s not found", userLogin));
             return;
@@ -40,7 +42,7 @@ public class UserUpdateCommand extends Command {
         user.setLogin(newLogin);
         user.setCreated(ConsoleHelper.convertDateToXMLCalendar(newDate));
         user.setPassword(newPassword);
-        userSOAPEndpoint.updateUser(user);
+        userSOAPEndpoint.updateUser(session, user);
         ConsoleHelper.printMessage(String.format("User %s has been updated", userLogin));
     }
 }

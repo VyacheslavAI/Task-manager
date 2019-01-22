@@ -1,8 +1,9 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
 import ru.ivanov.todoproject.api.Project;
+import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
@@ -20,10 +21,11 @@ public class ProjectShowCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
-        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
+    public void execute(final ServiceLocator serviceLocator) {
+        IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
+        final Session session = serviceLocator.getSession();
         ConsoleHelper.printMessage("All available projects: \r\n");
-        final List<Project> projects = projectSOAPEndpoint.showProjects();
+        final List<Project> projects = projectSOAPEndpoint.showProjects(session);
         for (final Project project : projects) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Name: %s %n Date of creation: %s",
                     project.getId(),

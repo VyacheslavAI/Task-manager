@@ -1,7 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
+import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.api.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -20,10 +21,11 @@ public class UserShowCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
-        final IUserSOAPEndpoint userSOAPEndpoint = soapServiceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+    public void execute(final ServiceLocator serviceLocator) {
+        final IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+        final Session session = serviceLocator.getSession();
         ConsoleHelper.printMessage("All users:");
-        final List<User> users = userSOAPEndpoint.showUsers();
+        final List<User> users = userSOAPEndpoint.showUsers(session);
         final String format = "Login: %s%nPassword: %s%nDate of creation: %s";
         for (final User user : users) {
             ConsoleHelper.printMessage(String.format(format,

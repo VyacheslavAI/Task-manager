@@ -1,10 +1,7 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
-import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
-import ru.ivanov.todoproject.api.ITaskSOAPEndpoint;
-import ru.ivanov.todoproject.api.Project;
-import ru.ivanov.todoproject.api.Task;
+import ru.ivanov.todoproject.ServiceLocator;
+import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
@@ -22,12 +19,13 @@ public class TaskShowByProjectCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
-        ITaskSOAPEndpoint taskSOAPEndpoint = soapServiceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
-        IProjectSOAPEndpoint projectSOAPEndpoint = soapServiceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
+    public void execute(final ServiceLocator serviceLocator) {
+        ITaskSOAPEndpoint taskSOAPEndpoint = serviceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
+        IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
+        final Session session = serviceLocator.getSession();
         ConsoleHelper.printMessage("Enter project name:");
         final String projectName = ConsoleHelper.readString();
-        final List<Project> projects = projectSOAPEndpoint.readProject(projectName);
+        final List<Project> projects = projectSOAPEndpoint.readProject(session, projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
@@ -35,7 +33,7 @@ public class TaskShowByProjectCommand extends Command {
             return;
         }
 
-        final List<Task> tasks = taskSOAPEndpoint.getTasksByProject(selectedProject);
+        final List<Task> tasks = taskSOAPEndpoint.getTasksByProject(session, selectedProject);
         for (final Task persistentTask : tasks) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Project id: %s %n Name: %s %n Date of creation: %s",
                     persistentTask.getId(),

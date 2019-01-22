@@ -1,7 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
+import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.api.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -18,16 +19,17 @@ public class UserDeleteCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter user login for delete:");
+        final Session session = serviceLocator.getSession();
         final String userLogin = ConsoleHelper.readString();
-        IUserSOAPEndpoint userSOAPEndpoint = soapServiceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
-        final User user = userSOAPEndpoint.readUser(userLogin);
+        IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+        final User user = userSOAPEndpoint.readUser(session, userLogin);
         if (user == null) {
             ConsoleHelper.printMessage(String.format("User %s not found", userLogin));
             return;
         }
-        userSOAPEndpoint.deleteUser(user);
+        userSOAPEndpoint.deleteUser(session, user);
         ConsoleHelper.printMessage(String.format("User %s has been deleted", userLogin));
     }
 }

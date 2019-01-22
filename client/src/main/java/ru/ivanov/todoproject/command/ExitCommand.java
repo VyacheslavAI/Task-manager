@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 public class ExitCommand extends Command {
@@ -16,7 +16,7 @@ public class ExitCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
+    public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Good bye!");
     }
 }

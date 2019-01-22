@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 public class SignOutCommand extends Command {
@@ -16,7 +16,8 @@ public class SignOutCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
+    public void execute(final ServiceLocator serviceLocator) {
+        serviceLocator.setSession(null);
         ConsoleHelper.printMessage("Logout successful");
     }
 }

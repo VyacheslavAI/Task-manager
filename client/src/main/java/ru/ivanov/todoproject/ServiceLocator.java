@@ -1,10 +1,12 @@
 package ru.ivanov.todoproject;
 
+import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
+import ru.ivanov.todoproject.endpoint.SessionSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpointService;
 
-public interface SOAPServiceLocator {
+public interface ServiceLocator {
 
     ProjectSOAPEndpointService getProjectSOAPEndpointService();
 
@@ -17,4 +19,12 @@ public interface SOAPServiceLocator {
     UserSOAPEndpointService getUserSOAPEndpointService();
 
     void setUserSOAPEndpointService(UserSOAPEndpointService userSOAPEndpoint);
+
+    SessionSOAPEndpointService getSessionSOAPEndpointService();
+
+    void setSessionSOAPEndpointService(final SessionSOAPEndpointService sessionSOAPEndpointService);
+
+    Session getSession();
+
+    void setSession(Session session);
 }

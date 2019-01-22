@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.Project;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -33,5 +33,5 @@ public abstract class Command {
 
     public abstract String getDescription();
 
-    public abstract void execute(final SOAPServiceLocator soapServiceLocator);
+    public abstract void execute(final ServiceLocator serviceLocator);
 }

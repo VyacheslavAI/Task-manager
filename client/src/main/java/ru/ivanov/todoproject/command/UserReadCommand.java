@@ -1,7 +1,8 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.SOAPServiceLocator;
+import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
+import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.api.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
@@ -18,11 +19,12 @@ public class UserReadCommand extends Command {
     }
 
     @Override
-    public void execute(final SOAPServiceLocator soapServiceLocator) {
-        IUserSOAPEndpoint userSOAPEndpoint = soapServiceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+    public void execute(final ServiceLocator serviceLocator) {
+        IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
+        final Session session = serviceLocator.getSession();
         ConsoleHelper.printMessage("Enter user login:");
         final String userLogin = ConsoleHelper.readString();
-        final User user = userSOAPEndpoint.readUser(userLogin);
+        final User user = userSOAPEndpoint.readUser(session, userLogin);
         if (user == null) {
             ConsoleHelper.printMessage(String.format("User %s not found", userLogin));
             return;
