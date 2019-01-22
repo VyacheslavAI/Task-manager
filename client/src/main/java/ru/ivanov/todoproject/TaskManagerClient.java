@@ -11,7 +11,7 @@ public class TaskManagerClient {
             TaskCreateCommand.class, TaskReadCommand.class, TaskUpdateCommand.class,
             TaskDeleteCommand.class, TaskShowByProjectCommand.class, UserCreateCommand.class,
             UserReadCommand.class, UserUpdateCommand.class, UserDeleteCommand.class, SignInCommand.class,
-            SignOutCommand.class, UserShowCommand.class};
+            SignOutCommand.class, UserShowCommand.class, RegistryCommand.class};
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException {
         Bootstrap bootstrap = new Bootstrap();

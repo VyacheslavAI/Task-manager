@@ -2,14 +2,14 @@ package ru.ivanov.todoproject.bootstrap;
 
 import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.command.Command;
-import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint;
 import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.SessionService;
 import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Bootstrap implements ServiceLocator {
 

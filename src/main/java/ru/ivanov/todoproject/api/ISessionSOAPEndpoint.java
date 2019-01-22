@@ -12,10 +12,10 @@ public interface ISessionSOAPEndpoint {
     boolean userRegistry(String login, String password);
 
     @WebMethod
-    Session singIn(String login, String password);
+    Session login(String login, String password);
 
     @WebMethod
-    boolean signOut(Session session);
+    boolean logout(Session session);
 
     @WebMethod
     boolean fullSignOut(Session session);

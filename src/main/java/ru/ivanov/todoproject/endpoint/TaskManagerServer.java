@@ -5,7 +5,7 @@ import ru.ivanov.todoproject.bootstrap.Bootstrap;
 
 import javax.xml.ws.Endpoint;
 
-public class TaskManagerPublisher {
+public class TaskManagerServer {
 
     public static void main(String[] args) {
         ServiceLocator locator = new Bootstrap();

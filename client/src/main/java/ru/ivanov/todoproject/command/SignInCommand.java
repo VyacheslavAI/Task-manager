@@ -22,7 +22,7 @@ public class SignInCommand extends Command {
         final String login = ConsoleHelper.readString();
         ConsoleHelper.printMessage("Enter password:");
         final String password = ConsoleHelper.readString();
-        final Session session = serviceLocator.getSessionSOAPEndpointService().getSessionSOAPEndpointPort().singIn(login, password);
+        final Session session = serviceLocator.getSessionSOAPEndpointService().getSessionSOAPEndpointPort().login(login, password);
         if (session == null) {
             ConsoleHelper.printMessage("Wrong login/password");
             return;

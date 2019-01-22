@@ -27,7 +27,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
     }
 
     @Override
-    public Session singIn(final String login, final String password) {
+    public Session login(final String login, final String password) {
         final Map<User, List<Session>> authorizedUsers = serviceLocator.getUserService().getAuthorizedUsers();
         final User user = serviceLocator.getUserService().loadUserByLogin(login);
         if (!user.getPassword().equals(password)) {
@@ -42,7 +42,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
     }
 
     @Override
-    public boolean signOut(final Session session) {
+    public boolean logout(final Session session) {
         final Map<User, List<Session>> authorizedUsers = serviceLocator.getUserService().getAuthorizedUsers();
         final User user = serviceLocator.getUserService().getUserBySession(session);
         return authorizedUsers.get(user).remove(session);
