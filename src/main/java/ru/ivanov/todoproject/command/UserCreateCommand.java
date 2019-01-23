@@ -29,7 +29,7 @@ public class UserCreateCommand extends Command {
         final String userPassword = ConsoleHelper.readString();
         final User user = new User();
         user.setLogin(userLogin);
-        user.setPassword(userPassword);
+        user.setPasswordHash(userPassword);
         serviceLocator.getUserService().createOrUpdateUser(user);
         ConsoleHelper.printMessage(String.format("User %s has been added", userLogin));
     }

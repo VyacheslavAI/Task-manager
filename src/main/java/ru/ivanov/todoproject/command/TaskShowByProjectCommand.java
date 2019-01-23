@@ -37,7 +37,7 @@ public class TaskShowByProjectCommand extends Command {
             return;
         }
 
-        final List<Task> tasks = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
+        final List<Task> tasks = serviceLocator.getTaskService().loadAllTaskByProject(selectedProject);
         serviceLocator.getUserService().filterTasksForUser(tasks);
         for (final Task persistentTask : tasks) {
             ConsoleHelper.printMessage(String.format("Id: %s %n Project id: %s %n Name: %s %n Date of creation: %s",

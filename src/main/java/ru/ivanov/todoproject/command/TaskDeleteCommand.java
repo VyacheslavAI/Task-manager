@@ -39,7 +39,7 @@ public class TaskDeleteCommand extends Command {
 
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
-        final List<Task> projectTask = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
+        final List<Task> projectTask = serviceLocator.getTaskService().loadAllTaskByProject(selectedProject);
         serviceLocator.getUserService().filterTasksForUser(projectTask);
 
         Task taskForDelete = null;

@@ -2,7 +2,8 @@ package ru.ivanov.todoproject.service;
 
 import ru.ivanov.todoproject.api.ITaskRepository;
 import ru.ivanov.todoproject.api.ITaskService;
-import ru.ivanov.todoproject.dao.TaskRepository;
+import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.repository.TaskRepository;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
@@ -14,6 +15,8 @@ import java.util.List;
 public class TaskService implements ITaskService {
 
     private final ITaskRepository taskRepository = new TaskRepository();
+
+    private ServiceLocator serviceLocator;
 
     @Override
     public Task createOrUpdateTask(final Task task) {
@@ -28,7 +31,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<Task> findTasksByUser(final User user) {
+    public List<Task> loadAllTaskByUser(final User user) {
         if (user == null) return null;
         final List<Task> tasks = loadAllTask();
         final List<Task> result = new ArrayList<>();
@@ -41,19 +44,19 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task loadById(final String id) {
+    public Task loadTaskById(final String id) {
         if (id == null || id.isEmpty()) return null;
         return taskRepository.findById(id);
     }
 
     @Override
-    public List<Task> loadTasksByName(final String name) {
+    public List<Task> loadAllTaskByName(final String name) {
         if (name == null || name.isEmpty()) return Collections.emptyList();
         return taskRepository.findByName(name);
     }
 
     @Override
-    public List<Task> loadTasksByProject(final Project project) {
+    public List<Task> loadAllTaskByProject(final Project project) {
         if (project == null) return null;
         final List<Task> tasks = taskRepository.findAll();
         final List<Task> result = new ArrayList<>();
@@ -81,4 +84,13 @@ public class TaskService implements ITaskService {
         taskRepository.deleteAll();
     }
 
+    @Override
+    public ServiceLocator getServiceLocator() {
+        return serviceLocator;
+    }
+
+    @Override
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
 }

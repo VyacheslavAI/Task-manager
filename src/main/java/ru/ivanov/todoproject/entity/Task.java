@@ -6,7 +6,7 @@ public class Task extends AbstractEntity implements Serializable {
 
     private String name = "no name";
 
-    private String projectId = "0";
+    private String projectId;
 
     private String userId;
 

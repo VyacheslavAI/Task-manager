@@ -1,25 +1,24 @@
 package ru.ivanov.todoproject.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.IUserRepository;
 import ru.ivanov.todoproject.api.IUserService;
-import ru.ivanov.todoproject.dao.UserRepository;
-import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
-import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.repository.UserRepository;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Map;
+
+import static ru.ivanov.todoproject.util.HashUtil.getHashByAlgorithm;
+import static ru.ivanov.todoproject.util.HashUtil.sign;
 
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository = new UserRepository();
 
-    private Map<User, List<Session>> authorizedUsers = new HashMap<>();
-
-    private User activeUser;
+    private ServiceLocator serviceLocator;
 
     @Override
     public User createOrUpdateUser(final User user) {
@@ -64,70 +63,36 @@ public class UserService implements IUserService {
     @Override
     public User getUserBySession(final Session session) {
         if (session == null) return null;
-        for (final Map.Entry<User, List<Session>> authorizedUser : authorizedUsers.entrySet()) {
-            List<Session> userSessions = authorizedUser.getValue();
-            if (userSessions.contains(session)) {
-                return authorizedUser.getKey();
+        final List<User> users = loadAllUser();
+        for (User user : users) {
+            if (user.getId().equals(session.getUserId())) {
+                return user;
             }
         }
         return null;
     }
 
     @Override
-    public Map<User, List<Session>> getAuthorizedUsers() {
-        return authorizedUsers;
+    public void userInitialize(final String login, final String password) throws NoSuchAlgorithmException, JsonProcessingException {
+        final String hashPassword = getHashByAlgorithm("MD5", password);
+        final User user = new User();
+        user.setLogin(login);
+        user.setPasswordHash(hashPassword);
+        final Session session = new Session();
+        session.setTimestamp(session.getCreated().getTime());
+        session.setUserId(user.getId());
+        session.setSignature(sign(session));
+        createOrUpdateUser(user);
+        serviceLocator.getSessionService().createOrUpdateSession(session);
     }
 
     @Override
-    public void setAuthorizedUsers(Map<User, List<Session>> authorizedUsers) {
-        this.authorizedUsers = authorizedUsers;
+    public ServiceLocator getServiceLocator() {
+        return serviceLocator;
     }
 
     @Override
-    public void filterProjectsForUser(final List<Project> projects) {
-        final Iterator<Project> iterator = projects.iterator();
-        while (iterator.hasNext()) {
-            final Project project = iterator.next();
-            if (!project.getUserId().equals(activeUser.getId())) {
-                iterator.remove();
-            }
-        }
-    }
-
-    @Override
-    public void filterTasksForUser(final List<Task> tasks) {
-        final Iterator<Task> iterator = tasks.iterator();
-        while (iterator.hasNext()) {
-            final Task task = iterator.next();
-            if (!task.getUserId().equals(activeUser.getId())) {
-                iterator.remove();
-            }
-        }
-    }
-
-    @Override
-    public User getActiveUser() {
-        return activeUser;
-    }
-
-    @Override
-    public void setActiveUser(final User activeUser) {
-        this.activeUser = activeUser;
-    }
-
-    @Override
-    public boolean hasUserAuthorized() {
-        return activeUser != null;
-    }
-
-    @Override
-    public void adminInitialization() {
-        User admin = loadUserByLogin("admin");
-        if (admin == null) {
-            admin = new User();
-            admin.setLogin("admin");
-            admin.setPassword("admin");
-            createOrUpdateUser(admin);
-        }
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
     }
 }

@@ -42,7 +42,7 @@ public class UserUpdateCommand extends Command {
         final String newPassword = ConsoleHelper.readString();
         user.setLogin(newLogin);
         user.setCreated(newDate);
-        user.setPassword(newPassword);
+        user.setPasswordHash(newPassword);
 
         ConsoleHelper.printMessage(String.format("User %s has been updated", userLogin));
     }

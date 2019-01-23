@@ -1,7 +1,10 @@
 package ru.ivanov.todoproject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.command.*;
+
+import java.security.NoSuchAlgorithmException;
 
 public class TaskManager {
 
@@ -14,7 +17,7 @@ public class TaskManager {
             UserReadCommand.class, UserUpdateCommand.class, UserDeleteCommand.class, SignInCommand.class,
             SignOutCommand.class, UserShowCommand.class};
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException, JsonProcessingException, NoSuchAlgorithmException {
         final Bootstrap bootstrap = new Bootstrap();
         bootstrap.register(commands);
         bootstrap.run();

@@ -21,7 +21,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
         if (password == null || password.isEmpty()) return false;
         final User user = new User();
         user.setLogin(login);
-        user.setPassword(password);
+        user.setPasswordHash(password);
         serviceLocator.getUserService().createOrUpdateUser(user);
         return true;
     }
@@ -30,7 +30,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
     public Session login(final String login, final String password) {
         final Map<User, List<Session>> authorizedUsers = serviceLocator.getUserService().getAuthorizedUsers();
         final User user = serviceLocator.getUserService().loadUserByLogin(login);
-        if (!user.getPassword().equals(password)) {
+        if (!user.getPasswordHash().equals(password)) {
             return null;
         }
         final Session session = Session.createSession();

@@ -5,13 +5,19 @@ import ru.ivanov.todoproject.entity.Session;
 import java.util.List;
 
 public interface ISessionService {
-    Session createOrUpdateSession(final Session session);
+    Session createOrUpdateSession(Session session);
 
-    Session deleteSession(final Session session);
+    Session loadSessionById(String id);
+
+    Session deleteSession(Session session);
 
     void deleteAllSession();
 
-    void addAllSession(final List<Session> sessions);
+    void addAllSession(List<Session> sessions);
 
     List<Session> loadAllSession();
+
+    ServiceLocator getServiceLocator();
+
+    void setServiceLocator(ServiceLocator serviceLocator);
 }

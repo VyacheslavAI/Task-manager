@@ -40,7 +40,7 @@ public class TaskUpdateCommand extends Command {
 
         ConsoleHelper.printMessage("Enter task name:");
         final String taskName = ConsoleHelper.readString();
-        final List<Task> tasks = serviceLocator.getTaskService().loadTasksByProject(selectedProject);
+        final List<Task> tasks = serviceLocator.getTaskService().loadAllTaskByProject(selectedProject);
         serviceLocator.getUserService().filterTasksForUser(tasks);
 
         Task taskForUpdate = null;

@@ -5,21 +5,24 @@ import ru.ivanov.todoproject.entity.User;
 
 import java.util.List;
 
-public interface IProjectService extends IService {
+public interface IProjectService {
+    Project createOrUpdateProject(Project project);
 
-    Project createOrUpdateProject(final Project project);
+    void addAllProject(List<Project> projects);
 
-    Project loadById(final String id);
+    Project loadProjectById(String id);
 
-    void addAllProject(final List<Project> projects);
-
-    List<Project> loadProjectByName(final String name);
+    List<Project> loadProjectByName(String name);
 
     List<Project> loadAllProject();
 
-    Project deleteProject(final Project project);
+    List<Project> loadAllProjectByUser(User user);
+
+    Project deleteProject(Project project);
 
     void deleteAllProject();
 
-    List<Project> loadProjectsByUser(final User user);
+    ServiceLocator getServiceLocator();
+
+    void setServiceLocator(ServiceLocator serviceLocator);
 }

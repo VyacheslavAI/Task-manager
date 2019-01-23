@@ -1,4 +1,4 @@
-package ru.ivanov.todoproject.dao;
+package ru.ivanov.todoproject.repository;
 
 import ru.ivanov.todoproject.api.IRepository;
 import ru.ivanov.todoproject.entity.AbstractEntity;
@@ -13,11 +13,13 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
     final Map<String, E> entities = new HashMap<>();
 
     public E merge(final E entity) {
+        if (entity == null) return null;
         entities.put(entity.getId(), entity);
         return entity;
     }
 
     public E findById(final String id) {
+        if (id == null || id.isEmpty()) return null;
         return entities.get(id);
     }
 
@@ -26,6 +28,7 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
     }
 
     public E delete(final E entity) {
+        if (entity == null) return null;
         entities.remove(entity.getId());
         return entity;
     }
@@ -35,6 +38,7 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
     }
 
     public void addAll(final List<E> entityList) {
+        if (entityList == null) return;
         for (final E entity : entityList) {
             entities.put(entity.getId(), entity);
         }

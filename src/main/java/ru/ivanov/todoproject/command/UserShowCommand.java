@@ -33,7 +33,7 @@ public class UserShowCommand extends Command {
             ConsoleHelper.printMessage(String.format(format,
                     user.getId(),
                     user.getLogin(),
-                    user.getPassword(),
+                    user.getPasswordHash(),
                     user.getCreated()));
             ConsoleHelper.printDelimiter();
         }

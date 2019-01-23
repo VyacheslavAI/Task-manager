@@ -28,7 +28,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
         if (session == null || name == null || name.isEmpty()) return null;
         final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null) return null;
-        final List<Project> projects = serviceLocator.getProjectService().loadProjectsByUser(user);
+        final List<Project> projects = serviceLocator.getProjectService().loadAllProjectByUser(user);
         final List<Project> result = new ArrayList<>();
         for (Project project : projects) {
             if (project.getName().equals(name)) {

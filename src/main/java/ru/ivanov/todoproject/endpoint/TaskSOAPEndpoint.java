@@ -29,7 +29,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
         if (session == null || name == null || name.isEmpty()) return null;
         final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null) return null;
-        final List<Task> tasks = serviceLocator.getTaskService().findTasksByUser(user);
+        final List<Task> tasks = serviceLocator.getTaskService().loadAllTaskByUser(user);
         final List<Task> result = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getName().equals(name)) {
@@ -59,7 +59,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     public List<Task> showTasks(final Session session) {
         if (session == null) return null;
         final User user = serviceLocator.getUserService().getUserBySession(session);
-        return serviceLocator.getTaskService().findTasksByUser(user);
+        return serviceLocator.getTaskService().loadAllTaskByUser(user);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
         if (session == null || project == null) return null;
         final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null || !project.getUserId().equals(user.getId())) return null;
-        List<Task> tasks = serviceLocator.getTaskService().findTasksByUser(user);
+        List<Task> tasks = serviceLocator.getTaskService().loadAllTaskByUser(user);
         List<Task> result = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getProjectId().equals(project.getId())) {

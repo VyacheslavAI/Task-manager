@@ -1,45 +1,32 @@
 package ru.ivanov.todoproject.api;
 
-import ru.ivanov.todoproject.entity.Project;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.entity.Session;
-import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
-import java.util.Iterator;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Map;
 
-public interface IUserService extends IService {
+public interface IUserService {
+    User createOrUpdateUser(User user);
 
-    User createOrUpdateUser(final User user);
+    User loadById(String id);
 
-    void addAllUser(final List<User> users);
-
-    User loadById(final String id);
-
-    User loadUserByLogin(final String login);
+    User loadUserByLogin(String login);
 
     List<User> loadAllUser();
 
-    User deleteUser(final User user);
+    void addAllUser(List<User> users);
+
+    User deleteUser(User user);
 
     void deleteAllUser();
 
-    boolean hasUserAuthorized();
+    User getUserBySession(Session session);
 
-    void setActiveUser(User user);
+    void userInitialize(String login, String password) throws NoSuchAlgorithmException, JsonProcessingException;
 
-    User getActiveUser();
+    ServiceLocator getServiceLocator();
 
-    void adminInitialization();
-
-    void filterProjectsForUser(final List<Project> projects);
-
-    void filterTasksForUser(final List<Task> tasks);
-
-    Map<User, List<Session>> getAuthorizedUsers();
-
-    void setAuthorizedUsers(Map<User, List<Session>> authorizedUsers);
-
-    User getUserBySession(final Session session);
+    void setServiceLocator(ServiceLocator serviceLocator);
 }
