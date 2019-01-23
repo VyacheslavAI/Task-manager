@@ -7,6 +7,7 @@ import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpoint;
+import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.SessionService;
 import ru.ivanov.todoproject.service.TaskService;
@@ -48,7 +49,7 @@ public class Bootstrap implements ServiceLocator {
         commands.get("load bin").execute(this);
     }
 
-    public void run() throws JsonProcessingException, NoSuchAlgorithmException {
+    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException {
         loadData();
         userService.userInitialize("admin", "admin");
         userService.userInitialize("root", "root");

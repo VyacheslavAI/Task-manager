@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import ru.ivanov.todoproject.entity.Session;
-import ru.ivanov.todoproject.exception.RequestNotUnauthorizedException;
+import ru.ivanov.todoproject.exception.RequestUnauthorizedException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -33,7 +33,7 @@ public final class HashUtil {
         return signature;
     }
 
-    public static boolean verifySessionSignature(final Session session) throws JsonProcessingException, NoSuchAlgorithmException, RequestNotUnauthorizedException {
+    public static boolean verifySessionSignature(final Session session) throws JsonProcessingException, NoSuchAlgorithmException, RequestUnauthorizedException {
         if (!isSessionValid(session)) return false;
         final Session clone = new Session();
         clone.setTimestamp(session.getTimestamp());
@@ -41,7 +41,7 @@ public final class HashUtil {
         final String currentSignature = session.getSignature();
         final String expectedSignature = sign(clone);
         if (!currentSignature.equals(expectedSignature)) {
-            throw new RequestNotUnauthorizedException();
+            throw new RequestUnauthorizedException();
         }
         return true;
     }
