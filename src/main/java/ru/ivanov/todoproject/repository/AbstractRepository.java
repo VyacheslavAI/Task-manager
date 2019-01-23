@@ -33,14 +33,16 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
         return entity;
     }
 
-    public void deleteAll() {
+    public boolean deleteAll() {
         entities.clear();
+        return false;
     }
 
-    public void addAll(final List<E> entityList) {
-        if (entityList == null) return;
+    public boolean addAll(final List<E> entityList) {
+        if (entityList == null) return false;
         for (final E entity : entityList) {
             entities.put(entity.getId(), entity);
         }
+        return false;
     }
 }

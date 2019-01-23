@@ -12,7 +12,7 @@ public interface IRepository<E> {
 
     E findById(final String id);
 
-    void deleteAll();
+    boolean deleteAll();
 
-    void addAll(final List<E> entityList);
+    boolean addAll(final List<E> entityList);
 }

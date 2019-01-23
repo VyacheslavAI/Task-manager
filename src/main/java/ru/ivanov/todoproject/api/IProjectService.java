@@ -2,13 +2,14 @@ package ru.ivanov.todoproject.api;
 
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 
 import java.util.List;
 
 public interface IProjectService {
-    Project createOrUpdateProject(Project project);
+    Project createOrUpdateProject(Project project) throws ObjectIsNotValidException;
 
-    void addAllProject(List<Project> projects);
+    boolean addAllProject(List<Project> projects);
 
     Project loadProjectById(String id);
 
@@ -16,11 +17,11 @@ public interface IProjectService {
 
     List<Project> loadAllProject();
 
-    List<Project> loadAllProjectByUser(User user);
+    List<Project> loadAllProjectByUser(User user) throws ObjectIsNotValidException;
 
-    Project deleteProject(Project project);
+    Project deleteProject(Project project) throws ObjectIsNotValidException;
 
-    void deleteAllProject();
+    boolean deleteAllProject();
 
     ServiceLocator getServiceLocator();
 

@@ -31,12 +31,8 @@ public final class HashUtil {
         return signature;
     }
 
-    public static boolean validate(final Session session) throws JsonProcessingException, NoSuchAlgorithmException, RequestNotUnauthorizedException {
-        if (session == null) return false;
-        if (session.getTimestamp() == 0) return false;
-        if (session.getUserId() == null) return false;
-        if (session.getSignature() == null) return false;
-
+    public static boolean verifySessionSignature(final Session session) throws JsonProcessingException, NoSuchAlgorithmException, RequestNotUnauthorizedException {
+        ValidationUtil.isSessionValid(session);
         final Session clone = new Session();
         clone.setTimestamp(session.getTimestamp());
         clone.setUserId(session.getUserId());

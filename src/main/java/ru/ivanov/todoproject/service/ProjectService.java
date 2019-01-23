@@ -5,11 +5,15 @@ import ru.ivanov.todoproject.api.IProjectService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.repository.ProjectRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static ru.ivanov.todoproject.util.ValidationUtil.isProjectValid;
+import static ru.ivanov.todoproject.util.ValidationUtil.isUserValid;
 
 public class ProjectService implements IProjectService {
 
@@ -18,19 +22,21 @@ public class ProjectService implements IProjectService {
     private ServiceLocator serviceLocator;
 
     @Override
-    public Project createOrUpdateProject(final Project project) {
-        if (project == null) return null;
+    public Project createOrUpdateProject(final Project project) throws ObjectIsNotValidException {
+        if (!isProjectValid(project)) throw new ObjectIsNotValidException(project);
         return projectRepository.merge(project);
     }
 
     @Override
-    public void addAllProject(final List<Project> projects) {
-        if (projects == null || projects.isEmpty()) return;
-        projectRepository.addAll(projects);
+    public boolean addAllProject(final List<Project> projects) {
+        if (projects == null || projects.isEmpty()) return false;
+        projects.removeAll(Collections.singleton(null));
+        return projectRepository.addAll(projects);
     }
 
     @Override
-    public Project loadProjectById(final String id) {
+    public Project loadProjectById(final String id) throws IllegalArgumentException {
+        if (id == null || id.isEmpty()) throw new IllegalArgumentException();
         return projectRepository.findById(id);
     }
 
@@ -46,8 +52,8 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public List<Project> loadAllProjectByUser(final User user) {
-        if (user == null) return null;
+    public List<Project> loadAllProjectByUser(final User user) throws ObjectIsNotValidException {
+        if (!isUserValid(user)) throw new ObjectIsNotValidException(user);
         final List<Project> projects = loadAllProject();
         final List<Project> result = new ArrayList<>();
         for (Project project : projects) {
@@ -59,14 +65,14 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public Project deleteProject(final Project project) {
-        if (project == null) return null;
+    public Project deleteProject(final Project project) throws ObjectIsNotValidException {
+        if (!isProjectValid(project)) throw new ObjectIsNotValidException(project);
         return projectRepository.delete(project);
     }
 
     @Override
-    public void deleteAllProject() {
-        projectRepository.deleteAll();
+    public boolean deleteAllProject() {
+        return projectRepository.deleteAll();
     }
 
     @Override

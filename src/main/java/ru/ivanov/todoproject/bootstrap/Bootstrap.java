@@ -11,7 +11,6 @@ import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.SessionService;
 import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
-import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
