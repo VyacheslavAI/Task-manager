@@ -3,27 +3,28 @@ package ru.ivanov.todoproject.api;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 
 import java.util.List;
 
 public interface ITaskService {
-    Task createOrUpdateTask(Task task);
+    Task createOrUpdateTask(Task task) throws ObjectIsNotValidException;
 
-    void addAllTask(List<Task> tasks);
+    boolean addAllTask(List<Task> tasks);
 
-    List<Task> loadAllTaskByUser(User user);
+    List<Task> loadAllTaskByUser(User user) throws ObjectIsNotValidException;
 
     Task loadTaskById(String id);
 
     List<Task> loadAllTaskByName(String name);
 
-    List<Task> loadAllTaskByProject(Project project);
+    List<Task> loadAllTaskByProject(Project project) throws ObjectIsNotValidException;
 
     List<Task> loadAllTask();
 
-    Task deleteTask(Task task);
+    Task deleteTask(Task task) throws ObjectIsNotValidException;
 
-    void deleteAllTask();
+    boolean deleteAllTask();
 
     ServiceLocator getServiceLocator();
 

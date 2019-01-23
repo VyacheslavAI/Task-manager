@@ -35,7 +35,7 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
 
     public boolean deleteAll() {
         entities.clear();
-        return false;
+        return true;
     }
 
     public boolean addAll(final List<E> entityList) {
@@ -43,6 +43,6 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
         for (final E entity : entityList) {
             entities.put(entity.getId(), entity);
         }
-        return false;
+        return true;
     }
 }

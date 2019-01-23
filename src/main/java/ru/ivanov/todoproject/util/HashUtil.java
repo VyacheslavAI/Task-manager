@@ -11,6 +11,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ru.ivanov.todoproject.util.ValidationUtil.isSessionValid;
+
 public final class HashUtil {
 
     private static final String SALT = "184S8w0";
@@ -32,7 +34,7 @@ public final class HashUtil {
     }
 
     public static boolean verifySessionSignature(final Session session) throws JsonProcessingException, NoSuchAlgorithmException, RequestNotUnauthorizedException {
-        ValidationUtil.isSessionValid(session);
+        if (!isSessionValid(session)) return false;
         final Session clone = new Session();
         clone.setTimestamp(session.getTimestamp());
         clone.setUserId(session.getUserId());

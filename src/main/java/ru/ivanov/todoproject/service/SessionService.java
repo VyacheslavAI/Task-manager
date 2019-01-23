@@ -2,9 +2,13 @@ package ru.ivanov.todoproject.service;
 
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
+import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.repository.SessionRepository;
 
+import java.util.Collections;
 import java.util.List;
+
+import static ru.ivanov.todoproject.util.ValidationUtil.isSessionValid;
 
 public class SessionService implements ru.ivanov.todoproject.api.ISessionService {
 
@@ -13,31 +17,33 @@ public class SessionService implements ru.ivanov.todoproject.api.ISessionService
     private ServiceLocator serviceLocator;
 
     @Override
-    public Session createOrUpdateSession(final Session session) {
-        if (session == null) return null;
+    public Session createOrUpdateSession(final Session session) throws ObjectIsNotValidException {
+        if (!isSessionValid(session)) throw new ObjectIsNotValidException(session);
         return sessionRepository.merge(session);
     }
 
     @Override
-    public Session loadSessionById(final String id) {
-        if (id == null || id.isEmpty()) return null;
+    public Session loadSessionById(final String id) throws IllegalArgumentException {
+        if (id == null || id.isEmpty()) throw new IllegalArgumentException();
         return sessionRepository.findById(id);
     }
 
     @Override
-    public Session deleteSession(final Session session) {
-        if (session == null) return null;
+    public Session deleteSession(final Session session) throws ObjectIsNotValidException {
+        if (!isSessionValid(session)) throw new ObjectIsNotValidException(session);
         return sessionRepository.delete(session);
     }
 
     @Override
-    public void deleteAllSession() {
-        sessionRepository.deleteAll();
+    public boolean deleteAllSession() {
+        return sessionRepository.deleteAll();
     }
 
     @Override
-    public void addAllSession(final List<Session> sessions) {
-        sessionRepository.addAll(sessions);
+    public boolean addAllSession(final List<Session> sessions) {
+        if (sessions == null || sessions.isEmpty()) return false;
+        sessions.removeAll(Collections.singletonList(null));
+        return sessionRepository.addAll(sessions);
     }
 
     @Override
