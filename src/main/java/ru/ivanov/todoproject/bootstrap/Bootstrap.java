@@ -2,7 +2,7 @@ package ru.ivanov.todoproject.bootstrap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.*;
-import ru.ivanov.todoproject.command.Command;
+import ru.ivanov.todoproject.dto.Domain;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint;
@@ -12,11 +12,15 @@ import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.SessionService;
 import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
+import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import javax.xml.ws.Endpoint;
+import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Bootstrap implements ServiceLocator {
 
@@ -35,18 +39,17 @@ public class Bootstrap implements ServiceLocator {
         sessionService.setServiceLocator(this);
     }
 
-    private final Map<String, Command> commands = new HashMap<>();
-
-    public void register(final Class<?>[] commandClasses) throws IllegalAccessException, InstantiationException {
-        for (Class commandClass : commandClasses) {
-            final Command command = (Command) commandClass.newInstance();
-            final String consoleCommand = command.getConsoleCommand();
-            commands.put(consoleCommand, command);
-        }
-    }
-
     private void loadData() {
-        commands.get("load bin").execute(this);
+        try (final InputStream inputStream = Files.newInputStream(Paths.get("data.bin"));
+             final ObjectInput objectInput = new ObjectInputStream(inputStream)) {
+            projectService.deleteAllProject();
+            taskService.deleteAllTask();
+            final Domain domain = (Domain) objectInput.readObject();
+            domain.loadFromDomain(this);
+            ConsoleHelper.printMessage("Loading from binary file was successful");
+        } catch (Exception e) {
+            ConsoleHelper.printMessage("An error has occurred during loading from binary file");
+        }
     }
 
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException {
@@ -68,10 +71,6 @@ public class Bootstrap implements ServiceLocator {
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/user", userSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/session", sessionSOAPEndpoint);
-    }
-
-    public Map<String, Command> getCommands() {
-        return commands;
     }
 
     @Override
