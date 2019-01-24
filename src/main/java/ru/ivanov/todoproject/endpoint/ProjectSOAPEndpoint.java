@@ -9,7 +9,6 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
 
 import javax.jws.WebService;
-import java.util.ArrayList;
 import java.util.List;
 
 import static ru.ivanov.todoproject.util.HashUtil.isSessionVerified;
@@ -29,16 +28,8 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public List<Project> readProject(final Session session, final String name) throws RequestNotAuthenticatedException {
         if (!isSessionVerified(session)) throw new RequestNotAuthenticatedException();
-        final User user = serviceLocator.getUserService().getUserBySession(session);
-        if (user == null) return null;
-        final List<Project> projects = serviceLocator.getProjectService().loadAllProjectByUser(user);
-        final List<Project> result = new ArrayList<>();
-        for (Project project : projects) {
-            if (project.getName().equals(name)) {
-                result.add(project);
-            }
-        }
-        return result;
+        final List<Project> loadProjects = serviceLocator.getProjectService().loadProjectByName(name);
+        return null;
     }
 
     @Override
