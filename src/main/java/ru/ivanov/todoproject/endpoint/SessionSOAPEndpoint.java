@@ -56,12 +56,10 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
         return true;
     }
 
-    @Override
     public ServiceLocator getServiceLocator() {
         return serviceLocator;
     }
 
-    @Override
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;
     }

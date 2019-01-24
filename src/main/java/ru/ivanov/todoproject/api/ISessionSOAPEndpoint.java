@@ -21,8 +21,4 @@ public interface ISessionSOAPEndpoint {
 
     @WebMethod
     boolean fullSignOut(Session session) throws RequestNotAuthenticatedException;
-
-    ServiceLocator getServiceLocator();
-
-    void setServiceLocator(ServiceLocator serviceLocator);
 }

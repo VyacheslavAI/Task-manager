@@ -51,12 +51,10 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
         return filterProjectsByUserId(allProjects, session.getUserId());
     }
 
-    @Override
     public ServiceLocator getServiceLocator() {
         return serviceLocator;
     }
 
-    @Override
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;
     }

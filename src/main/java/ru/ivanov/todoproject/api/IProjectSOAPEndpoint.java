@@ -28,8 +28,4 @@ public interface IProjectSOAPEndpoint {
 
     @WebMethod
     List<Project> showProjects(final Session session) throws RequestNotAuthenticatedException;
-
-    ServiceLocator getServiceLocator();
-
-    void setServiceLocator(ServiceLocator serviceLocator);
 }
