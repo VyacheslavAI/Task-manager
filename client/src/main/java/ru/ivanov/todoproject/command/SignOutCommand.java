@@ -16,6 +16,11 @@ public class SignOutCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         serviceLocator.setSession(null);
         ConsoleHelper.printMessage("Logout successful");

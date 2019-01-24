@@ -19,6 +19,11 @@ public class UserDeleteCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter user login for delete:");
         final Session session = serviceLocator.getSession();

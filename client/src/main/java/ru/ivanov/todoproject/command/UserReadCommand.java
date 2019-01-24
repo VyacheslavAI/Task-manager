@@ -19,6 +19,11 @@ public class UserReadCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
@@ -32,7 +37,7 @@ public class UserReadCommand extends Command {
         final String format = "Login: %s %nPassword: %s %nDate of creation: %s";
         ConsoleHelper.printMessage(String.format(format,
                 user.getLogin(),
-                user.getPassword(),
+                user.getPasswordHash(),
                 ConsoleHelper.formatDate(user.getCreated())));
     }
 }

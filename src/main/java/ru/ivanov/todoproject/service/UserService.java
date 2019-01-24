@@ -79,7 +79,7 @@ public class UserService implements IUserService {
 
     @Override
     public void userInitialize(final String login, final String password) throws NoSuchAlgorithmException,
-            JsonProcessingException, ObjectIsNotValidException, IllegalArgumentException {
+            ObjectIsNotValidException, IllegalArgumentException {
         if (login == null || login.isEmpty()) throw new IllegalArgumentException();
         if (password == null || password.isEmpty()) throw new IllegalArgumentException();
         final String hashPassword = getHashByAlgorithm("MD5", password);

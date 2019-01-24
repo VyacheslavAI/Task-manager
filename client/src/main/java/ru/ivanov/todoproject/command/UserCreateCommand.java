@@ -18,6 +18,11 @@ public class UserCreateCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter new user login:");
         final Session session = serviceLocator.getSession();
@@ -26,7 +31,7 @@ public class UserCreateCommand extends Command {
         final String userPassword = ConsoleHelper.readString();
         final User user = new User();
         user.setLogin(userLogin);
-        user.setPassword(userPassword);
+        user.setPasswordHash(userPassword);
         serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort().createUser(session, user);
         ConsoleHelper.printMessage(String.format("User %s has been added", userLogin));
     }

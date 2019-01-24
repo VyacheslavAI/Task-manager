@@ -16,6 +16,11 @@ public class ExitCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return false;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Good bye!");
     }

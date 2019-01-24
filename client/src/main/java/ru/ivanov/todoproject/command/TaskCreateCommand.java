@@ -19,6 +19,11 @@ public class TaskCreateCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         ITaskSOAPEndpoint taskSOAPEndpoint = serviceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
         IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();

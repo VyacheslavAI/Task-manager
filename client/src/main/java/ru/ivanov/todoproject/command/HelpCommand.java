@@ -19,6 +19,11 @@ public class HelpCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return false;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("The following commands are available to you:");
         final Map<String, Command> commands = ((Bootstrap) serviceLocator).getCommands();

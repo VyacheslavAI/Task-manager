@@ -12,6 +12,8 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ru.ivanov.todoproject.util.ConsoleHelper.printWelcome;
+
 public class Bootstrap implements ServiceLocator {
 
     private ProjectSOAPEndpointService projectSOAPEndpoint = new ProjectSOAPEndpointService();
@@ -35,16 +37,20 @@ public class Bootstrap implements ServiceLocator {
     }
 
     public void run() {
-        String welcomeString = "Welcome to Task Manager Application! \r\n" +
-                "Enter \"help\" show list of available commands";
-        ConsoleHelper.printMessage(welcomeString);
+        printWelcome();
         String operation;
         do {
             operation = ConsoleHelper.readString();
-            Command command = commands.containsKey(operation) ? commands.get(operation) : commands.get("help");
+            Command command = commands.get(operation);
+            if (command == null) command = commands.get("help");
+            if (command.isAuthorizationRequired() && !isUserAuthorized()) command = commands.get("help");
             command.execute(this);
             ConsoleHelper.printDelimiter();
         } while (!operation.equals("exit"));
+    }
+
+    private boolean isUserAuthorized() {
+        return session != null;
     }
 
     public Map<String, Command> getCommands() {

@@ -10,8 +10,8 @@ public class UserRepository extends AbstractRepository<User> implements IUserRep
     public User findByLogin(final String login) {
         if (login == null || login.isEmpty()) return null;
         for (final Map.Entry<String, User> entry : entities.entrySet()) {
-            User user = entry.getValue();
-            String userLogin = user.getLogin();
+            final User user = entry.getValue();
+            final String userLogin = user.getLogin();
             if (userLogin.equals(login)) {
                 return user;
             }

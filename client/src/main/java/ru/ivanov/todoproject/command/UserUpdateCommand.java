@@ -21,6 +21,11 @@ public class UserUpdateCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         final IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
@@ -41,7 +46,7 @@ public class UserUpdateCommand extends Command {
         final String newPassword = ConsoleHelper.readString();
         user.setLogin(newLogin);
         user.setCreated(ConsoleHelper.convertDateToXMLCalendar(newDate));
-        user.setPassword(newPassword);
+        user.setPasswordHash(newPassword);
         userSOAPEndpoint.updateUser(session, user);
         ConsoleHelper.printMessage(String.format("User %s has been updated", userLogin));
     }

@@ -16,6 +16,11 @@ public class RegistryCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return false;
+    }
+
+    @Override
     public void execute(ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter new name:");
         final String login = ConsoleHelper.readString();

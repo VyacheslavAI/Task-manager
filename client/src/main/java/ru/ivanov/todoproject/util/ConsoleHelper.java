@@ -21,6 +21,12 @@ public final class ConsoleHelper {
 
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+    public static void printWelcome() {
+        final String welcomeString = "Welcome to Task Manager Application! \r\n" +
+                "Enter \"help\" show list of available commands";
+        printMessage(welcomeString);
+    }
+
     public static void printMessage(final String message) {
         System.out.println(message);
     }

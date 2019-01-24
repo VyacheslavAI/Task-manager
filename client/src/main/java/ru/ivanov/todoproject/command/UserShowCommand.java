@@ -21,6 +21,11 @@ public class UserShowCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return true;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         final IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
@@ -30,7 +35,7 @@ public class UserShowCommand extends Command {
         for (final User user : users) {
             ConsoleHelper.printMessage(String.format(format,
                     user.getLogin(),
-                    user.getPassword(),
+                    user.getPasswordHash(),
                     user.getCreated()));
             ConsoleHelper.printDelimiter();
         }

@@ -33,5 +33,7 @@ public abstract class Command {
 
     public abstract String getDescription();
 
+    public abstract boolean isAuthorizationRequired();
+
     public abstract void execute(final ServiceLocator serviceLocator);
 }

@@ -17,6 +17,11 @@ public class SignInCommand extends Command {
     }
 
     @Override
+    public boolean isAuthorizationRequired() {
+        return false;
+    }
+
+    @Override
     public void execute(final ServiceLocator serviceLocator) {
         ConsoleHelper.printMessage("Enter your login:");
         final String login = ConsoleHelper.readString();
