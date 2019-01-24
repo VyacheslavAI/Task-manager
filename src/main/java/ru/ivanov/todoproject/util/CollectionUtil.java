@@ -20,20 +20,20 @@ public class CollectionUtil {
         return result;
     }
 
-    public static List<Project> filterProjectByName(final List<Project> projects, final String name) {
+    public static List<Project> filterProjectsByUserId(final List<Project> projects, final String userId) {
         final List<Project> result = new ArrayList<>();
-        for (final Project project : projects) {
-            if (project.getName().equals(name)) {
+        for (Project project : projects) {
+            if (project.getUserId().equals(userId)) {
                 result.add(project);
             }
         }
         return result;
     }
 
-    public static List<Task> filterTaskByName(final List<Task> projects, final String name) {
+    public static List<Task> filterTasksByUserId(final List<Task> projects, final String userId) {
         final List<Task> result = new ArrayList<>();
-        for (final Task project : projects) {
-            if (project.getName().equals(name)) {
+        for (Task project : projects) {
+            if (project.getUserId().equals(userId)) {
                 result.add(project);
             }
         }

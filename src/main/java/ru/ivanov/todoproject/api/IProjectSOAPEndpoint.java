@@ -21,11 +21,15 @@ public interface IProjectSOAPEndpoint {
     List<Project> readProject(final Session session, final String name) throws RequestNotAuthenticatedException;
 
     @WebMethod
-    Project updateProject(final Session session, final Project project);
+    Project updateProject(final Session session, final Project project) throws RequestNotAuthenticatedException, ObjectIsNotValidException;
 
     @WebMethod
-    Project deleteProject(final Session session, final Project project);
+    Project deleteProject(final Session session, final Project project) throws ObjectIsNotValidException, RequestNotAuthenticatedException;
 
     @WebMethod
-    List<Project> showProjects(final Session session);
+    List<Project> showProjects(final Session session) throws RequestNotAuthenticatedException;
+
+    ServiceLocator getServiceLocator();
+
+    void setServiceLocator(ServiceLocator serviceLocator);
 }

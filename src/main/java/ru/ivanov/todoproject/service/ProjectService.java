@@ -64,6 +64,8 @@ public class ProjectService implements IProjectService {
         return result;
     }
 
+
+
     @Override
     public Project deleteProject(final Project project) throws ObjectIsNotValidException {
         if (!isProjectValid(project)) throw new ObjectIsNotValidException(project);
