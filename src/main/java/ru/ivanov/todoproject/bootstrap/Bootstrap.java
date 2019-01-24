@@ -44,6 +44,7 @@ public class Bootstrap implements ServiceLocator {
              final ObjectInput objectInput = new ObjectInputStream(inputStream)) {
             projectService.deleteAllProject();
             taskService.deleteAllTask();
+            sessionService.deleteAllSession();
             final Domain domain = (Domain) objectInput.readObject();
             domain.loadFromDomain(this);
             ConsoleHelper.printMessage("Loading from binary file was successful");
@@ -55,7 +56,6 @@ public class Bootstrap implements ServiceLocator {
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException {
         loadData();
         userService.userInitialize("admin", "admin");
-        userService.userInitialize("root", "root");
 
         ProjectSOAPEndpoint projectSOAPEndpoint = new ProjectSOAPEndpoint();
         TaskSOAPEndpoint taskSOAPEndpoint = new TaskSOAPEndpoint();

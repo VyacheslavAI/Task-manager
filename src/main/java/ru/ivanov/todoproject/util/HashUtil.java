@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import ru.ivanov.todoproject.entity.Session;
-import ru.ivanov.todoproject.exception.RequestUnauthorizedException;
+import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -33,17 +33,14 @@ public final class HashUtil {
         return signature;
     }
 
-    public static boolean verifySessionSignature(final Session session) throws JsonProcessingException, NoSuchAlgorithmException, RequestUnauthorizedException {
+    public static boolean isSessionVerified(final Session session) throws JsonProcessingException, NoSuchAlgorithmException {
         if (!isSessionValid(session)) return false;
         final Session clone = new Session();
         clone.setTimestamp(session.getTimestamp());
         clone.setUserId(session.getUserId());
         final String currentSignature = session.getSignature();
         final String expectedSignature = sign(clone);
-        if (!currentSignature.equals(expectedSignature)) {
-            throw new RequestUnauthorizedException();
-        }
-        return true;
+        return currentSignature.equals(expectedSignature);
     }
 
     public static String getHashByAlgorithm(final String algorithm, final String value) throws NoSuchAlgorithmException {
@@ -51,7 +48,8 @@ public final class HashUtil {
         if (value == null || value.isEmpty()) throw new IllegalArgumentException();
         MessageDigest digest = digestMap.get(algorithm);
         if (digest == null) {
-            digest = digestMap.put(algorithm, MessageDigest.getInstance(algorithm));
+            digest = MessageDigest.getInstance(algorithm);
+            digestMap.put(algorithm, MessageDigest.getInstance(algorithm));
         }
         final byte[] bytesValue = digest.digest(value.getBytes());
         return new String(bytesValue);

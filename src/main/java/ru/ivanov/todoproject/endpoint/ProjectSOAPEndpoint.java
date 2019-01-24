@@ -1,14 +1,20 @@
 package ru.ivanov.todoproject.endpoint;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
 
 import javax.jws.WebService;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.ivanov.todoproject.util.HashUtil.isSessionVerified;
 
 @WebService(endpointInterface = "ru.ivanov.todoproject.api.IProjectSOAPEndpoint")
 public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
@@ -16,10 +22,9 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     private ServiceLocator serviceLocator;
 
     @Override
-    public Project createProject(final Session session, final Project project) {
-        if (session == null || project == null) return null;
-        final User user = serviceLocator.getUserService().getUserBySession(session);
-        if (user == null || !project.getUserId().equals(user.getId())) return null;
+    public Project createProject(final Session session, final Project project) throws RequestNotAuthenticatedException, ObjectIsNotValidException, JsonProcessingException, NoSuchAlgorithmException {
+        if (!isSessionVerified(session)) throw new RequestNotAuthenticatedException();
+        project.setId(session.getUserId());
         return serviceLocator.getProjectService().createOrUpdateProject(project);
     }
 
