@@ -27,4 +27,8 @@ public interface IUserSOAPEndpoint {
 
     @WebMethod
     User getUser(final Session session);
+
+    ServiceLocator getServiceLocator();
+
+    void setServiceLocator(ServiceLocator serviceLocator);
 }

@@ -4,11 +4,13 @@ import ru.ivanov.todoproject.api.ISessionSOAPEndpoint;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
 
 import javax.jws.WebService;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+
+import static ru.ivanov.todoproject.util.HashUtil.isSessionVerified;
+import static ru.ivanov.todoproject.util.HashUtil.sign;
 
 @WebService(endpointInterface = "ru.ivanov.todoproject.api.ISessionSOAPEndpoint")
 public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
@@ -16,50 +18,50 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
     private ServiceLocator serviceLocator;
 
     @Override
-    public boolean userRegistry(final String login, final String password) {
+    public boolean userRegistry(final String login, final String passwordHash) throws ObjectIsNotValidException {
         if (login == null || login.isEmpty()) return false;
-        if (password == null || password.isEmpty()) return false;
+        if (passwordHash == null || passwordHash.isEmpty()) return false;
         final User user = new User();
         user.setLogin(login);
-        user.setPasswordHash(password);
+        user.setPasswordHash(passwordHash);
         serviceLocator.getUserService().createOrUpdateUser(user);
         return true;
     }
 
     @Override
-    public Session login(final String login, final String password) {
-        final Map<User, List<Session>> authorizedUsers = serviceLocator.getUserService().getAuthorizedUsers();
+    public Session login(final String login, final String passwordHash) throws IllegalArgumentException, ObjectIsNotValidException {
+        if (login == null || login.isEmpty()) throw new IllegalArgumentException();
+        if (passwordHash == null || passwordHash.isEmpty()) throw new IllegalArgumentException();
         final User user = serviceLocator.getUserService().loadUserByLogin(login);
-        if (!user.getPasswordHash().equals(password)) {
-            return null;
-        }
-        final Session session = Session.createSession();
-        if (!authorizedUsers.containsKey(user)) {
-            authorizedUsers.put(user, new ArrayList<Session>());
-        }
-        authorizedUsers.get(user).add(session);
-        return session;
+        final Session userSession = new Session();
+        userSession.setUserId(user.getId());
+        userSession.setTimestamp(System.currentTimeMillis());
+        final String signature = sign(userSession);
+        userSession.setSignature(signature);
+        serviceLocator.getSessionService().createOrUpdateSession(userSession);
+        return userSession;
     }
 
     @Override
-    public boolean logout(final Session session) {
-        final Map<User, List<Session>> authorizedUsers = serviceLocator.getUserService().getAuthorizedUsers();
-        final User user = serviceLocator.getUserService().getUserBySession(session);
-        return authorizedUsers.get(user).remove(session);
-    }
-
-    @Override
-    public boolean fullSignOut(final Session session) {
-        final Map<User, List<Session>> authorizedUsers = serviceLocator.getUserService().getAuthorizedUsers();
-        final User user = serviceLocator.getUserService().getUserBySession(session);
-        authorizedUsers.remove(user);
+    public boolean logout(final Session session) throws RequestNotAuthenticatedException, ObjectIsNotValidException {
+        if (isSessionVerified(session)) throw new RequestNotAuthenticatedException();
+        serviceLocator.getSessionService().deleteSession(session);
         return true;
     }
 
+    @Override
+    public boolean fullSignOut(final Session session) throws RequestNotAuthenticatedException {
+        if (isSessionVerified(session)) throw new RequestNotAuthenticatedException();
+        serviceLocator.getSessionService().deleteAllSession();
+        return true;
+    }
+
+    @Override
     public ServiceLocator getServiceLocator() {
         return serviceLocator;
     }
 
+    @Override
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;
     }

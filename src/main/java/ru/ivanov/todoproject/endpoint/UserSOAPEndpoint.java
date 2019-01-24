@@ -15,38 +15,40 @@ public class UserSOAPEndpoint implements IUserSOAPEndpoint {
 
     @Override
     public User createUser(final Session session, final User user) {
-        return serviceLocator.getUserService().createOrUpdateUser(user);
+        return null;
     }
 
     @Override
     public User readUser(final Session session, final String login) {
-        return serviceLocator.getUserService().loadUserByLogin(login);
+        return null;
     }
 
     @Override
     public User updateUser(final Session session, final User user) {
-        return serviceLocator.getUserService().createOrUpdateUser(user);
+        return null;
     }
 
     @Override
     public User deleteUser(final Session session, final User user) {
-        return serviceLocator.getUserService().deleteUser(user);
+        return null;
     }
 
     @Override
     public List<User> showUsers(final Session session) {
-        return serviceLocator.getUserService().loadAllUser();
+        return null;
     }
 
     @Override
     public User getUser(final Session session) {
-        return serviceLocator.getUserService().getActiveUser();
+        return null;
     }
 
+    @Override
     public ServiceLocator getServiceLocator() {
         return serviceLocator;
     }
 
+    @Override
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;
     }

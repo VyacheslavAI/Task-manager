@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class CollectionUtil {
+public final class CollectionUtil {
+
+    private CollectionUtil() {
+    }
 
     public static <T> List<T> filter(final Collection<T> target, final IPredicate<T> predicate) {
         final List<T> result = new ArrayList<>();
