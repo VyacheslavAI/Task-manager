@@ -1,6 +1,5 @@
 package ru.ivanov.todoproject.endpoint;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
@@ -10,7 +9,6 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
 
 import javax.jws.WebService;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +20,15 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     private ServiceLocator serviceLocator;
 
     @Override
-    public Project createProject(final Session session, final Project project) throws RequestNotAuthenticatedException, ObjectIsNotValidException, JsonProcessingException, NoSuchAlgorithmException {
+    public Project createProject(final Session session, final Project project) throws RequestNotAuthenticatedException, ObjectIsNotValidException {
         if (!isSessionVerified(session)) throw new RequestNotAuthenticatedException();
         project.setId(session.getUserId());
         return serviceLocator.getProjectService().createOrUpdateProject(project);
     }
 
     @Override
-    public List<Project> readProject(final Session session, final String name) {
-        if (session == null || name == null || name.isEmpty()) return null;
+    public List<Project> readProject(final Session session, final String name) throws RequestNotAuthenticatedException {
+        if (!isSessionVerified(session)) throw new RequestNotAuthenticatedException();
         final User user = serviceLocator.getUserService().getUserBySession(session);
         if (user == null) return null;
         final List<Project> projects = serviceLocator.getProjectService().loadAllProjectByUser(user);

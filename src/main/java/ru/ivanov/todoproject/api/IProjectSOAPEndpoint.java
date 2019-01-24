@@ -18,7 +18,7 @@ public interface IProjectSOAPEndpoint {
     Project createProject(final Session session, final Project project) throws RequestNotAuthenticatedException, ObjectIsNotValidException, JsonProcessingException, NoSuchAlgorithmException;
 
     @WebMethod
-    List<Project> readProject(final Session session, final String name);
+    List<Project> readProject(final Session session, final String name) throws RequestNotAuthenticatedException;
 
     @WebMethod
     Project updateProject(final Session session, final Project project);

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import ru.ivanov.todoproject.entity.Session;
-import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,18 +21,22 @@ public final class HashUtil {
     private HashUtil() {
     }
 
-    public static String sign(final Object object) throws JsonProcessingException, NoSuchAlgorithmException {
+    public static String sign(final Object object) {
         if (object == null) return null;
-        final ObjectWriter jsonMapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        final String algorithmName = "MD5";
-        String signature = jsonMapper.writeValueAsString(object);
-        for (int i = 0; i < 1466; i++) {
-            signature = SALT + getHashByAlgorithm(algorithmName, signature) + SALT;
+        try {
+            final ObjectWriter jsonMapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            final String algorithmName = "MD5";
+            String signature = jsonMapper.writeValueAsString(object);
+            for (int i = 0; i < 1466; i++) {
+                signature = SALT + getHashByAlgorithm(algorithmName, signature) + SALT;
+            }
+            return signature;
+        } catch (JsonProcessingException | NoSuchAlgorithmException e) {
+            return null;
         }
-        return signature;
     }
 
-    public static boolean isSessionVerified(final Session session) throws JsonProcessingException, NoSuchAlgorithmException {
+    public static boolean isSessionVerified(final Session session) {
         if (!isSessionValid(session)) return false;
         final Session clone = new Session();
         clone.setTimestamp(session.getTimestamp());
