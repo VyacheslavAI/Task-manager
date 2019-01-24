@@ -30,11 +30,11 @@ public class CollectionUtil {
         return result;
     }
 
-    public static List<Task> filterTasksByUserId(final List<Task> projects, final String userId) {
+    public static List<Task> filterTasksByUserId(final List<Task> tasks, final String userId) {
         final List<Task> result = new ArrayList<>();
-        for (Task project : projects) {
-            if (project.getUserId().equals(userId)) {
-                result.add(project);
+        for (Task task : tasks) {
+            if (task.getUserId().equals(userId)) {
+                result.add(task);
             }
         }
         return result;

@@ -48,7 +48,8 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public List<Project> showProjects(final Session session) throws RequestNotAuthenticatedException {
         if (!isSessionVerified(session)) throw new RequestNotAuthenticatedException();
-        return serviceLocator.getProjectService().loadAllProject();
+        final List<Project> allProjects = serviceLocator.getProjectService().loadAllProject();
+        return filterProjectsByUserId(allProjects, session.getUserId());
     }
 
     @Override
