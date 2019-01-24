@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.endpoint;
 
+import ru.ivanov.todoproject.api.IPredicate;
 import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
@@ -11,6 +12,7 @@ import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
 import javax.jws.WebService;
 import java.util.List;
 
+import static ru.ivanov.todoproject.util.CollectionUtil.filter;
 import static ru.ivanov.todoproject.util.HashUtil.isSessionVerified;
 
 @WebService(endpointInterface = "ru.ivanov.todoproject.api.IProjectSOAPEndpoint")
@@ -29,7 +31,13 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     public List<Project> readProject(final Session session, final String name) throws RequestNotAuthenticatedException {
         if (!isSessionVerified(session)) throw new RequestNotAuthenticatedException();
         final List<Project> loadProjects = serviceLocator.getProjectService().loadProjectByName(name);
-        return null;
+        final IPredicate<Project> belongsToUser = new IPredicate<Project>() {
+            public boolean apply(final Project project) {
+                return project.getName().equals(name);
+            }
+        };
+        final List<Project> result = filter(loadProjects, belongsToUser);
+        return result;
     }
 
     @Override
