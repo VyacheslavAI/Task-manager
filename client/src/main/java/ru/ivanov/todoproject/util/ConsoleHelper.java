@@ -62,18 +62,6 @@ public final class ConsoleHelper {
         System.out.println("=================================================");
     }
 
-    public static String formatDate(final XMLGregorianCalendar calendar) {
-        return simpleDateFormat.format(calendar);
-    }
-
-    public static Date parseDate(final String date) {
-        try {
-            return simpleDateFormat.parse(date);
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
     public static XMLGregorianCalendar convertDateToXMLCalendar(final Date date) {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setGregorianChange(date);

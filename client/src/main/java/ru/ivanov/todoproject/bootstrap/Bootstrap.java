@@ -1,18 +1,17 @@
 package ru.ivanov.todoproject.bootstrap;
 
 import ru.ivanov.todoproject.ServiceLocator;
-import ru.ivanov.todoproject.api.Session;
+import ru.ivanov.todoproject.UserData;
 import ru.ivanov.todoproject.command.Command;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpointService;
-import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.ivanov.todoproject.util.ConsoleHelper.printWelcome;
+import static ru.ivanov.todoproject.util.ConsoleHelper.*;
 
 public class Bootstrap implements ServiceLocator {
 
@@ -24,7 +23,7 @@ public class Bootstrap implements ServiceLocator {
 
     private SessionSOAPEndpointService sessionSOAPEndpoint = new SessionSOAPEndpointService();
 
-    private Session session;
+    private UserData userData = new UserData();
 
     private final Map<String, Command> commands = new HashMap<>();
 
@@ -40,17 +39,13 @@ public class Bootstrap implements ServiceLocator {
         printWelcome();
         String operation;
         do {
-            operation = ConsoleHelper.readString();
+            operation = readString();
             Command command = commands.get(operation);
             if (command == null) command = commands.get("help");
-            if (command.isAuthorizationRequired() && !isUserAuthorized()) command = commands.get("help");
+            if (command.isAuthorizationRequired() && !userData.isUserAuthorized()) command = commands.get("help");
             command.execute(this);
-            ConsoleHelper.printDelimiter();
+            printDelimiter();
         } while (!operation.equals("exit"));
-    }
-
-    private boolean isUserAuthorized() {
-        return session != null;
     }
 
     public Map<String, Command> getCommands() {
@@ -95,13 +90,5 @@ public class Bootstrap implements ServiceLocator {
     @Override
     public void setSessionSOAPEndpointService(SessionSOAPEndpointService sessionSOAPEndpoint) {
         this.sessionSOAPEndpoint = sessionSOAPEndpoint;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
     }
 }
