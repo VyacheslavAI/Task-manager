@@ -6,8 +6,12 @@ import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
-import java.io.Serializable;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+
+import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
 public class Domain implements Serializable {
 
@@ -54,7 +58,7 @@ public class Domain implements Serializable {
     public Domain() {
     }
 
-    public static Domain saveDataToDomain(final ServiceLocator serviceLocator) {
+    private static Domain saveDataToDomain(final ServiceLocator serviceLocator) {
         final Domain domain = new Domain();
         domain.setProjects(serviceLocator.getProjectService().loadAllProject());
         domain.setTasks(serviceLocator.getTaskService().loadAllTask());
@@ -63,18 +67,32 @@ public class Domain implements Serializable {
         return domain;
     }
 
-    public void loadFromDomain(final ServiceLocator serviceLocator) {
+    public void loadDataFromDomain(final ServiceLocator serviceLocator) {
         serviceLocator.getUserService().addAllUser(getUsers());
         serviceLocator.getProjectService().addAllProject(getProjects());
         serviceLocator.getTaskService().addAllTask(getTasks());
         serviceLocator.getSessionService().addAllSession(getSessions());
     }
 
-    public void saveDomainInBinary() {
-
+    public static void saveApplicationDataInBinary(final ServiceLocator serviceLocator) {
+        try (final OutputStream outputStream = Files.newOutputStream(Paths.get("data.bin"));
+             final ObjectOutput objectOutput = new ObjectOutputStream(outputStream)) {
+            final Domain domain = Domain.saveDataToDomain(serviceLocator);
+            objectOutput.writeObject(domain);
+            print("Saving in binary file was successful");
+        } catch (Exception e) {
+            print("An error has occurred during saving in binary format");
+        }
     }
 
-    public void loadDomainFromBinary() {
-
+    public static void loadApplicationDataFromBinary(final ServiceLocator serviceLocator) {
+        try (final InputStream inputStream = Files.newInputStream(Paths.get("data.bin"));
+             final ObjectInput objectInput = new ObjectInputStream(inputStream)) {
+            final Domain domain = (Domain) objectInput.readObject();
+            domain.loadDataFromDomain(serviceLocator);
+            print("Loading from binary file was successful");
+        } catch (Exception e) {
+            print("An error has occurred during loading from binary file");
+        }
     }
 }

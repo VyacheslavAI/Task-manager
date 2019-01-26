@@ -12,7 +12,6 @@ import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.SessionService;
 import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
-import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import javax.xml.ws.Endpoint;
 import java.io.InputStream;
@@ -22,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 
+import static ru.ivanov.todoproject.dto.Domain.loadApplicationDataFromBinary;
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
 public class Bootstrap implements ServiceLocator {
@@ -53,19 +53,8 @@ public class Bootstrap implements ServiceLocator {
         sessionSOAPEndpoint.setServiceLocator(this);
     }
 
-    private void loadData() {
-        try (final InputStream inputStream = Files.newInputStream(Paths.get("data.bin"));
-             final ObjectInput objectInput = new ObjectInputStream(inputStream)) {
-            final Domain domain = (Domain) objectInput.readObject();
-            domain.loadFromDomain(this);
-            print("Loading from binary file was successful");
-        } catch (Exception e) {
-            print("An error has occurred during loading from binary file");
-        }
-    }
-
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException {
-        loadData();
+        loadApplicationDataFromBinary();
         userService.userInitialize("admin", "admin");
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);

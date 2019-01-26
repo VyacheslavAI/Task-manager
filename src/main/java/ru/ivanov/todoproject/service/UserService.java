@@ -1,6 +1,5 @@
 package ru.ivanov.todoproject.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.IUserRepository;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.api.ServiceLocator;
@@ -13,7 +12,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.ivanov.todoproject.util.HashUtil.getHashByAlgorithm;
 import static ru.ivanov.todoproject.util.HashUtil.getPasswordHash;
 import static ru.ivanov.todoproject.util.HashUtil.sign;
 import static ru.ivanov.todoproject.util.ValidationUtil.isSessionValid;

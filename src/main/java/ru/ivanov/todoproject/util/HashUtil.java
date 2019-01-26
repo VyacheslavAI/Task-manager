@@ -7,16 +7,12 @@ import ru.ivanov.todoproject.entity.Session;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static ru.ivanov.todoproject.util.ValidationUtil.isSessionValid;
 
 public final class HashUtil {
 
     private static final String SALT = "184S8w0";
-
-    private static Map<String, MessageDigest> digestMap = new HashMap<>();
 
     private HashUtil() {
     }
@@ -41,8 +37,8 @@ public final class HashUtil {
         final Session clone = new Session();
         clone.setTimestamp(session.getTimestamp());
         clone.setUserId(session.getUserId());
-        final String currentSignature = session.getSignature();
-        final String expectedSignature = sign(clone);
+        final String expectedSignature = session.getSignature();
+        final String currentSignature = sign(clone);
         return currentSignature.equals(expectedSignature);
     }
 
@@ -55,13 +51,8 @@ public final class HashUtil {
     }
 
     public static String getHashByAlgorithm(final String algorithm, final String value) throws NoSuchAlgorithmException {
-        if (algorithm == null || algorithm.isEmpty()) throw new IllegalArgumentException();
-        if (value == null || value.isEmpty()) throw new IllegalArgumentException();
-        MessageDigest digest = digestMap.get(algorithm);
-        if (digest == null) {
-            digest = MessageDigest.getInstance(algorithm);
-            digestMap.put(algorithm, MessageDigest.getInstance(algorithm));
-        }
+        if (value == null || value.isEmpty()) return "";
+        final MessageDigest digest = MessageDigest.getInstance(algorithm);
         final byte[] bytesValue = digest.digest(value.getBytes());
         return new String(bytesValue);
     }
