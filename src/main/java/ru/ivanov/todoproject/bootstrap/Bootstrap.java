@@ -22,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 
+import static ru.ivanov.todoproject.util.ConsoleHelper.print;
+
 public class Bootstrap implements ServiceLocator {
 
     private IProjectService projectService = new ProjectService();
@@ -32,41 +34,39 @@ public class Bootstrap implements ServiceLocator {
 
     private ISessionService sessionService = new SessionService();
 
+    private ProjectSOAPEndpoint projectSOAPEndpoint = new ProjectSOAPEndpoint();
+
+    private TaskSOAPEndpoint taskSOAPEndpoint = new TaskSOAPEndpoint();
+
+    private UserSOAPEndpoint userSOAPEndpoint = new UserSOAPEndpoint();
+
+    private SessionSOAPEndpoint sessionSOAPEndpoint = new SessionSOAPEndpoint();
+
     {
         projectService.setServiceLocator(this);
         taskService.setServiceLocator(this);
         userService.setServiceLocator(this);
         sessionService.setServiceLocator(this);
+        projectSOAPEndpoint.setServiceLocator(this);
+        taskSOAPEndpoint.setServiceLocator(this);
+        userSOAPEndpoint.setServiceLocator(this);
+        sessionSOAPEndpoint.setServiceLocator(this);
     }
 
     private void loadData() {
         try (final InputStream inputStream = Files.newInputStream(Paths.get("data.bin"));
              final ObjectInput objectInput = new ObjectInputStream(inputStream)) {
-            projectService.deleteAllProject();
-            taskService.deleteAllTask();
-            sessionService.deleteAllSession();
             final Domain domain = (Domain) objectInput.readObject();
             domain.loadFromDomain(this);
-            ConsoleHelper.printMessage("Loading from binary file was successful");
+            print("Loading from binary file was successful");
         } catch (Exception e) {
-            ConsoleHelper.printMessage("An error has occurred during loading from binary file");
+            print("An error has occurred during loading from binary file");
         }
     }
 
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException {
         loadData();
         userService.userInitialize("admin", "admin");
-
-        ProjectSOAPEndpoint projectSOAPEndpoint = new ProjectSOAPEndpoint();
-        TaskSOAPEndpoint taskSOAPEndpoint = new TaskSOAPEndpoint();
-        UserSOAPEndpoint userSOAPEndpoint = new UserSOAPEndpoint();
-        SessionSOAPEndpoint sessionSOAPEndpoint = new SessionSOAPEndpoint();
-
-        projectSOAPEndpoint.setServiceLocator(this);
-        taskSOAPEndpoint.setServiceLocator(this);
-        userSOAPEndpoint.setServiceLocator(this);
-        sessionSOAPEndpoint.setServiceLocator(this);
-
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/user", userSOAPEndpoint);

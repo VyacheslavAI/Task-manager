@@ -46,6 +46,14 @@ public final class HashUtil {
         return currentSignature.equals(expectedSignature);
     }
 
+    public static String getPasswordHash(final String password) {
+        try {
+            return getHashByAlgorithm("MD5", password);
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+    }
+
     public static String getHashByAlgorithm(final String algorithm, final String value) throws NoSuchAlgorithmException {
         if (algorithm == null || algorithm.isEmpty()) throw new IllegalArgumentException();
         if (value == null || value.isEmpty()) throw new IllegalArgumentException();

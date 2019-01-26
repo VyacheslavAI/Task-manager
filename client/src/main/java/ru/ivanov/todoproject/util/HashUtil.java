@@ -2,14 +2,22 @@ package ru.ivanov.todoproject.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class HashUtil {
+
+    private static Map<String, MessageDigest> digestMap = new HashMap<>();
 
     private HashUtil() {
     }
 
     public static String getPasswordHash(final String password) {
+        try {
+            return getHashByAlgorithm("MD5", password);
+        } catch (NoSuchAlgorithmException e) {
 
+        }
     }
 
     public static String getHashByAlgorithm(final String algorithm, final String value) throws NoSuchAlgorithmException {

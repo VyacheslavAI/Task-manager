@@ -54,7 +54,7 @@ public class Domain implements Serializable {
     public Domain() {
     }
 
-    public static Domain createDomain(final ServiceLocator serviceLocator) {
+    public static Domain saveDataToDomain(final ServiceLocator serviceLocator) {
         final Domain domain = new Domain();
         domain.setProjects(serviceLocator.getProjectService().loadAllProject());
         domain.setTasks(serviceLocator.getTaskService().loadAllTask());
@@ -68,5 +68,13 @@ public class Domain implements Serializable {
         serviceLocator.getProjectService().addAllProject(getProjects());
         serviceLocator.getTaskService().addAllTask(getTasks());
         serviceLocator.getSessionService().addAllSession(getSessions());
+    }
+
+    public void saveDomainInBinary() {
+
+    }
+
+    public void loadDomainFromBinary() {
+
     }
 }

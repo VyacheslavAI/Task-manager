@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static ru.ivanov.todoproject.util.HashUtil.getHashByAlgorithm;
+import static ru.ivanov.todoproject.util.HashUtil.getPasswordHash;
 import static ru.ivanov.todoproject.util.HashUtil.sign;
 import static ru.ivanov.todoproject.util.ValidationUtil.isSessionValid;
 import static ru.ivanov.todoproject.util.ValidationUtil.isUserValid;
@@ -82,7 +83,7 @@ public class UserService implements IUserService {
             ObjectIsNotValidException, IllegalArgumentException {
         if (login == null || login.isEmpty()) throw new IllegalArgumentException();
         if (password == null || password.isEmpty()) throw new IllegalArgumentException();
-        final String hashPassword = getHashByAlgorithm("MD5", password);
+        final String hashPassword = getPasswordHash(password);
         final User user = new User();
         user.setLogin(login);
         user.setPasswordHash(hashPassword);
