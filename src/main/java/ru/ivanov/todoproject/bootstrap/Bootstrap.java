@@ -2,21 +2,22 @@ package ru.ivanov.todoproject.bootstrap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.*;
+import ru.ivanov.todoproject.dto.Domain;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpoint;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.SessionService;
 import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
+import ru.ivanov.todoproject.validator.Validator;
 
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
-
-import static ru.ivanov.todoproject.dto.Domain.loadApplicationDataFromBinary;
 
 public class Bootstrap implements ServiceLocator {
 
@@ -36,6 +37,12 @@ public class Bootstrap implements ServiceLocator {
 
     private SessionSOAPEndpoint sessionSOAPEndpoint = new SessionSOAPEndpoint();
 
+    private SecurityServerManager securityServerManager = new SecurityServerManager();
+
+    private Validator validator = new Validator();
+
+    private Serializer serializer = new Domain();
+
     {
         projectService.setServiceLocator(this);
         taskService.setServiceLocator(this);
@@ -45,10 +52,21 @@ public class Bootstrap implements ServiceLocator {
         taskSOAPEndpoint.setServiceLocator(this);
         userSOAPEndpoint.setServiceLocator(this);
         sessionSOAPEndpoint.setServiceLocator(this);
+
+        userService.setSecurityManager(securityServerManager);
+        projectSOAPEndpoint.setSecurityManager(securityServerManager);
+        taskSOAPEndpoint.setSecurityManager(securityServerManager);
+        userSOAPEndpoint.setSecurityManager(securityServerManager);
+        sessionSOAPEndpoint.setSecurityManager(securityServerManager);
+
+        projectService.setValidator(validator);
+        taskService.setValidator(validator);
+        userService.setValidator(validator);
+        sessionService.setValidator(validator);
     }
 
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException {
-        loadApplicationDataFromBinary(this);
+        serializer.loadApplicationDataFromBinary(this);
         userService.userInitialize("admin", "admin");
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);

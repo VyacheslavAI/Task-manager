@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.dto;
 
+import ru.ivanov.todoproject.api.Serializer;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
@@ -13,7 +14,7 @@ import java.util.List;
 
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
-public class Domain implements Serializable {
+public class Domain implements Serializable, Serializer {
 
     private List<Project> projects;
 
@@ -55,10 +56,10 @@ public class Domain implements Serializable {
         this.sessions = sessions;
     }
 
-    private Domain() {
+    public Domain() {
     }
 
-    private static Domain saveDataToDomain(final ServiceLocator serviceLocator) {
+    private Domain saveDataToDomain(final ServiceLocator serviceLocator) {
         final Domain domain = new Domain();
         domain.setProjects(serviceLocator.getProjectService().loadAllProject());
         domain.setTasks(serviceLocator.getTaskService().loadAllTask());
@@ -74,7 +75,10 @@ public class Domain implements Serializable {
         serviceLocator.getSessionService().addAllSession(getSessions());
     }
 
-    public static void saveApplicationDataInBinary(final ServiceLocator serviceLocator) {
+
+
+    @Override
+    public void saveApplicationDataInBinary(final ServiceLocator serviceLocator) {
         try (final OutputStream outputStream = Files.newOutputStream(Paths.get("data.bin"));
              final ObjectOutput objectOutput = new ObjectOutputStream(outputStream)) {
             final Domain domain = saveDataToDomain(serviceLocator);
@@ -85,7 +89,8 @@ public class Domain implements Serializable {
         }
     }
 
-    public static void loadApplicationDataFromBinary(final ServiceLocator serviceLocator) {
+    @Override
+    public void loadApplicationDataFromBinary(final ServiceLocator serviceLocator) {
         try (final InputStream inputStream = Files.newInputStream(Paths.get("data.bin"));
              final ObjectInput objectInput = new ObjectInputStream(inputStream)) {
             final Domain domain = (Domain) objectInput.readObject();

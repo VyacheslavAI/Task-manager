@@ -90,16 +90,6 @@ public class ProjectService implements IProjectService {
         return projectRepository.deleteAll();
     }
 
-    @Override
-    public ServiceLocator getServiceLocator() {
-        return serviceLocator;
-    }
-
-    @Override
-    public void setServiceLocator(final ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
-
     private List<Project> filterProjectsByUserId(final List<Project> projects, final String userId) {
         if (projects == null || projects.isEmpty()) return Collections.emptyList();
         if (userId == null || userId.isEmpty()) return Collections.emptyList();
@@ -110,5 +100,15 @@ public class ProjectService implements IProjectService {
             }
         }
         return result;
+    }
+
+    @Override
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
+
+    @Override
+    public void setValidator(Validator validator) {
+        this.validator = validator;
     }
 }

@@ -7,6 +7,7 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.AuthenticationException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
+import ru.ivanov.todoproject.security.SecurityServerManager;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -30,4 +31,8 @@ public interface IProjectSOAPEndpoint {
 
     @WebMethod
     List<Project> showProjects(final Session session) throws AuthenticationException, InvalidArgumentException;
+
+    void setServiceLocator(ServiceLocator serviceLocator);
+
+    void setSecurityManager(SecurityServerManager securityManager);
 }

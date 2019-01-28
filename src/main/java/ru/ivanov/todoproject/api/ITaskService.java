@@ -7,6 +7,7 @@ import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
+import ru.ivanov.todoproject.validator.Validator;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface ITaskService {
 
     boolean deleteAllTask();
 
-    ServiceLocator getServiceLocator();
-
     void setServiceLocator(ServiceLocator serviceLocator);
+
+    void setValidator(Validator validator);
 }

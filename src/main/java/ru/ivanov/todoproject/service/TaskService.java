@@ -10,6 +10,7 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.TaskRepository;
+import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.util.ArrayList;
@@ -101,16 +102,6 @@ public class TaskService implements ITaskService {
         return taskRepository.deleteAll();
     }
 
-    @Override
-    public ServiceLocator getServiceLocator() {
-        return serviceLocator;
-    }
-
-    @Override
-    public void setServiceLocator(final ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
-
     private List<Task> filterTasksByUserId(final List<Task> tasks, final String userId) {
         if (tasks == null || tasks.isEmpty()) return Collections.emptyList();
         if (userId == null || userId.isEmpty()) return Collections.emptyList();
@@ -133,5 +124,15 @@ public class TaskService implements ITaskService {
             }
         }
         return result;
+    }
+
+    @Override
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
+
+    @Override
+    public void setValidator(Validator validator) {
+        this.validator = validator;
     }
 }

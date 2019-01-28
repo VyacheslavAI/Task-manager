@@ -5,6 +5,8 @@ import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.security.SecurityServerManager;
+import ru.ivanov.todoproject.validator.Validator;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -28,7 +30,9 @@ public interface IUserService {
 
     void userInitialize(String login, String password) throws NoSuchAlgorithmException, JsonProcessingException, ObjectIsNotValidException, InvalidArgumentException;
 
-    ServiceLocator getServiceLocator();
-
     void setServiceLocator(ServiceLocator serviceLocator);
+
+    void setSecurityManager(SecurityServerManager securityManager);
+
+    void setValidator(Validator validator);
 }

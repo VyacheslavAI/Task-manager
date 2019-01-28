@@ -3,6 +3,7 @@ package ru.ivanov.todoproject.api;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.validator.Validator;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface ISessionService {
 
     List<Session> loadAllSession();
 
-    ServiceLocator getServiceLocator();
-
     void setServiceLocator(ServiceLocator serviceLocator);
+
+    void setValidator(Validator validator);
 }

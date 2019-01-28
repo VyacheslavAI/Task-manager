@@ -96,12 +96,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ServiceLocator getServiceLocator() {
-        return serviceLocator;
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
     }
 
     @Override
-    public void setServiceLocator(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
+    public void setSecurityManager(SecurityServerManager securityManager) {
+        this.securityManager = securityManager;
+    }
+
+    @Override
+    public void setValidator(Validator validator) {
+        this.validator = validator;
     }
 }

@@ -2,6 +2,7 @@ package ru.ivanov.todoproject.api;
 
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.security.SecurityServerManager;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -27,4 +28,8 @@ public interface IUserSOAPEndpoint {
 
     @WebMethod
     User getUser(final Session session);
+
+    void setServiceLocator(ServiceLocator serviceLocator);
+
+    void setSecurityManager(SecurityServerManager securityManager);
 }
