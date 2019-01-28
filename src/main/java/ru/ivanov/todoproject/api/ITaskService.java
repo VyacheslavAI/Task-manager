@@ -1,29 +1,34 @@
 package ru.ivanov.todoproject.api;
 
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 
 import java.util.List;
 
 public interface ITaskService {
-    Task createOrUpdateTask(Task task) throws ObjectIsNotValidException;
+
+    Task createTask(String userId, Task task) throws ObjectIsNotValidException, InvalidArgumentException;
+
+    Task updateTask(Task task) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
 
     boolean addAllTask(List<Task> tasks);
 
-    List<Task> loadAllTaskByUser(User user) throws ObjectIsNotValidException;
+    Task loadTaskById(String userId, String id) throws InvalidArgumentException, ObjectNotFoundException;
 
-    Task loadTaskById(String id) throws InvalidArgumentException;
+    List<Task> loadUserTaskByName(String userId, String name) throws InvalidArgumentException;
 
-    List<Task> loadAllTaskByName(String name);
+    List<Task> loadUserTaskByProject(String userId, Project project) throws ObjectIsNotValidException, InvalidArgumentException;
 
-    List<Task> loadAllTaskByProject(Project project) throws ObjectIsNotValidException;
+    List<Task> loadAllUserTask(String userId) throws InvalidArgumentException;
 
     List<Task> loadAllTask();
 
-    Task deleteTask(Task task) throws ObjectIsNotValidException;
+    Task deleteTask(Task task) throws ObjectIsNotValidException, ObjectNotFoundException;
 
     boolean deleteAllTask();
 

@@ -54,11 +54,7 @@ public class UserSOAPEndpoint implements IUserSOAPEndpoint {
         this.serviceLocator = serviceLocator;
     }
 
-    public SecurityManager getSecurityManager() {
-        return securityManager;
-    }
-
-    public void setSecurityManager(SecurityManager securityManager) {
+    public void setSecurityManager(SecurityServerManager securityManager) {
         this.securityManager = securityManager;
     }
 }

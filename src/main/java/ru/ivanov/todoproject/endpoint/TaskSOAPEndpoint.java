@@ -6,13 +6,13 @@ import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.exception.AuthenticationException;
+import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 
 import javax.jws.WebService;
 import java.util.List;
-
-import static ru.ivanov.todoproject.util.ValidationUtil.isSessionVerified;
 
 @WebService(endpointInterface = "ru.ivanov.todoproject.api.ITaskSOAPEndpoint")
 public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
@@ -22,58 +22,46 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     private SecurityServerManager securityManager;
 
     @Override
-    public Task createTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException {
-        if (!isSessionVerified(session)) throw new AuthenticationException();
-        task.setUserId(session.getUserId());
-        return serviceLocator.getTaskService().createOrUpdateTask(task);
+    public Task createTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException, InvalidArgumentException {
+        if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
+        return serviceLocator.getTaskService().createTask(session.getUserId(), task);
     }
 
     @Override
-    public List<Task> readTask(final Session session, final String name) throws AuthenticationException {
-        if (!isSessionVerified(session)) throw new AuthenticationException();
-        List<Task> tasks = serviceLocator.getTaskService().loadAllTaskByName(name);
-        return filterTasksByUserId(tasks, session.getUserId());
+    public List<Task> readTask(final Session session, final String name) throws AuthenticationException, InvalidArgumentException {
+        if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
+        return serviceLocator.getTaskService().loadUserTaskByName(session.getUserId(), name);
     }
 
     @Override
-    public Task updateTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException {
-        if (!isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().createOrUpdateTask(task);
+    public Task updateTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+        if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
+        return serviceLocator.getTaskService().updateTask(task);
     }
 
     @Override
-    public Task deleteTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException {
-        if (!isSessionVerified(session)) throw new AuthenticationException();
+    public Task deleteTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException {
+        if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
         return serviceLocator.getTaskService().deleteTask(task);
     }
 
     @Override
-    public List<Task> showTasks(final Session session) throws AuthenticationException {
-        if (!isSessionVerified(session)) throw new AuthenticationException();
-        final List<Task> allTasks = serviceLocator.getTaskService().loadAllTask();
-        return filterTasksByUserId(allTasks, session.getUserId());
+    public List<Task> showTasks(final Session session) throws AuthenticationException, InvalidArgumentException {
+        if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
+        return serviceLocator.getTaskService().loadAllUserTask(session.getUserId());
     }
 
     @Override
-    public List<Task> getTasksByProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException {
-        if (!isSessionVerified(session)) throw new AuthenticationException();
-        final List<Task> projectTasks = serviceLocator.getTaskService().loadAllTaskByProject(project);
-        return filterTasksByUserId(projectTasks, session.getUserId());
+    public List<Task> getTasksByProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, InvalidArgumentException {
+        if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
+        return serviceLocator.getTaskService().loadUserTaskByProject(session.getUserId(), project);
     }
 
-    public ServiceLocator getServiceLocator() {
-        return serviceLocator;
-    }
-
-    public void setServiceLocator(ServiceLocator serviceLocator) {
+    public void setServiceLocator(final ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;
     }
 
-    public SecurityManager getSecurityManager() {
-        return securityManager;
-    }
-
-    public void setSecurityManager(SecurityManager securityManager) {
+    public void setSecurityManager(final SecurityServerManager securityManager) {
         this.securityManager = securityManager;
     }
 }

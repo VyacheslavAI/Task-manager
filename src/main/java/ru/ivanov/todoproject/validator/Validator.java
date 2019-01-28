@@ -36,7 +36,7 @@ public class Validator {
         final String passwordHash = user.getPasswordHash();
         if (id == null || id.isEmpty()) return false;
         if (login == null || login.isEmpty()) return false;
-        return user.getPasswordHash() != null;
+        return passwordHash != null;
     }
 
     public boolean isSessionValid(final Session session) {
@@ -46,7 +46,7 @@ public class Validator {
         final String userId = session.getUserId();
         final String signature = session.getSignature();
         if (id == null || id.isEmpty()) return false;
-        if (timestamp == 0) return false;
+        if (timestamp <= 0) return false;
         if (userId == null) return false;
         return signature != null && !signature.isEmpty();
     }

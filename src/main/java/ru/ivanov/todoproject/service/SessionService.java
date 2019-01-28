@@ -11,8 +11,6 @@ import ru.ivanov.todoproject.validator.Validator;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.ivanov.todoproject.util.ValidationUtil.isSessionValid;
-
 public class SessionService implements ISessionService {
 
     private SessionRepository sessionRepository = new SessionRepository();
@@ -23,7 +21,7 @@ public class SessionService implements ISessionService {
 
     @Override
     public Session createOrUpdateSession(final Session session) throws ObjectIsNotValidException {
-        if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException(session);
+        if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
         return sessionRepository.merge(session);
     }
 
@@ -35,7 +33,7 @@ public class SessionService implements ISessionService {
 
     @Override
     public Session deleteSession(final Session session) throws ObjectIsNotValidException {
-        if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException(session);
+        if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
         return sessionRepository.delete(session);
     }
 

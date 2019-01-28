@@ -8,14 +8,13 @@ import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.TaskRepository;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static ru.ivanov.todoproject.util.ValidationUtil.*;
 
 public class TaskService implements ITaskService {
 
@@ -26,8 +25,19 @@ public class TaskService implements ITaskService {
     private Validator validator;
 
     @Override
-    public Task createOrUpdateTask(final Task task) throws ObjectIsNotValidException {
-        if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException(task);
+    public Task createTask(final String userId, final Task task) throws ObjectIsNotValidException, InvalidArgumentException {
+        if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
+        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        task.setUserId(userId);
+        return taskRepository.merge(task);
+    }
+
+    @Override
+    public Task updateTask(final Task task) throws ObjectIsNotValidException, ObjectNotFoundException {
+        if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
+        final Task persistentTask = taskRepository.findById(task.getId());
+        if (persistentTask == null ) throw new ObjectNotFoundException();
+        if (!persistentTask.getUserId().equals(task.getUserId())) throw new ObjectNotFoundException();
         return taskRepository.merge(task);
     }
 
@@ -39,29 +49,30 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<Task> loadAllTaskByUser(final User user) throws ObjectIsNotValidException {
-        if (!validator.isUserValid(user)) throw new ObjectIsNotValidException(user);
-        final List<Task> allTask = loadAllTask();
-        return filterTasksByUserId(allTask, user.getId());
+    public Task loadTaskById(final String userId, final String taskId) throws InvalidArgumentException, ObjectNotFoundException {
+        if (taskId == null || taskId.isEmpty()) throw new InvalidArgumentException();
+        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        final Task persistentTask = taskRepository.findById(taskId);
+        if (persistentTask == null) throw new ObjectNotFoundException();
+        if (!persistentTask.getUserId().equals(userId)) throw new ObjectNotFoundException();
+        return persistentTask;
     }
 
     @Override
-    public Task loadTaskById(final String id) throws InvalidArgumentException {
-        if (id == null || id.isEmpty()) throw new InvalidArgumentException();
-        return taskRepository.findById(id);
-    }
-
-    @Override
-    public List<Task> loadAllTaskByName(final String name) {
+    public List<Task> loadUserTaskByName(final String userId, final String name) throws InvalidArgumentException {
         if (name == null || name.isEmpty()) return Collections.emptyList();
-        return taskRepository.findByName(name);
+        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        final List<Task> tasks = taskRepository.findByName(name);
+        return filterTasksByUserId(tasks, userId);
     }
 
     @Override
-    public List<Task> loadAllTaskByProject(final Project project) throws ObjectIsNotValidException {
-        if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException(project);
+    public List<Task> loadUserTaskByProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
+        if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
+        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
         final List<Task> tasks = taskRepository.findAll();
-        return filterTasksByProjectId(tasks, project.getId());
+        List<Task> projectTasks = filterTasksByProjectId(tasks, project.getId());
+        return filterTasksByUserId(projectTasks, userId);
     }
 
     @Override
@@ -70,8 +81,18 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task deleteTask(final Task task) throws ObjectIsNotValidException {
-        if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException(task);
+    public List<Task> loadAllUserTask(final String userId) throws InvalidArgumentException {
+        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        final List<Task> allTask = taskRepository.findAll();
+        return filterTasksByUserId(allTask, userId);
+    }
+
+    @Override
+    public Task deleteTask(final Task task) throws ObjectIsNotValidException, ObjectNotFoundException {
+        if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
+        final Task persistentTask = taskRepository.findById(task.getId());
+        if (persistentTask == null) throw new ObjectNotFoundException();
+        if (!persistentTask.getUserId().equals(task.getUserId())) throw new ObjectNotFoundException();
         return taskRepository.delete(task);
     }
 

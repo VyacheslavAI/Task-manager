@@ -8,8 +8,10 @@ import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.repository.UserRepository;
+import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,11 +22,13 @@ public class UserService implements IUserService {
 
     private ServiceLocator serviceLocator;
 
+    private SecurityServerManager securityManager;
+
     private Validator validator;
 
     @Override
     public User createOrUpdateUser(final User user) throws ObjectIsNotValidException {
-        if (!validator.isUserValid(user)) throw new ObjectIsNotValidException(user);
+        if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
         return userRepository.merge(user);
     }
 
@@ -54,7 +58,7 @@ public class UserService implements IUserService {
 
     @Override
     public User deleteUser(final User user) throws ObjectIsNotValidException {
-        if (!validator.isUserValid(user)) throw new ObjectIsNotValidException(user);
+        if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
         return userRepository.delete(user);
     }
 
@@ -65,7 +69,7 @@ public class UserService implements IUserService {
 
     @Override
     public User getUserBySession(final Session session) throws ObjectIsNotValidException {
-        if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException(session);
+        if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
         final List<User> users = loadAllUser();
         for (final User user : users) {
             if (user.getId().equals(session.getUserId())) {
@@ -76,17 +80,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void userInitialize(final String login, final String password) throws ObjectIsNotValidException, InvalidArgumentException {
+    public void userInitialize(final String login, final String password) throws ObjectIsNotValidException, InvalidArgumentException, NoSuchAlgorithmException {
         if (login == null || login.isEmpty()) throw new InvalidArgumentException();
         if (password == null || password.isEmpty()) throw new InvalidArgumentException();
         final User user = new User();
-        final String hashPassword = getPasswordHash(password);
+        final String hashPassword = securityManager.getPasswordHash(password);
         user.setLogin(login);
         user.setPasswordHash(hashPassword);
         final Session session = new Session();
         session.setTimestamp(session.getCreated().getTime());
         session.setUserId(user.getId());
-        session.setSignature(sign(session));
+        session.setSignature(securityManager.sign(session));
         createOrUpdateUser(user);
         serviceLocator.getSessionService().createOrUpdateSession(session);
     }

@@ -58,18 +58,6 @@ public class SecurityServerManager {
         return new String(bytesValue);
     }
 
-    private List<Project> filterProjectsByUserId(final List<Project> projects, final String userId) {
-        if (projects == null || projects.isEmpty()) return Collections.emptyList();
-        if (userId == null || userId.isEmpty()) return Collections.emptyList();
-        final List<Project> result = new ArrayList<>();
-        for (final Project project : projects) {
-            if (project.getUserId().equals(userId)) {
-                result.add(project);
-            }
-        }
-        return result;
-    }
-
     public void setValidator(final Validator validator) {
         this.validator = validator;
     }
