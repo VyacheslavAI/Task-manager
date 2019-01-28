@@ -8,6 +8,7 @@ import java.util.List;
 
 public class TaskRepository extends AbstractRepository<Task> implements ITaskRepository {
 
+    @Override
     public List<Task> findByName(final String name) {
         if (name == null || name.isEmpty()) return null;
         final List<Task> result = new ArrayList<>();

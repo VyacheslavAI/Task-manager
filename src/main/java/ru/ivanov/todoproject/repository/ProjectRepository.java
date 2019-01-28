@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ProjectRepository extends AbstractRepository<Project> implements IProjectRepository {
 
+    @Override
     public List<Project> findByName(final String name) {
         if (name == null || name.isEmpty()) return null;
         final List<Project> result = new ArrayList<>();

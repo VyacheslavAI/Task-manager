@@ -9,12 +9,4 @@ public interface ServiceLocator {
     ITaskService getTaskService();
 
     ISessionService getSessionService();
-
-    void setUserService(final IUserService userService);
-
-    void setProjectService(final IProjectService projectService);
-
-    void setTaskService(final ITaskService taskService);
-
-    void setSessionService(final ISessionService ISessionService);
 }

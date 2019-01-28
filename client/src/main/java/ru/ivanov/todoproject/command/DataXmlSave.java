@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataXmlSave extends Command {
+public class DataXmlSave extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -32,9 +32,9 @@ public class DataXmlSave extends Command {
             final Domain domain = Domain.createDomain(serviceLocator);
             final XmlMapper xmlMapper = new XmlMapper();
             xmlMapper.writeValue(outputStream, domain);
-            ConsoleHelper.printMessage("Saving in xml file was successful");
+            ConsoleHelper.print("Saving in xml file was successful");
         } catch (IOException e) {
-            ConsoleHelper.printMessage("An error has occurred during saving in xml format");
+            ConsoleHelper.print("An error has occurred during saving in xml format");
         }
     }
 }

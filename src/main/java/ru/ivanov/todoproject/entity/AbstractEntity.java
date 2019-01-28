@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public abstract class AbstractEntity implements Serializable {
 
+    static final long serialVersionUID = 1L;
+
     private String id = UUID.randomUUID().toString();
 
     private Date created = new Date();

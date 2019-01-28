@@ -5,7 +5,8 @@ import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
-import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
+import ru.ivanov.todoproject.exception.AuthenticationException;
+import ru.ivanov.todoproject.security.SecurityServerManager;
 
 import javax.jws.WebService;
 
@@ -16,6 +17,8 @@ import static ru.ivanov.todoproject.util.HashUtil.sign;
 public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
 
     private ServiceLocator serviceLocator;
+
+    private SecurityServerManager securityManager;
 
     @Override
     public boolean userRegistry(final String login, final String passwordHash) throws ObjectIsNotValidException {
@@ -43,15 +46,15 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
     }
 
     @Override
-    public boolean logout(final Session session) throws RequestNotAuthenticatedException, ObjectIsNotValidException {
-        if (isSessionVerified(session)) throw new RequestNotAuthenticatedException();
+    public boolean logout(final Session session) throws AuthenticationException, ObjectIsNotValidException {
+        if (isSessionVerified(session)) throw new AuthenticationException();
         serviceLocator.getSessionService().deleteSession(session);
         return true;
     }
 
     @Override
-    public boolean fullSignOut(final Session session) throws RequestNotAuthenticatedException {
-        if (isSessionVerified(session)) throw new RequestNotAuthenticatedException();
+    public boolean fullSignOut(final Session session) throws AuthenticationException {
+        if (isSessionVerified(session)) throw new AuthenticationException();
         serviceLocator.getSessionService().deleteAllSession();
         return true;
     }
@@ -62,5 +65,13 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
 
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;
+    }
+
+    public SecurityManager getSecurityManager() {
+        return securityManager;
+    }
+
+    public void setSecurityManager(SecurityManager securityManager) {
+        this.securityManager = securityManager;
     }
 }

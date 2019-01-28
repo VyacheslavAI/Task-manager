@@ -8,7 +8,7 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public class ProjectShowCommand extends Command {
+public class ProjectShowCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -29,10 +29,10 @@ public class ProjectShowCommand extends Command {
     public void execute(final ServiceLocator serviceLocator) {
         IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
-        ConsoleHelper.printMessage("All available projects: \r\n");
+        ConsoleHelper.print("All available projects: \r\n");
         final List<Project> projects = projectSOAPEndpoint.showProjects(session);
         for (final Project project : projects) {
-            ConsoleHelper.printMessage(String.format("Id: %s %n Name: %s %n Date of creation: %s",
+            ConsoleHelper.print(String.format("Id: %s %n Name: %s %n Date of creation: %s",
                     project.getId(),
                     project.getName(),
                     project.getCreated()));

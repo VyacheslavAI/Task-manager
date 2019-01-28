@@ -2,11 +2,11 @@ package ru.ivanov.todoproject.bootstrap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.*;
-import ru.ivanov.todoproject.dto.Domain;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpoint;
+import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.SessionService;
@@ -14,15 +14,9 @@ import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
 
 import javax.xml.ws.Endpoint;
-import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 
 import static ru.ivanov.todoproject.dto.Domain.loadApplicationDataFromBinary;
-import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
 public class Bootstrap implements ServiceLocator {
 
@@ -53,8 +47,8 @@ public class Bootstrap implements ServiceLocator {
         sessionSOAPEndpoint.setServiceLocator(this);
     }
 
-    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException {
-        loadApplicationDataFromBinary();
+    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException {
+        loadApplicationDataFromBinary(this);
         userService.userInitialize("admin", "admin");
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
@@ -67,7 +61,6 @@ public class Bootstrap implements ServiceLocator {
         return projectService;
     }
 
-    @Override
     public void setProjectService(IProjectService projectService) {
         this.projectService = projectService;
     }
@@ -77,7 +70,6 @@ public class Bootstrap implements ServiceLocator {
         return taskService;
     }
 
-    @Override
     public void setTaskService(ITaskService taskService) {
         this.taskService = taskService;
     }
@@ -87,7 +79,6 @@ public class Bootstrap implements ServiceLocator {
         return userService;
     }
 
-    @Override
     public void setUserService(IUserService userService) {
         this.userService = userService;
     }
@@ -97,7 +88,6 @@ public class Bootstrap implements ServiceLocator {
         return sessionService;
     }
 
-    @Override
     public void setSessionService(ISessionService ISessionService) {
         this.sessionService = ISessionService;
     }

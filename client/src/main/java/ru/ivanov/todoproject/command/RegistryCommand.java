@@ -3,7 +3,7 @@ package ru.ivanov.todoproject.command;
 import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class RegistryCommand extends Command {
+public class RegistryCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -22,11 +22,11 @@ public class RegistryCommand extends Command {
 
     @Override
     public void execute(ServiceLocator serviceLocator) {
-        ConsoleHelper.printMessage("Enter new name:");
+        ConsoleHelper.print("Enter new name:");
         final String login = ConsoleHelper.readString();
-        ConsoleHelper.printMessage("Enter password:");
+        ConsoleHelper.print("Enter password:");
         final String password = ConsoleHelper.readString();
         boolean result = serviceLocator.getSessionSOAPEndpointService().getSessionSOAPEndpointPort().userRegistry(login, password);
-        ConsoleHelper.printMessage(Boolean.toString(result));
+        ConsoleHelper.print(Boolean.toString(result));
     }
 }

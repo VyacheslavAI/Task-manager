@@ -8,7 +8,7 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public class UserShowCommand extends Command {
+public class UserShowCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -29,11 +29,11 @@ public class UserShowCommand extends Command {
     public void execute(final ServiceLocator serviceLocator) {
         final IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
-        ConsoleHelper.printMessage("All users:");
+        ConsoleHelper.print("All users:");
         final List<User> users = userSOAPEndpoint.showUsers(session);
         final String format = "Login: %s%nPassword: %s%nDate of creation: %s";
         for (final User user : users) {
-            ConsoleHelper.printMessage(String.format(format,
+            ConsoleHelper.print(String.format(format,
                     user.getLogin(),
                     user.getPasswordHash(),
                     user.getCreated()));

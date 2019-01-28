@@ -16,7 +16,7 @@ public final class HashUtil {
         try {
             return getHashByAlgorithm("MD5", password);
         } catch (NoSuchAlgorithmException e) {
-
+            return null;
         }
     }
 

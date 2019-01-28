@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class UserRepository extends AbstractRepository<User> implements IUserRepository {
 
+    @Override
     public User findByLogin(final String login) {
         if (login == null || login.isEmpty()) return null;
         for (final Map.Entry<String, User> entry : entities.entrySet()) {

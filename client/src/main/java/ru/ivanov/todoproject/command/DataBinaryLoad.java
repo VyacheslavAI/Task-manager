@@ -10,7 +10,7 @@ import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataBinaryLoad extends Command {
+public class DataBinaryLoad extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -35,9 +35,9 @@ public class DataBinaryLoad extends Command {
             serviceLocator.getTaskService().deleteAllTask();
             final Domain domain = (Domain) objectInput.readObject();
             domain.loadFromDomain(serviceLocator);
-            ConsoleHelper.printMessage("Loading from binary file was successful");
+            ConsoleHelper.print("Loading from binary file was successful");
         } catch (Exception e) {
-            ConsoleHelper.printMessage("An error has occurred during loading from binary file");
+            ConsoleHelper.print("An error has occurred during loading from binary file");
         }
     }
 }

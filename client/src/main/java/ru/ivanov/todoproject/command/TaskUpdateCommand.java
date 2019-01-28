@@ -7,7 +7,7 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 import java.util.Date;
 import java.util.List;
 
-public class TaskUpdateCommand extends Command {
+public class TaskUpdateCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -29,17 +29,17 @@ public class TaskUpdateCommand extends Command {
         ITaskSOAPEndpoint taskSOAPEndpoint = serviceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
         IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
-        ConsoleHelper.printMessage("Enter project name:");
+        ConsoleHelper.print("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = projectSOAPEndpoint.readProject(session, projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
-            ConsoleHelper.printMessage(String.format("Project %s not found", projectName));
+            ConsoleHelper.print(String.format("Project %s not found", projectName));
             return;
         }
 
-        ConsoleHelper.printMessage("Enter task name:");
+        ConsoleHelper.print("Enter task name:");
         final String taskName = ConsoleHelper.readString();
         final List<Task> tasks = taskSOAPEndpoint.getTasksByProject(session, selectedProject);
 
@@ -51,19 +51,19 @@ public class TaskUpdateCommand extends Command {
         }
 
         if (taskForUpdate == null) {
-            ConsoleHelper.printMessage(String.format("Task with name %s in the project %s not found",
+            ConsoleHelper.print(String.format("Task with name %s in the project %s not found",
                     taskName, selectedProject.getName()));
             return;
         }
 
-        ConsoleHelper.printMessage("Please enter new name:");
+        ConsoleHelper.print("Please enter new name:");
         final String newName = ConsoleHelper.readString();
-        ConsoleHelper.printMessage("Please enter new date of creation(example: 04/01/1993):");
+        ConsoleHelper.print("Please enter new date of creation(example: 04/01/1993):");
         final String date = ConsoleHelper.readString();
         final Date newDate = ConsoleHelper.parseDate(date);
         taskForUpdate.setName(newName);
         taskForUpdate.setCreated(ConsoleHelper.convertDateToXMLCalendar(newDate));
 
-        ConsoleHelper.printMessage(String.format("Task %s has been updated", taskName));
+        ConsoleHelper.print(String.format("Task %s has been updated", taskName));
     }
 }

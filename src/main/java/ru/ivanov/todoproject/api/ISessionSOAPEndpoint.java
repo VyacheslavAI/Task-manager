@@ -2,7 +2,7 @@ package ru.ivanov.todoproject.api;
 
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
-import ru.ivanov.todoproject.exception.RequestNotAuthenticatedException;
+import ru.ivanov.todoproject.exception.AuthenticationException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
@@ -17,8 +17,8 @@ public interface ISessionSOAPEndpoint {
     Session login(String login, String password) throws ObjectIsNotValidException;
 
     @WebMethod
-    boolean logout(Session session) throws RequestNotAuthenticatedException, ObjectIsNotValidException;
+    boolean logout(Session session) throws AuthenticationException, ObjectIsNotValidException;
 
     @WebMethod
-    boolean fullSignOut(Session session) throws RequestNotAuthenticatedException;
+    boolean fullSignOut(Session session) throws AuthenticationException;
 }

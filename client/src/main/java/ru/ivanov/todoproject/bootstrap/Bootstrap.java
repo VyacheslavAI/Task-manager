@@ -2,7 +2,7 @@ package ru.ivanov.todoproject.bootstrap;
 
 import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.UserData;
-import ru.ivanov.todoproject.command.Command;
+import ru.ivanov.todoproject.command.AbstractCommand;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpointService;
@@ -25,11 +25,12 @@ public class Bootstrap implements ServiceLocator {
 
     private UserData userData = new UserData();
 
-    private final Map<String, Command> commands = new HashMap<>();
+    private final Map<String, AbstractCommand> commands = new HashMap<>();
 
     public void register(final Class<?>[] commandClasses) throws IllegalAccessException, InstantiationException {
         for (final Class commandClass : commandClasses) {
-            final Command command = (Command) commandClass.newInstance();
+            final AbstractCommand command = (AbstractCommand) commandClass.newInstance();
+            command.setServiceLocator(this);
             final String consoleCommand = command.getConsoleCommand();
             commands.put(consoleCommand, command);
         }
@@ -40,15 +41,15 @@ public class Bootstrap implements ServiceLocator {
         String operation;
         do {
             operation = readString();
-            Command command = commands.get(operation);
+            AbstractCommand command = commands.get(operation);
             if (command == null) command = commands.get("help");
             if (command.isAuthorizationRequired() && !userData.isUserAuthorized()) command = commands.get("help");
-            command.execute(this);
+            command.execute();
             printDelimiter();
         } while (!operation.equals("exit"));
     }
 
-    public Map<String, Command> getCommands() {
+    public Map<String, AbstractCommand> getCommands() {
         return commands;
     }
 
@@ -90,5 +91,15 @@ public class Bootstrap implements ServiceLocator {
     @Override
     public void setSessionSOAPEndpointService(SessionSOAPEndpointService sessionSOAPEndpoint) {
         this.sessionSOAPEndpoint = sessionSOAPEndpoint;
+    }
+
+    @Override
+    public UserData getUserData() {
+        return userData;
+    }
+
+    @Override
+    public void setUserData(UserData userData) {
+        this.userData = userData;
     }
 }

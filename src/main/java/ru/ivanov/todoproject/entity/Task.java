@@ -1,8 +1,6 @@
 package ru.ivanov.todoproject.entity;
 
-import java.io.Serializable;
-
-public class Task extends AbstractEntity implements Serializable {
+public class Task extends AbstractEntity {
 
     private String name = "no name";
 

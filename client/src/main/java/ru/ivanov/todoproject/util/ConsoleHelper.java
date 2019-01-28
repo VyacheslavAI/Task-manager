@@ -1,9 +1,6 @@
 package ru.ivanov.todoproject.util;
 
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,22 +19,21 @@ public final class ConsoleHelper {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static void printWelcome() {
-        final String welcomeString = "Welcome to Task Manager Application! \r\n" +
-                "Enter \"help\" show list of available commands";
-        printMessage(welcomeString);
+        System.out.println("Welcome to Task Manager Application!");
+        System.out.println("Enter \"help\" show list of available commands");
     }
 
-    public static void printMessage(final String message) {
+    public static void print(final String message) {
         System.out.println(message);
     }
 
     public static String readString() {
         String string = null;
-        while (string == null || string.isEmpty()) {
+        while (string == null) {
             try {
                 string = reader.readLine();
             } catch (IOException e) {
-                System.out.println("An exception has occurred. Please try again");
+                System.out.println("An error has occurred. Please try again");
             }
         }
         return string;
@@ -49,23 +45,15 @@ public final class ConsoleHelper {
 
     public static int readInt(final int from, final int to) {
         int number = Integer.parseInt(readString());
-
         while (number < from || number > to) {
-            ConsoleHelper.printMessage("Invalid input");
+            print(String.format("Value must be more then %d and less then %d", from - 1, to + 1));
             number = Integer.parseInt(readString());
         }
-
         return number;
     }
 
     public static void printDelimiter() {
         System.out.println("=================================================");
-    }
-
-    public static XMLGregorianCalendar convertDateToXMLCalendar(final Date date) {
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setGregorianChange(date);
-        return new XMLGregorianCalendarImpl(gregorianCalendar);
     }
 
     public static Date readDate() {
@@ -75,10 +63,14 @@ public final class ConsoleHelper {
                 final String stringDate = readString();
                 date = simpleDateFormat.parse(stringDate);
             } catch (ParseException e) {
-                ConsoleHelper.printMessage("Wrong date format. Please enter the date in the following format 15/04/1990:");
+                print("Wrong date format. Please enter the date in the following format 15/04/1990:");
             }
         }
         return date;
+    }
+
+    public static String formatDate(final GregorianCalendar date) {
+        return simpleDateFormat.format(date);
     }
 }
 

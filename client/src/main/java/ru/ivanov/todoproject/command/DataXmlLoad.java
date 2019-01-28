@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataXmlLoad extends Command {
+public class DataXmlLoad extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -35,9 +35,9 @@ public class DataXmlLoad extends Command {
             final XmlMapper xmlMapper = new XmlMapper();
             final Domain domain = xmlMapper.readValue(inputStream, Domain.class);
             domain.loadFromDomain(serviceLocator);
-            ConsoleHelper.printMessage("Loading from xml file was successful");
+            ConsoleHelper.print("Loading from xml file was successful");
         } catch (IOException e) {
-            ConsoleHelper.printMessage("An error has occurred during loading from xml file");
+            ConsoleHelper.print("An error has occurred during loading from xml file");
         }
     }
 }

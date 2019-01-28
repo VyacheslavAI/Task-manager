@@ -3,6 +3,7 @@ package ru.ivanov.todoproject.api;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface ITaskService {
 
     List<Task> loadAllTaskByUser(User user) throws ObjectIsNotValidException;
 
-    Task loadTaskById(String id);
+    Task loadTaskById(String id) throws InvalidArgumentException;
 
     List<Task> loadAllTaskByName(String name);
 

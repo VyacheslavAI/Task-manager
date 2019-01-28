@@ -6,7 +6,7 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public class TaskDeleteCommand extends Command {
+public class TaskDeleteCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -28,17 +28,17 @@ public class TaskDeleteCommand extends Command {
         ITaskSOAPEndpoint taskSOAPEndpoint = serviceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
         IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
-        ConsoleHelper.printMessage("Enter project name:");
+        ConsoleHelper.print("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = projectSOAPEndpoint.readProject(session, projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
-            ConsoleHelper.printMessage(String.format("Project %s not found", projectName));
+            ConsoleHelper.print(String.format("Project %s not found", projectName));
             return;
         }
 
-        ConsoleHelper.printMessage("Enter task name:");
+        ConsoleHelper.print("Enter task name:");
         final String taskName = ConsoleHelper.readString();
         final List<Task> projectTask = taskSOAPEndpoint.getTasksByProject(session, selectedProject);
 
@@ -50,11 +50,11 @@ public class TaskDeleteCommand extends Command {
         }
 
         if (taskForDelete == null) {
-            ConsoleHelper.printMessage(String.format("Task with the name %s in the project %s not found",
+            ConsoleHelper.print(String.format("Task with the name %s in the project %s not found",
                     taskName, selectedProject.getName()));
         }
 
         taskSOAPEndpoint.deleteTask(session, taskForDelete);
-        ConsoleHelper.printMessage(String.format("Task %s has been deleted", taskName));
+        ConsoleHelper.print(String.format("Task %s has been deleted", taskName));
     }
 }

@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataJsonSave extends Command {
+public class DataJsonSave extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -33,9 +33,9 @@ public class DataJsonSave extends Command {
             final ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
             final Domain domain = Domain.createDomain(serviceLocator);
             objectWriter.writeValue(outputStream, domain);
-            ConsoleHelper.printMessage("Saving in json file was successful");
+            ConsoleHelper.print("Saving in json file was successful");
         } catch (Exception e) {
-            ConsoleHelper.printMessage("An error has occurred during saving in json format");
+            ConsoleHelper.print("An error has occurred during saving in json format");
         }
     }
 }

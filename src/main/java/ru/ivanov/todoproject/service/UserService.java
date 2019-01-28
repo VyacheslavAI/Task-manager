@@ -5,17 +5,14 @@ import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.repository.UserRepository;
+import ru.ivanov.todoproject.validator.Validator;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 
-import static ru.ivanov.todoproject.util.HashUtil.getPasswordHash;
-import static ru.ivanov.todoproject.util.HashUtil.sign;
-import static ru.ivanov.todoproject.util.ValidationUtil.isSessionValid;
-import static ru.ivanov.todoproject.util.ValidationUtil.isUserValid;
 
 public class UserService implements IUserService {
 
@@ -23,21 +20,23 @@ public class UserService implements IUserService {
 
     private ServiceLocator serviceLocator;
 
+    private Validator validator;
+
     @Override
     public User createOrUpdateUser(final User user) throws ObjectIsNotValidException {
-        if (!isUserValid(user)) throw new ObjectIsNotValidException(user);
+        if (!validator.isUserValid(user)) throw new ObjectIsNotValidException(user);
         return userRepository.merge(user);
     }
 
     @Override
-    public User loadById(final String id) throws IllegalArgumentException {
-        if (id == null || id.isEmpty()) throw new IllegalArgumentException();
+    public User loadById(final String id) throws InvalidArgumentException {
+        if (id == null || id.isEmpty()) throw new InvalidArgumentException();
         return userRepository.findById(id);
     }
 
     @Override
-    public User loadUserByLogin(final String login) throws IllegalArgumentException {
-        if (login == null || login.isEmpty()) throw new IllegalArgumentException();
+    public User loadUserByLogin(final String login) throws InvalidArgumentException {
+        if (login == null || login.isEmpty()) throw new InvalidArgumentException();
         return userRepository.findByLogin(login);
     }
 
@@ -55,7 +54,7 @@ public class UserService implements IUserService {
 
     @Override
     public User deleteUser(final User user) throws ObjectIsNotValidException {
-        if (!isUserValid(user)) throw new ObjectIsNotValidException(user);
+        if (!validator.isUserValid(user)) throw new ObjectIsNotValidException(user);
         return userRepository.delete(user);
     }
 
@@ -66,9 +65,9 @@ public class UserService implements IUserService {
 
     @Override
     public User getUserBySession(final Session session) throws ObjectIsNotValidException {
-        if (!isSessionValid(session)) throw new ObjectIsNotValidException(session);
+        if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException(session);
         final List<User> users = loadAllUser();
-        for (User user : users) {
+        for (final User user : users) {
             if (user.getId().equals(session.getUserId())) {
                 return user;
             }
@@ -77,12 +76,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void userInitialize(final String login, final String password) throws NoSuchAlgorithmException,
-            ObjectIsNotValidException, IllegalArgumentException {
-        if (login == null || login.isEmpty()) throw new IllegalArgumentException();
-        if (password == null || password.isEmpty()) throw new IllegalArgumentException();
-        final String hashPassword = getPasswordHash(password);
+    public void userInitialize(final String login, final String password) throws ObjectIsNotValidException, InvalidArgumentException {
+        if (login == null || login.isEmpty()) throw new InvalidArgumentException();
+        if (password == null || password.isEmpty()) throw new InvalidArgumentException();
         final User user = new User();
+        final String hashPassword = getPasswordHash(password);
         user.setLogin(login);
         user.setPasswordHash(hashPassword);
         final Session session = new Session();

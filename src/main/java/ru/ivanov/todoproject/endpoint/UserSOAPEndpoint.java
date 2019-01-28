@@ -4,6 +4,7 @@ import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
+import ru.ivanov.todoproject.security.SecurityServerManager;
 
 import javax.jws.WebService;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.List;
 public class UserSOAPEndpoint implements IUserSOAPEndpoint {
 
     private ServiceLocator serviceLocator;
+
+    private SecurityServerManager securityManager;
 
     @Override
     public User createUser(final Session session, final User user) {
@@ -49,5 +52,13 @@ public class UserSOAPEndpoint implements IUserSOAPEndpoint {
 
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;
+    }
+
+    public SecurityManager getSecurityManager() {
+        return securityManager;
+    }
+
+    public void setSecurityManager(SecurityManager securityManager) {
+        this.securityManager = securityManager;
     }
 }

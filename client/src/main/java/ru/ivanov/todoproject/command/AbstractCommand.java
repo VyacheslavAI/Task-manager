@@ -6,7 +6,9 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public abstract class Command {
+public abstract class AbstractCommand {
+
+    protected ServiceLocator serviceLocator;
 
     private static final String warningString = "Several projects found with data name. \n" +
             "Select the creation date of the desired project.";
@@ -15,12 +17,12 @@ public abstract class Command {
         if (projects == null || projects.isEmpty()) return null;
         if (projects.size() == 1) return projects.get(0);
 
-        ConsoleHelper.printMessage(warningString);
+        ConsoleHelper.print(warningString);
         for (int i = 0; i < projects.size(); i++) {
             final Project project = projects.get(i);
-            final String created = ConsoleHelper.formatDate(project.getCreated());
+            final String created = ConsoleHelper.formatDate(project.getCreated().toGregorianCalendar());
             final String indexAndDate = String.format("%d %s", i, created);
-            ConsoleHelper.printMessage(indexAndDate);
+            ConsoleHelper.print(indexAndDate);
         }
 
         final int firstIndex = 0;
@@ -35,5 +37,9 @@ public abstract class Command {
 
     public abstract boolean isAuthorizationRequired();
 
-    public abstract void execute(final ServiceLocator serviceLocator);
+    public abstract void execute();
+
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
 }

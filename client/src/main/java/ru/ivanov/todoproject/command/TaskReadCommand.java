@@ -6,7 +6,7 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public class TaskReadCommand extends Command {
+public class TaskReadCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -28,17 +28,17 @@ public class TaskReadCommand extends Command {
         ITaskSOAPEndpoint taskSOAPEndpoint = serviceLocator.getTaskSOAPEndpointService().getTaskSOAPEndpointPort();
         IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
-        ConsoleHelper.printMessage("Enter project name:");
+        ConsoleHelper.print("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = projectSOAPEndpoint.readProject(session, projectName);
         Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
-            ConsoleHelper.printMessage(String.format("Project %s not found", projectName));
+            ConsoleHelper.print(String.format("Project %s not found", projectName));
             return;
         }
 
-        ConsoleHelper.printMessage("Enter task name:");
+        ConsoleHelper.print("Enter task name:");
         final String taskName = ConsoleHelper.readString();
         final List<Task> tasks = taskSOAPEndpoint.getTasksByProject(session, selectedProject);
 
@@ -50,13 +50,13 @@ public class TaskReadCommand extends Command {
         }
 
         if (taskForRead == null) {
-            ConsoleHelper.printMessage(String.format("Task with name %s in the project %s not found",
+            ConsoleHelper.print(String.format("Task with name %s in the project %s not found",
                     taskName, selectedProject.getName()));
             return;
         }
 
         final String format = "Id: %s %nProject id: %s %nName: %s %nDate of creation: %s";
-        ConsoleHelper.printMessage(String.format(format,
+        ConsoleHelper.print(String.format(format,
                 taskForRead.getId(),
                 taskForRead.getProjectId(),
                 taskForRead.getName(),

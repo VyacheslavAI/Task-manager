@@ -23,11 +23,11 @@ public class Domain implements Serializable {
 
     private List<Session> sessions;
 
-    public List<Project> getProjects() {
+    private List<Project> getProjects() {
         return projects;
     }
 
-    public List<Task> getTasks() {
+    private List<Task> getTasks() {
         return tasks;
     }
 
@@ -39,23 +39,23 @@ public class Domain implements Serializable {
         this.tasks = tasks;
     }
 
-    public List<User> getUsers() {
+    private List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    private void setUsers(List<User> users) {
         this.users = users;
     }
 
-    public List<Session> getSessions() {
+    private List<Session> getSessions() {
         return sessions;
     }
 
-    public void setSessions(List<Session> sessions) {
+    private void setSessions(List<Session> sessions) {
         this.sessions = sessions;
     }
 
-    public Domain() {
+    private Domain() {
     }
 
     private static Domain saveDataToDomain(final ServiceLocator serviceLocator) {
@@ -67,7 +67,7 @@ public class Domain implements Serializable {
         return domain;
     }
 
-    public void loadDataFromDomain(final ServiceLocator serviceLocator) {
+    private void loadDataFromDomain(final ServiceLocator serviceLocator) {
         serviceLocator.getUserService().addAllUser(getUsers());
         serviceLocator.getProjectService().addAllProject(getProjects());
         serviceLocator.getTaskService().addAllTask(getTasks());
@@ -77,11 +77,11 @@ public class Domain implements Serializable {
     public static void saveApplicationDataInBinary(final ServiceLocator serviceLocator) {
         try (final OutputStream outputStream = Files.newOutputStream(Paths.get("data.bin"));
              final ObjectOutput objectOutput = new ObjectOutputStream(outputStream)) {
-            final Domain domain = Domain.saveDataToDomain(serviceLocator);
+            final Domain domain = saveDataToDomain(serviceLocator);
             objectOutput.writeObject(domain);
             print("Saving in binary file was successful");
-        } catch (Exception e) {
-            print("An error has occurred during saving in binary format");
+        } catch (Throwable e) {
+            print("Saving from binary file failed");
         }
     }
 
@@ -91,8 +91,8 @@ public class Domain implements Serializable {
             final Domain domain = (Domain) objectInput.readObject();
             domain.loadDataFromDomain(serviceLocator);
             print("Loading from binary file was successful");
-        } catch (Exception e) {
-            print("An error has occurred during loading from binary file");
+        } catch (Throwable e) {
+            print("Loading from binary file was failed");
         }
     }
 }

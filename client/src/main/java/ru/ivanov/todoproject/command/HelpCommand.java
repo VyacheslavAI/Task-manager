@@ -6,7 +6,7 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.*;
 
-public class HelpCommand extends Command {
+public class HelpCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -25,23 +25,23 @@ public class HelpCommand extends Command {
 
     @Override
     public void execute(final ServiceLocator serviceLocator) {
-        ConsoleHelper.printMessage("The following commands are available to you:");
-        final Map<String, Command> commands = ((Bootstrap) serviceLocator).getCommands();
-        final List<Command> availableCommands = new ArrayList<>(commands.values());
+        ConsoleHelper.print("The following commands are available to you:");
+        final Map<String, AbstractCommand> commands = ((Bootstrap) serviceLocator).getCommands();
+        final List<AbstractCommand> availableCommands = new ArrayList<>(commands.values());
 
-        Collections.sort(availableCommands, new Comparator<Command>() {
+        Collections.sort(availableCommands, new Comparator<AbstractCommand>() {
             @Override
-            public int compare(final Command c1, final Command c2) {
+            public int compare(final AbstractCommand c1, final AbstractCommand c2) {
                 final String consoleCommandOne = c1.getConsoleCommand();
                 final String consoleCommandTwo = c2.getConsoleCommand();
                 return consoleCommandOne.compareTo(consoleCommandTwo);
             }
         });
 
-        for (final Command command : availableCommands) {
+        for (final AbstractCommand command : availableCommands) {
             final String consoleCommand = command.getConsoleCommand();
             final String description = command.getDescription();
-            ConsoleHelper.printMessage(String.format("%s - %s", consoleCommand, description));
+            ConsoleHelper.print(String.format("%s - %s", consoleCommand, description));
         }
     }
 }

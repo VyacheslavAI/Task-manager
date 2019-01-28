@@ -1,10 +1,10 @@
 package ru.ivanov.todoproject.entity;
 
-import java.io.Serializable;
+import java.util.Date;
 
-public class Session extends AbstractEntity implements Serializable {
+public class Session extends AbstractEntity {
 
-    private long timestamp;
+    private long timestamp = new Date().getTime();
 
     private String userId;
 

@@ -3,7 +3,7 @@ package ru.ivanov.todoproject.command;
 import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class ExitCommand extends Command {
+public class ExitCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -22,6 +22,6 @@ public class ExitCommand extends Command {
 
     @Override
     public void execute(final ServiceLocator serviceLocator) {
-        ConsoleHelper.printMessage("Good bye!");
+        ConsoleHelper.print("Good bye!");
     }
 }

@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataBinarySave extends Command {
+public class DataBinarySave extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -33,9 +33,9 @@ public class DataBinarySave extends Command {
              final ObjectOutput objectOutput = new ObjectOutputStream(outputStream)) {
             final Domain domain = Domain.createDomain(serviceLocator);
             objectOutput.writeObject(domain);
-            ConsoleHelper.printMessage("Saving in binary file was successful");
+            ConsoleHelper.print("Saving in binary file was successful");
         } catch (Exception e) {
-            ConsoleHelper.printMessage("An error has occurred during saving in binary format");
+            ConsoleHelper.print("An error has occurred during saving in binary format");
         }
     }
 }

@@ -6,7 +6,7 @@ import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.api.User;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class UserReadCommand extends Command {
+public class UserReadCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -27,15 +27,15 @@ public class UserReadCommand extends Command {
     public void execute(final ServiceLocator serviceLocator) {
         IUserSOAPEndpoint userSOAPEndpoint = serviceLocator.getUserSOAPEndpointService().getUserSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
-        ConsoleHelper.printMessage("Enter user login:");
+        ConsoleHelper.print("Enter user login:");
         final String userLogin = ConsoleHelper.readString();
         final User user = userSOAPEndpoint.readUser(session, userLogin);
         if (user == null) {
-            ConsoleHelper.printMessage(String.format("User %s not found", userLogin));
+            ConsoleHelper.print(String.format("User %s not found", userLogin));
             return;
         }
         final String format = "Login: %s %nPassword: %s %nDate of creation: %s";
-        ConsoleHelper.printMessage(String.format(format,
+        ConsoleHelper.print(String.format(format,
                 user.getLogin(),
                 user.getPasswordHash(),
                 ConsoleHelper.formatDate(user.getCreated())));

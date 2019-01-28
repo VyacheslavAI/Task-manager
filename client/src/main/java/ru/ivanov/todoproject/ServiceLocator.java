@@ -22,4 +22,9 @@ public interface ServiceLocator {
     SessionSOAPEndpointService getSessionSOAPEndpointService();
 
     void setSessionSOAPEndpointService(final SessionSOAPEndpointService sessionSOAPEndpointService);
+
+
+    UserData getUserData();
+
+    void setUserData(UserData userData);
 }

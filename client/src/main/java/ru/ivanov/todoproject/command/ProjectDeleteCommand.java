@@ -1,6 +1,5 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
 import ru.ivanov.todoproject.api.Project;
 import ru.ivanov.todoproject.api.Session;
@@ -8,7 +7,9 @@ import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.util.List;
 
-public class ProjectDeleteCommand extends Command {
+import static ru.ivanov.todoproject.util.ConsoleHelper.print;
+
+public class ProjectDeleteCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -26,20 +27,20 @@ public class ProjectDeleteCommand extends Command {
     }
 
     @Override
-    public void execute(final ServiceLocator serviceLocator) {
+    public void execute() {
         IProjectSOAPEndpoint projectSOAPEndpoint = serviceLocator.getProjectSOAPEndpointService().getProjectSOAPEndpointPort();
         final Session session = serviceLocator.getSession();
-        ConsoleHelper.printMessage("Enter project name:");
+        print("Enter project name:");
         final String projectName = ConsoleHelper.readString();
         final List<Project> projects = projectSOAPEndpoint.readProject(session, projectName);
         final Project selectedProject = tryFindProject(projects);
 
         if (selectedProject == null) {
-            ConsoleHelper.printMessage(String.format("Project %s not found", projectName));
+            print(String.format("Project %s not found", projectName));
             return;
         }
 
         projectSOAPEndpoint.deleteProject(session, selectedProject);
-        ConsoleHelper.printMessage(String.format("Project %s has been deleted", selectedProject.getName()));
+        print(String.format("Project %s has been deleted", selectedProject.getName()));
     }
 }

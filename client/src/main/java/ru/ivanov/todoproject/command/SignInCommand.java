@@ -4,7 +4,7 @@ import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
-public class SignInCommand extends Command {
+public class SignInCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -23,16 +23,16 @@ public class SignInCommand extends Command {
 
     @Override
     public void execute(final ServiceLocator serviceLocator) {
-        ConsoleHelper.printMessage("Enter your login:");
+        ConsoleHelper.print("Enter your login:");
         final String login = ConsoleHelper.readString();
-        ConsoleHelper.printMessage("Enter password:");
+        ConsoleHelper.print("Enter password:");
         final String password = ConsoleHelper.readString();
         final Session session = serviceLocator.getSessionSOAPEndpointService().getSessionSOAPEndpointPort().login(login, password);
         if (session == null) {
-            ConsoleHelper.printMessage("Wrong login/password");
+            ConsoleHelper.print("Wrong login/password");
             return;
         }
         serviceLocator.setSession(session);
-        ConsoleHelper.printMessage("Welcome, " + login);
+        ConsoleHelper.print("Welcome, " + login);
     }
 }

@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DataJsonLoad extends Command {
+public class DataJsonLoad extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
@@ -36,9 +36,9 @@ public class DataJsonLoad extends Command {
             final ObjectReader objectReader = new ObjectMapper().reader().forType(Domain.class);
             final Domain domain = objectReader.readValue(inputStream);
             domain.loadFromDomain(serviceLocator);
-            ConsoleHelper.printMessage("Loading from json file was successful");
+            ConsoleHelper.print("Loading from json file was successful");
         } catch (IOException e) {
-            ConsoleHelper.printMessage("An error has occurred during loading from json file");
+            ConsoleHelper.print("An error has occurred during loading from json file");
         }
     }
 }
