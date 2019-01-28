@@ -1,30 +1,24 @@
 package ru.ivanov.todoproject;
 
-import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
-import ru.ivanov.todoproject.endpoint.SessionSOAPEndpointService;
-import ru.ivanov.todoproject.endpoint.TaskSOAPEndpointService;
-import ru.ivanov.todoproject.endpoint.UserSOAPEndpointService;
+import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
+import ru.ivanov.todoproject.api.ISessionSOAPEndpoint;
+import ru.ivanov.todoproject.api.ITaskSOAPEndpoint;
+import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
 
 public interface ServiceLocator {
+    IProjectSOAPEndpoint getProjectSOAPEndpoint();
 
-    ProjectSOAPEndpointService getProjectSOAPEndpointService();
+    void setProjectSOAPEndpoint(IProjectSOAPEndpoint projectSOAPEndpoint);
 
-    void setProjectSOAPEndpointService(ProjectSOAPEndpointService projectSOAPEndpoint);
+    ITaskSOAPEndpoint getTaskSOAPEndpoint();
 
-    TaskSOAPEndpointService getTaskSOAPEndpointService();
+    void setTaskSOAPEndpoint(ITaskSOAPEndpoint taskSOAPEndpoint);
 
-    void setTaskSOAPEndpointService(TaskSOAPEndpointService taskSOAPEndpoint);
+    IUserSOAPEndpoint getUserSOAPEndpoint();
 
-    UserSOAPEndpointService getUserSOAPEndpointService();
+    void setUserSOAPEndpoint(IUserSOAPEndpoint userSOAPEndpoint);
 
-    void setUserSOAPEndpointService(UserSOAPEndpointService userSOAPEndpoint);
+    ISessionSOAPEndpoint getSessionSOAPEndpoint();
 
-    SessionSOAPEndpointService getSessionSOAPEndpointService();
-
-    void setSessionSOAPEndpointService(final SessionSOAPEndpointService sessionSOAPEndpointService);
-
-
-    UserData getUserData();
-
-    void setUserData(UserData userData);
+    void setSessionSOAPEndpoint(ISessionSOAPEndpoint sessionSOAPEndpoint);
 }

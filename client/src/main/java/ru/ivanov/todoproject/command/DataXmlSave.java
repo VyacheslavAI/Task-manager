@@ -1,7 +1,6 @@
 package ru.ivanov.todoproject.command;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 import java.io.IOException;

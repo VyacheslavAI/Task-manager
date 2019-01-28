@@ -1,12 +1,16 @@
 package ru.ivanov.todoproject.bootstrap;
 
 import ru.ivanov.todoproject.ServiceLocator;
-import ru.ivanov.todoproject.UserData;
+import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
+import ru.ivanov.todoproject.api.ISessionSOAPEndpoint;
+import ru.ivanov.todoproject.api.ITaskSOAPEndpoint;
+import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
 import ru.ivanov.todoproject.command.AbstractCommand;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpointService;
+import ru.ivanov.todoproject.userdata.UserData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,22 +19,23 @@ import static ru.ivanov.todoproject.util.ConsoleHelper.*;
 
 public class Bootstrap implements ServiceLocator {
 
-    private ProjectSOAPEndpointService projectSOAPEndpoint = new ProjectSOAPEndpointService();
+    private IProjectSOAPEndpoint projectSOAPEndpoint = new ProjectSOAPEndpointService().getProjectSOAPEndpointPort();
 
-    private TaskSOAPEndpointService taskSOAPEndpoint = new TaskSOAPEndpointService();
+    private ITaskSOAPEndpoint taskSOAPEndpoint = new TaskSOAPEndpointService().getTaskSOAPEndpointPort();
 
-    private UserSOAPEndpointService userSOAPEndpoint = new UserSOAPEndpointService();
+    private IUserSOAPEndpoint userSOAPEndpoint = new UserSOAPEndpointService().getUserSOAPEndpointPort();
 
-    private SessionSOAPEndpointService sessionSOAPEndpoint = new SessionSOAPEndpointService();
-
-    private UserData userData = new UserData();
+    private ISessionSOAPEndpoint sessionSOAPEndpoint = new SessionSOAPEndpointService().getSessionSOAPEndpointPort();
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
+
+    private final UserData userData = new UserData();
 
     public void register(final Class<?>[] commandClasses) throws IllegalAccessException, InstantiationException {
         for (final Class commandClass : commandClasses) {
             final AbstractCommand command = (AbstractCommand) commandClass.newInstance();
             command.setServiceLocator(this);
+            command.setUserData(userData);
             final String consoleCommand = command.getConsoleCommand();
             commands.put(consoleCommand, command);
         }
@@ -54,52 +59,42 @@ public class Bootstrap implements ServiceLocator {
     }
 
     @Override
-    public ProjectSOAPEndpointService getProjectSOAPEndpointService() {
+    public IProjectSOAPEndpoint getProjectSOAPEndpoint() {
         return projectSOAPEndpoint;
     }
 
     @Override
-    public void setProjectSOAPEndpointService(ProjectSOAPEndpointService projectSOAPEndpoint) {
+    public void setProjectSOAPEndpoint(IProjectSOAPEndpoint projectSOAPEndpoint) {
         this.projectSOAPEndpoint = projectSOAPEndpoint;
     }
 
     @Override
-    public TaskSOAPEndpointService getTaskSOAPEndpointService() {
+    public ITaskSOAPEndpoint getTaskSOAPEndpoint() {
         return taskSOAPEndpoint;
     }
 
     @Override
-    public void setTaskSOAPEndpointService(TaskSOAPEndpointService taskSOAPEndpoint) {
+    public void setTaskSOAPEndpoint(ITaskSOAPEndpoint taskSOAPEndpoint) {
         this.taskSOAPEndpoint = taskSOAPEndpoint;
     }
 
     @Override
-    public UserSOAPEndpointService getUserSOAPEndpointService() {
+    public IUserSOAPEndpoint getUserSOAPEndpoint() {
         return userSOAPEndpoint;
     }
 
     @Override
-    public void setUserSOAPEndpointService(UserSOAPEndpointService userSOAPEndpoint) {
+    public void setUserSOAPEndpoint(IUserSOAPEndpoint userSOAPEndpoint) {
         this.userSOAPEndpoint = userSOAPEndpoint;
     }
 
     @Override
-    public SessionSOAPEndpointService getSessionSOAPEndpointService() {
+    public ISessionSOAPEndpoint getSessionSOAPEndpoint() {
         return sessionSOAPEndpoint;
     }
 
     @Override
-    public void setSessionSOAPEndpointService(SessionSOAPEndpointService sessionSOAPEndpoint) {
+    public void setSessionSOAPEndpoint(ISessionSOAPEndpoint sessionSOAPEndpoint) {
         this.sessionSOAPEndpoint = sessionSOAPEndpoint;
-    }
-
-    @Override
-    public UserData getUserData() {
-        return userData;
-    }
-
-    @Override
-    public void setUserData(UserData userData) {
-        this.userData = userData;
     }
 }

@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 public final class ConsoleHelper {
 
     private ConsoleHelper() {
+        throw new AssertionError();
     }
 
     private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -19,8 +20,8 @@ public final class ConsoleHelper {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static void printWelcome() {
-        System.out.println("Welcome to Task Manager Application!");
-        System.out.println("Enter \"help\" show list of available commands");
+        print("Welcome to Task Manager Application!");
+        print("Enter \"help\" show list of available commands");
     }
 
     public static void print(final String message) {
@@ -33,27 +34,33 @@ public final class ConsoleHelper {
             try {
                 string = reader.readLine();
             } catch (IOException e) {
-                System.out.println("An error has occurred. Please try again");
+                print("Input error. Please try again");
             }
         }
         return string;
     }
 
     public static int readInt() {
-        return Integer.parseInt(readString());
+        int result = 0;
+        try {
+            result = Integer.parseInt(readString());
+        } catch (NumberFormatException e) {
+            print("Input error. The number can't contain letters or special characters.");
+        }
+        return result;
     }
 
     public static int readInt(final int from, final int to) {
-        int number = Integer.parseInt(readString());
+        int number = readInt();
         while (number < from || number > to) {
-            print(String.format("Value must be more then %d and less then %d", from - 1, to + 1));
-            number = Integer.parseInt(readString());
+            print(String.format("Value must be greater than or equal %d and less or equal then %d", from, to));
+            number = readInt();
         }
         return number;
     }
 
     public static void printDelimiter() {
-        System.out.println("=================================================");
+        print("=================================================");
     }
 
     public static Date readDate() {
@@ -63,7 +70,7 @@ public final class ConsoleHelper {
                 final String stringDate = readString();
                 date = simpleDateFormat.parse(stringDate);
             } catch (ParseException e) {
-                print("Wrong date format. Please enter the date in the following format 15/04/1990:");
+                print("Wrong date format. Please enter the date in the following format: 15/04/1990");
             }
         }
         return date;

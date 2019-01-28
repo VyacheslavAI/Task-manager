@@ -1,8 +1,10 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.ServiceLocator;
+import ru.ivanov.todoproject.api.ObjectIsNotValidException_Exception;
 import ru.ivanov.todoproject.api.Session;
-import ru.ivanov.todoproject.util.ConsoleHelper;
+
+import static ru.ivanov.todoproject.util.ConsoleHelper.print;
+import static ru.ivanov.todoproject.util.ConsoleHelper.readString;
 
 public class SignInCommand extends AbstractCommand {
 
@@ -13,7 +15,7 @@ public class SignInCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "Command to login user";
+        return "Log In";
     }
 
     @Override
@@ -22,17 +24,13 @@ public class SignInCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final ServiceLocator serviceLocator) {
-        ConsoleHelper.print("Enter your login:");
-        final String login = ConsoleHelper.readString();
-        ConsoleHelper.print("Enter password:");
-        final String password = ConsoleHelper.readString();
-        final Session session = serviceLocator.getSessionSOAPEndpointService().getSessionSOAPEndpointPort().login(login, password);
-        if (session == null) {
-            ConsoleHelper.print("Wrong login/password");
-            return;
-        }
-        serviceLocator.setSession(session);
-        ConsoleHelper.print("Welcome, " + login);
+    public void execute() throws ObjectIsNotValidException_Exception {
+        print("Enter login:");
+        final String login = readString();
+        print("Enter password:");
+        final String password = readString();
+        final Session session = serviceLocator.getSessionSOAPEndpoint().login(login, password);
+        userData.setSession(session);
+        print("Log In successful");
     }
 }

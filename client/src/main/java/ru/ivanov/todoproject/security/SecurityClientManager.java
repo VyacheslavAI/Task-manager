@@ -3,19 +3,19 @@ package ru.ivanov.todoproject.security;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import ru.ivanov.todoproject.entity.Session;
+import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SecurityServerManager {
+public class SecurityClientManager {
 
     private final String salt = "184S8w076031";
 
     private final String passwordHashAlgorithm = "MD5";
 
-    private final String signHashAlgorithm = "MD5";
+    private final String signAlgorithm = "MD5";
 
     private Validator validator;
 
@@ -25,7 +25,7 @@ public class SecurityServerManager {
             final ObjectWriter jsonMapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
             String signature = jsonMapper.writeValueAsString(object);
             for (int i = 0; i < 1466; i++) {
-                signature = salt + getHashByAlgorithm(signHashAlgorithm, signature) + salt;
+                signature = salt + getHashByAlgorithm(signAlgorithm, signature) + salt;
             }
             return signature;
         } catch (JsonProcessingException | NoSuchAlgorithmException e) {

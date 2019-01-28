@@ -1,35 +1,17 @@
 package ru.ivanov.todoproject.command;
 
 import ru.ivanov.todoproject.ServiceLocator;
-import ru.ivanov.todoproject.api.Project;
-import ru.ivanov.todoproject.util.ConsoleHelper;
-
-import java.util.List;
+import ru.ivanov.todoproject.api.JsonProcessingException_Exception;
+import ru.ivanov.todoproject.api.NoSuchAlgorithmException_Exception;
+import ru.ivanov.todoproject.api.ObjectIsNotValidException_Exception;
+import ru.ivanov.todoproject.api.RequestNotAuthenticatedException_Exception;
+import ru.ivanov.todoproject.userdata.UserData;
 
 public abstract class AbstractCommand {
 
-    protected ServiceLocator serviceLocator;
+    ServiceLocator serviceLocator;
 
-    private static final String warningString = "Several projects found with data name. \n" +
-            "Select the creation date of the desired project.";
-
-    Project tryFindProject(final List<Project> projects) {
-        if (projects == null || projects.isEmpty()) return null;
-        if (projects.size() == 1) return projects.get(0);
-
-        ConsoleHelper.print(warningString);
-        for (int i = 0; i < projects.size(); i++) {
-            final Project project = projects.get(i);
-            final String created = ConsoleHelper.formatDate(project.getCreated().toGregorianCalendar());
-            final String indexAndDate = String.format("%d %s", i, created);
-            ConsoleHelper.print(indexAndDate);
-        }
-
-        final int firstIndex = 0;
-        final int lastIndex = projects.size() - 1;
-        final int indexOfProject = ConsoleHelper.readInt(firstIndex, lastIndex);
-        return projects.get(indexOfProject);
-    }
+    UserData userData;
 
     public abstract String getConsoleCommand();
 
@@ -37,9 +19,13 @@ public abstract class AbstractCommand {
 
     public abstract boolean isAuthorizationRequired();
 
-    public abstract void execute();
+    public abstract void execute() throws ObjectIsNotValidException_Exception, RequestNotAuthenticatedException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception;
 
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
     }
 }

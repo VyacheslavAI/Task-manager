@@ -1,6 +1,7 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.ServiceLocator;
+import ru.ivanov.todoproject.api.ObjectIsNotValidException_Exception;
+import ru.ivanov.todoproject.api.RequestNotAuthenticatedException_Exception;
 import ru.ivanov.todoproject.util.ConsoleHelper;
 
 public class SignOutCommand extends AbstractCommand {
@@ -12,7 +13,7 @@ public class SignOutCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "Command to logout user";
+        return "Log Out";
     }
 
     @Override
@@ -21,8 +22,9 @@ public class SignOutCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(final ServiceLocator serviceLocator) {
-        serviceLocator.setSession(null);
-        ConsoleHelper.print("Logout successful");
+    public void execute() throws ObjectIsNotValidException_Exception, RequestNotAuthenticatedException_Exception {
+        serviceLocator.getSessionSOAPEndpoint().logout(userData.getSession());
+        userData.setSession(null);
+        ConsoleHelper.print("Log Out successful");
     }
 }

@@ -1,7 +1,9 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.ServiceLocator;
-import ru.ivanov.todoproject.util.ConsoleHelper;
+import ru.ivanov.todoproject.api.ObjectIsNotValidException_Exception;
+
+import static ru.ivanov.todoproject.util.ConsoleHelper.print;
+import static ru.ivanov.todoproject.util.ConsoleHelper.readString;
 
 public class RegistryCommand extends AbstractCommand {
 
@@ -12,7 +14,7 @@ public class RegistryCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "New User Registration";
+        return "New user registration";
     }
 
     @Override
@@ -21,12 +23,11 @@ public class RegistryCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(ServiceLocator serviceLocator) {
-        ConsoleHelper.print("Enter new name:");
-        final String login = ConsoleHelper.readString();
-        ConsoleHelper.print("Enter password:");
-        final String password = ConsoleHelper.readString();
-        boolean result = serviceLocator.getSessionSOAPEndpointService().getSessionSOAPEndpointPort().userRegistry(login, password);
-        ConsoleHelper.print(Boolean.toString(result));
+    public void execute() throws ObjectIsNotValidException_Exception {
+        print("Enter new login:");
+        final String login = readString();
+        print("Enter password:");
+        final String password = readString();
+        serviceLocator.getSessionSOAPEndpoint().userRegistry(login, password);
     }
 }
