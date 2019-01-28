@@ -5,12 +5,10 @@ import ru.ivanov.todoproject.api.ITaskService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
-import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.TaskRepository;
-import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ public class TaskService implements ITaskService {
     public Task updateTask(final Task task) throws ObjectIsNotValidException, ObjectNotFoundException {
         if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
         final Task persistentTask = taskRepository.findById(task.getId());
-        if (persistentTask == null ) throw new ObjectNotFoundException();
+        if (persistentTask == null) throw new ObjectNotFoundException();
         if (!persistentTask.getUserId().equals(task.getUserId())) throw new ObjectNotFoundException();
         return taskRepository.merge(task);
     }

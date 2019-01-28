@@ -3,15 +3,11 @@ package ru.ivanov.todoproject.security;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class SecurityServerManager {
 

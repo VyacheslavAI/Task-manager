@@ -1,7 +1,6 @@
 package ru.ivanov.todoproject.api;
 
 import ru.ivanov.todoproject.entity.Project;
-import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;

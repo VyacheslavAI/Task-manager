@@ -2,7 +2,7 @@ package ru.ivanov.todoproject.bootstrap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.*;
-import ru.ivanov.todoproject.dto.Domain;
+import ru.ivanov.todoproject.dto.Serializer;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint;
@@ -41,7 +41,7 @@ public class Bootstrap implements ServiceLocator {
 
     private Validator validator = new Validator();
 
-    private Serializer serializer = new Domain();
+    private Serializer serializer = new Serializer();
 
     {
         projectService.setServiceLocator(this);
@@ -63,6 +63,7 @@ public class Bootstrap implements ServiceLocator {
         taskService.setValidator(validator);
         userService.setValidator(validator);
         sessionService.setValidator(validator);
+        securityServerManager.setValidator(validator);
     }
 
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException {
