@@ -31,5 +31,5 @@ public interface IUserSOAPEndpoint {
 
     void setSecurityServerManager(SecurityServerManager securityServerManager);
 
-//    void setServiceLocator(ServiceLocator serviceLocator);
+    void setServiceLocator(ServiceLocator serviceLocator);
 }

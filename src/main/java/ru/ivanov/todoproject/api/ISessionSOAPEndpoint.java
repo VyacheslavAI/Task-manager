@@ -24,5 +24,5 @@ public interface ISessionSOAPEndpoint {
 
     void setSecurityServerManager(SecurityServerManager securityManager);
 
-//    void setServiceLocator(ServiceLocator serviceLocator);
+    void setServiceLocator(ServiceLocator serviceLocator);
 }

@@ -34,5 +34,5 @@ public interface IProjectSOAPEndpoint {
 
     void setSecurityServerManager(SecurityServerManager securityManager);
 
-//    void setServiceLocator(ServiceLocator serviceLocator);
+    void setServiceLocator(ServiceLocator serviceLocator);
 }

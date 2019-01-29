@@ -46,10 +46,10 @@ public class UserSOAPEndpoint implements IUserSOAPEndpoint {
         return null;
     }
 
-//    @Override
-//    public void setServiceLocator(ServiceLocator serviceLocator) {
-//        this.serviceLocator = serviceLocator;
-//    }
+    @Override
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
 
     @Override
     public void setSecurityServerManager(SecurityServerManager securityServerManager) {

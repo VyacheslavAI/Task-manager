@@ -50,10 +50,10 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
         return serviceLocator.getProjectService().loadAllUserProject(session.getUserId());
     }
 
-//    @Override
-//    public void setServiceLocator(ServiceLocator serviceLocator) {
-//        this.serviceLocator = serviceLocator;
-//    }
+    @Override
+    public void setServiceLocator(ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
 
     @Override
     public void setSecurityServerManager(SecurityServerManager securityManager) {

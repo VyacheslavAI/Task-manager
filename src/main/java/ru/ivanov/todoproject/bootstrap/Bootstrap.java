@@ -29,13 +29,13 @@ public class Bootstrap implements ServiceLocator {
 
     private ISessionService sessionService = new SessionService();
 
-    private ProjectSOAPEndpoint projectSOAPEndpoint = new ProjectSOAPEndpoint();
+    private IProjectSOAPEndpoint projectSOAPEndpoint = new ProjectSOAPEndpoint();
 
-    private TaskSOAPEndpoint taskSOAPEndpoint = new TaskSOAPEndpoint();
+    private ITaskSOAPEndpoint taskSOAPEndpoint = new TaskSOAPEndpoint();
 
-    private UserSOAPEndpoint userSOAPEndpoint = new UserSOAPEndpoint();
+    private IUserSOAPEndpoint userSOAPEndpoint = new UserSOAPEndpoint();
 
-    private SessionSOAPEndpoint sessionSOAPEndpoint = new SessionSOAPEndpoint();
+    private ISessionSOAPEndpoint sessionSOAPEndpoint = new SessionSOAPEndpoint();
 
     private SecurityServerManager securityServerManager = new SecurityServerManager();
 
@@ -48,10 +48,10 @@ public class Bootstrap implements ServiceLocator {
         taskService.setServiceLocator(this);
         userService.setServiceLocator(this);
         sessionService.setServiceLocator(this);
-//        projectSOAPEndpoint.setServiceLocator(this);
-//        taskSOAPEndpoint.setServiceLocator(this);
-//        userSOAPEndpoint.setServiceLocator(this);
-//        sessionSOAPEndpoint.setServiceLocator(this);
+        projectSOAPEndpoint.setServiceLocator(this);
+        taskSOAPEndpoint.setServiceLocator(this);
+        userSOAPEndpoint.setServiceLocator(this);
+        sessionSOAPEndpoint.setServiceLocator(this);
 
         userService.setSecurityServerManager(securityServerManager);
         projectSOAPEndpoint.setSecurityServerManager(securityServerManager);

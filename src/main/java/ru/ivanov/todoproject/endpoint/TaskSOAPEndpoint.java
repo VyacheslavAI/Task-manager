@@ -57,10 +57,10 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
         return serviceLocator.getTaskService().loadAllUserTaskByProject(session.getUserId(), project);
     }
 
-//    @Override
-//    public void setServiceLocator(final ServiceLocator serviceLocator) {
-//        this.serviceLocator = serviceLocator;
-//    }
+    @Override
+    public void setServiceLocator(final ServiceLocator serviceLocator) {
+        this.serviceLocator = serviceLocator;
+    }
 
     @Override
     public void setSecurityServerManager(final SecurityServerManager securityManager) {
