@@ -35,6 +35,7 @@ public class SignInCommand extends AbstractCommand {
         print("Enter password:");
         final String password = readString();
         final String passwordHash = securityClientManager.getPasswordHash(password);
+        System.out.println(passwordHash);
         final Session session = serviceLocator.getSessionSOAPEndpoint().login(login, passwordHash);
         userData.setSession(session);
         print("Log In successful");
