@@ -34,7 +34,7 @@ public interface ITaskSOAPEndpoint {
     @WebMethod
     List<Task> getAllTaskByProject(final Session session, final Project project) throws ObjectIsNotValidException, AuthenticationException, InvalidArgumentException;
 
-//    void setServiceLocator(ServiceLocator serviceLocator);
-
     void setSecurityServerManager(SecurityServerManager securityManager);
+
+//    void setServiceLocator(ServiceLocator serviceLocator);
 }

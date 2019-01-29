@@ -52,7 +52,7 @@ public class UserSOAPEndpoint implements IUserSOAPEndpoint {
 //    }
 
     @Override
-    public void setSecurityServerManager(SecurityServerManager securityManager) {
-        this.securityManager = securityManager;
+    public void setSecurityServerManager(SecurityServerManager securityServerManager) {
+        this.securityManager = securityServerManager;
     }
 }

@@ -32,7 +32,7 @@ public interface IProjectSOAPEndpoint {
     @WebMethod
     List<Project> showProjects(final Session session) throws AuthenticationException, InvalidArgumentException;
 
-//    void setServiceLocator(ServiceLocator serviceLocator);
-
     void setSecurityServerManager(SecurityServerManager securityManager);
+
+//    void setServiceLocator(ServiceLocator serviceLocator);
 }
