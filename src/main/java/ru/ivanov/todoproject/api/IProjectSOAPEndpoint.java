@@ -1,6 +1,7 @@
 package ru.ivanov.todoproject.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.exception.AuthenticationException;
@@ -11,6 +12,7 @@ import ru.ivanov.todoproject.security.SecurityServerManager;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -21,18 +23,18 @@ public interface IProjectSOAPEndpoint {
     Project createProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, JsonProcessingException, NoSuchAlgorithmException, InvalidArgumentException;
 
     @WebMethod
-    List<Project> readProject(final Session session, final String name) throws AuthenticationException, InvalidArgumentException;
+    Project readProject(final Session session, final String name) throws AuthenticationException, InvalidArgumentException, ObjectNotFoundException;
 
     @WebMethod
     Project updateProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException;
 
     @WebMethod
-    Project deleteProject(final Session session, final Project project) throws ObjectIsNotValidException, AuthenticationException, ObjectNotFoundException;
+    Project deleteProject(Session session, String projectName) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException;
 
     @WebMethod
     List<Project> showProjects(final Session session) throws AuthenticationException, InvalidArgumentException;
 
-    void setServiceLocator(ServiceLocator serviceLocator);
+//    void setServiceLocator(ServiceLocator serviceLocator);
 
     void setSecurityManager(SecurityServerManager securityManager);
 }

@@ -28,21 +28,21 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     }
 
     @Override
-    public List<Task> readTask(final Session session, final String name) throws AuthenticationException, InvalidArgumentException {
+    public Task readTask(final Session session, final String taskName) throws AuthenticationException, InvalidArgumentException, ObjectNotFoundException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().loadUserTaskByName(session.getUserId(), name);
+        return serviceLocator.getTaskService().loadUserTaskByName(session.getUserId(), taskName);
     }
 
     @Override
     public Task updateTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().updateTask(task);
+        return serviceLocator.getTaskService().updateTask(session.getUserId(), task);
     }
 
     @Override
-    public Task deleteTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException {
+    public Task deleteTask(final Session session, final String taskName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().deleteTask(task);
+        return serviceLocator.getTaskService().deleteTask(session.getUserId(), taskName);
     }
 
     @Override
@@ -57,10 +57,10 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
         return serviceLocator.getTaskService().loadUserTaskByProject(session.getUserId(), project);
     }
 
-    @Override
-    public void setServiceLocator(final ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
+//    @Override
+//    public void setServiceLocator(final ServiceLocator serviceLocator) {
+//        this.serviceLocator = serviceLocator;
+//    }
 
     @Override
     public void setSecurityManager(final SecurityServerManager securityManager) {

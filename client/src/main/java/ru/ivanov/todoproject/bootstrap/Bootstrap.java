@@ -1,10 +1,7 @@
 package ru.ivanov.todoproject.bootstrap;
 
 import ru.ivanov.todoproject.ServiceLocator;
-import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
-import ru.ivanov.todoproject.api.ISessionSOAPEndpoint;
-import ru.ivanov.todoproject.api.ITaskSOAPEndpoint;
-import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
+import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.command.AbstractCommand;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpointService;
@@ -41,7 +38,7 @@ public class Bootstrap implements ServiceLocator {
         }
     }
 
-    public void run() {
+    public void run() throws ObjectIsNotValidException_Exception, RequestNotAuthenticatedException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception {
         printWelcome();
         String operation;
         do {

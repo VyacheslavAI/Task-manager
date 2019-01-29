@@ -23,13 +23,12 @@ public class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws NoSuchAlgorithmException_Exception, RequestNotAuthenticatedException_Exception, JsonProcessingException_Exception, ObjectIsNotValidException_Exception {
+    public void execute() throws NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, ObjectIsNotValidException_Exception, AuthenticationException_Exception, InvalidArgumentException_Exception {
         final Session session = userData.getSession();
         print("Enter project name:");
         final String projectName = readString();
         final Project project = new Project();
         project.setName(projectName);
-        project.setUserId(userData.getSession().getUserId());
         serviceLocator.getProjectSOAPEndpoint().createProject(session, project);
         print(String.format("Project %s has been added", projectName));
     }

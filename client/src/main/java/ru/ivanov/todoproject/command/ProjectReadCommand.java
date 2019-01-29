@@ -1,5 +1,10 @@
 package ru.ivanov.todoproject.command;
 
+import ru.ivanov.todoproject.api.*;
+
+import static ru.ivanov.todoproject.util.ConsoleHelper.print;
+import static ru.ivanov.todoproject.util.ConsoleHelper.readString;
+
 public class ProjectReadCommand extends AbstractCommand {
 
     @Override
@@ -18,6 +23,11 @@ public class ProjectReadCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws AuthenticationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, ObjectIsNotValidException_Exception {
+        final Session session = userData.getSession();
+        print("Enter project name:");
+        final String projectName = readString();
+        final Project project = serviceLocator.getProjectSOAPEndpoint().readProject(session, projectName);
+        print(String.format("%s - %s", projectName, project.getId()));
     }
 }

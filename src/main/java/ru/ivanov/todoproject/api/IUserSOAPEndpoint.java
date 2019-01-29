@@ -29,7 +29,7 @@ public interface IUserSOAPEndpoint {
     @WebMethod
     User getUser(final Session session);
 
-    void setServiceLocator(ServiceLocator serviceLocator);
+//    void setServiceLocator(ServiceLocator serviceLocator);
 
     void setSecurityManager(SecurityServerManager securityManager);
 }

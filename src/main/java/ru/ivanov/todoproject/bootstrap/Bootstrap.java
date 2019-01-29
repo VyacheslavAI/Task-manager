@@ -16,6 +16,7 @@ import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
 
@@ -48,10 +49,10 @@ public class Bootstrap implements ServiceLocator {
         taskService.setServiceLocator(this);
         userService.setServiceLocator(this);
         sessionService.setServiceLocator(this);
-        projectSOAPEndpoint.setServiceLocator(this);
-        taskSOAPEndpoint.setServiceLocator(this);
-        userSOAPEndpoint.setServiceLocator(this);
-        sessionSOAPEndpoint.setServiceLocator(this);
+//        projectSOAPEndpoint.setServiceLocator(this);
+//        taskSOAPEndpoint.setServiceLocator(this);
+//        userSOAPEndpoint.setServiceLocator(this);
+//        sessionSOAPEndpoint.setServiceLocator(this);
 
         userService.setSecurityManager(securityServerManager);
         projectSOAPEndpoint.setSecurityManager(securityServerManager);

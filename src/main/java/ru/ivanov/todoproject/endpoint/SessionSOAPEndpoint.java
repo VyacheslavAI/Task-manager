@@ -60,10 +60,10 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
         return true;
     }
 
-    @Override
-    public void setServiceLocator(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
+//    @Override
+//    public void setServiceLocator(ServiceLocator serviceLocator) {
+//        this.serviceLocator = serviceLocator;
+//    }
 
     @Override
     public void setSecurityManager(SecurityServerManager securityManager) {

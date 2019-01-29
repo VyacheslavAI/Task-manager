@@ -20,13 +20,13 @@ public interface ITaskSOAPEndpoint {
     Task createTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException, InvalidArgumentException;
 
     @WebMethod
-    List<Task> readTask(final Session session, final String name) throws AuthenticationException, InvalidArgumentException;
+    Task readTask(final Session session, final String name) throws AuthenticationException, InvalidArgumentException, ObjectNotFoundException;
 
     @WebMethod
     Task updateTask(final Session session, final Task task) throws ObjectIsNotValidException, AuthenticationException, ObjectNotFoundException, InvalidArgumentException;
 
     @WebMethod
-    Task deleteTask(final Session session, final Task task) throws ObjectIsNotValidException, AuthenticationException, ObjectNotFoundException;
+    Task deleteTask(Session session, String taskName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException;
 
     @WebMethod
     List<Task> showTasks(final Session session) throws AuthenticationException, InvalidArgumentException;
@@ -34,7 +34,7 @@ public interface ITaskSOAPEndpoint {
     @WebMethod
     List<Task> getTasksByProject(final Session session, final Project project) throws ObjectIsNotValidException, AuthenticationException, InvalidArgumentException;
 
-    void setServiceLocator(ServiceLocator serviceLocator);
+//    void setServiceLocator(ServiceLocator serviceLocator);
 
     void setSecurityManager(SecurityServerManager securityManager);
 }

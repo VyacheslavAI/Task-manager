@@ -27,21 +27,21 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     }
 
     @Override
-    public List<Project> readProject(final Session session, final String name) throws AuthenticationException, InvalidArgumentException {
+    public Project readProject(final Session session, final String projectName) throws AuthenticationException, InvalidArgumentException, ObjectNotFoundException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getProjectService().loadUserProjectByName(session.getUserId(), name);
+        return serviceLocator.getProjectService().loadUserProjectByName(session.getUserId(), projectName);
     }
 
     @Override
-    public Project updateProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+    public Project updateProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getProjectService().updateProject(project);
+        return serviceLocator.getProjectService().updateProject(session.getUserId(), project);
     }
 
     @Override
-    public Project deleteProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException {
+    public Project deleteProject(final Session session, final String projectName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getProjectService().deleteProject(project);
+        return serviceLocator.getProjectService().deleteProject(session.getUserId(), projectName);
     }
 
     @Override
@@ -50,10 +50,10 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
         return serviceLocator.getProjectService().loadAllUserProject(session.getUserId());
     }
 
-    @Override
-    public void setServiceLocator(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
+//    @Override
+//    public void setServiceLocator(ServiceLocator serviceLocator) {
+//        this.serviceLocator = serviceLocator;
+//    }
 
     @Override
     public void setSecurityManager(SecurityServerManager securityManager) {
