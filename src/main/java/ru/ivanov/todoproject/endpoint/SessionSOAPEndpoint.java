@@ -36,7 +36,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
         if (passwordHash == null || passwordHash.isEmpty()) throw new InvalidArgumentException();
         final User user = serviceLocator.getUserService().loadUserByLogin(login);
         if (user == null) throw new AuthorizationException();
-        if (user.getPasswordHash().equals(passwordHash)) throw new AuthorizationException();
+        if (!user.getPasswordHash().equals(passwordHash)) throw new AuthorizationException();
         final Session userSession = new Session();
         userSession.setUserId(user.getId());
         userSession.setTimestamp(System.currentTimeMillis());

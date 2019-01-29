@@ -1,6 +1,12 @@
 package ru.ivanov.todoproject.command;
 
 import ru.ivanov.todoproject.api.*;
+import ru.ivanov.todoproject.api.AuthenticationException_Exception;
+import ru.ivanov.todoproject.api.JsonProcessingException_Exception;
+import ru.ivanov.todoproject.api.NoSuchAlgorithmException_Exception;
+import ru.ivanov.todoproject.api.ObjectIsNotValidException_Exception;
+import ru.ivanov.todoproject.api.Project;
+import ru.ivanov.todoproject.api.Session;
 
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 import static ru.ivanov.todoproject.util.ConsoleHelper.readString;
@@ -23,7 +29,7 @@ public class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, ObjectIsNotValidException_Exception, AuthenticationException_Exception, InvalidArgumentException_Exception {
+    public void execute() throws NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, ObjectIsNotValidException_Exception, AuthenticationException_Exception, ru.ivanov.todoproject.api.InvalidArgumentException_Exception {
         final Session session = userData.getSession();
         print("Enter project name:");
         final String projectName = readString();

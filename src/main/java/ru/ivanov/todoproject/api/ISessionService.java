@@ -5,8 +5,10 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
+@XmlJavaTypeAdapter(ServiceLocator.SessionServiceAdapter.class)
 public interface ISessionService {
 
     Session createOrUpdateSession(Session session) throws ObjectIsNotValidException;

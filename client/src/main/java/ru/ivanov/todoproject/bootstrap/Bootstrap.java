@@ -2,13 +2,25 @@ package ru.ivanov.todoproject.bootstrap;
 
 import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.*;
+import ru.ivanov.todoproject.api.AuthenticationException_Exception;
+import ru.ivanov.todoproject.api.AuthorizationException_Exception;
+import ru.ivanov.todoproject.api.IProjectSOAPEndpoint;
+import ru.ivanov.todoproject.api.ISessionSOAPEndpoint;
+import ru.ivanov.todoproject.api.ITaskSOAPEndpoint;
+import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
+import ru.ivanov.todoproject.api.InvalidArgumentException_Exception;
+import ru.ivanov.todoproject.api.JsonProcessingException_Exception;
+import ru.ivanov.todoproject.api.NoSuchAlgorithmException_Exception;
+import ru.ivanov.todoproject.api.ObjectNotFoundException_Exception;
 import ru.ivanov.todoproject.command.AbstractCommand;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.TaskSOAPEndpointService;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpointService;
+import ru.ivanov.todoproject.security.SecurityClientManager;
 import ru.ivanov.todoproject.userdata.UserData;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +36,8 @@ public class Bootstrap implements ServiceLocator {
 
     private ISessionSOAPEndpoint sessionSOAPEndpoint = new SessionSOAPEndpointService().getSessionSOAPEndpointPort();
 
+    private SecurityClientManager securityClientManager = new SecurityClientManager();
+
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
     private final UserData userData = new UserData();
@@ -33,12 +47,13 @@ public class Bootstrap implements ServiceLocator {
             final AbstractCommand command = (AbstractCommand) commandClass.newInstance();
             command.setServiceLocator(this);
             command.setUserData(userData);
+            command.setSecurityClientManager(securityClientManager);
             final String consoleCommand = command.getConsoleCommand();
             commands.put(consoleCommand, command);
         }
     }
 
-    public void run() throws ObjectIsNotValidException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, AuthenticationException_Exception, AuthorizationException_Exception, InvalidArgumentException_Exception, ObjectNotFoundException_Exception {
+    public void run() throws ru.ivanov.todoproject.api.ObjectIsNotValidException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, AuthenticationException_Exception, AuthorizationException_Exception, InvalidArgumentException_Exception, ObjectNotFoundException_Exception, NoSuchAlgorithmException {
         printWelcome();
         String operation;
         do {
@@ -93,5 +108,13 @@ public class Bootstrap implements ServiceLocator {
     @Override
     public void setSessionSOAPEndpoint(ISessionSOAPEndpoint sessionSOAPEndpoint) {
         this.sessionSOAPEndpoint = sessionSOAPEndpoint;
+    }
+
+    public SecurityClientManager getSecurityClientManager() {
+        return securityClientManager;
+    }
+
+    public void setSecurityClientManager(SecurityClientManager securityClientManager) {
+        this.securityClientManager = securityClientManager;
     }
 }

@@ -69,6 +69,7 @@ public class Bootstrap implements ServiceLocator {
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException {
         serializer.loadApplicationDataFromBinary(this);
         userService.userInitialize("admin", "admin");
+        userService.userInitialize("root", "root");
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/user", userSOAPEndpoint);

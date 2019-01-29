@@ -7,8 +7,10 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
+@XmlJavaTypeAdapter(ServiceLocator.TaskServiceAdapter.class)
 public interface ITaskService {
 
     Task createTask(String userId, Task task) throws ObjectIsNotValidException, InvalidArgumentException;

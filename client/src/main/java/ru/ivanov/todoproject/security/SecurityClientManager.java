@@ -1,9 +1,5 @@
 package ru.ivanov.todoproject.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import ru.ivanov.todoproject.api.Session;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.security.MessageDigest;
@@ -11,40 +7,12 @@ import java.security.NoSuchAlgorithmException;
 
 public class SecurityClientManager {
 
-    private final String salt = "184S8w076031";
-
     private final String passwordHashAlgorithm = "MD5";
-
-    private final String signAlgorithm = "MD5";
 
     private Validator validator;
 
-    public String sign(final Object object) {
-        if (object == null) return "";
-        try {
-            final ObjectWriter jsonMapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            String signature = jsonMapper.writeValueAsString(object);
-            for (int i = 0; i < 1466; i++) {
-                signature = salt + getHashByAlgorithm(signAlgorithm, signature) + salt;
-            }
-            return signature;
-        } catch (JsonProcessingException | NoSuchAlgorithmException e) {
-            return "";
-        }
-    }
-
     public String getPasswordHash(final String password) throws NoSuchAlgorithmException {
         return getHashByAlgorithm(passwordHashAlgorithm, password);
-    }
-
-    public boolean isSessionVerified(final Session session) {
-        if (!validator.isSessionValid(session)) return false;
-        final Session clone = new Session();
-        clone.setTimestamp(session.getTimestamp());
-        clone.setUserId(session.getUserId());
-        final String expectedSignature = sign(clone);
-        final String transferredSignature = session.getSignature();
-        return expectedSignature.equals(transferredSignature);
     }
 
     private String getHashByAlgorithm(final String algorithm, final String value) throws NoSuchAlgorithmException {

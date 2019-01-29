@@ -9,10 +9,13 @@ import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+@XmlJavaTypeAdapter(ServiceLocator.UserServiceAdapter.class)
 public interface IUserService {
+
     User createOrUpdateUser(User user) throws ObjectIsNotValidException;
 
     User loadById(String id) throws InvalidArgumentException;

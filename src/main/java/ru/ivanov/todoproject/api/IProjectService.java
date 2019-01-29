@@ -6,8 +6,10 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
+@XmlJavaTypeAdapter(ServiceLocator.ProjectServiceAdapter.class)
 public interface IProjectService {
 
     Project createProject(String userId, Project project) throws ObjectIsNotValidException, InvalidArgumentException;
