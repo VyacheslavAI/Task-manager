@@ -24,6 +24,24 @@ public class TaskRepository extends AbstractRepository<Task> implements ITaskRep
     }
 
     @Override
+    public Task findTaskByName(final String userId, final String projectId, final String taskName) {
+        if (userId == null || userId.isEmpty()) return null;
+        if (projectId == null || projectId.isEmpty()) return null;
+        if (taskName == null || taskName.isEmpty()) return null;
+        for (final Task task : entities.values()) {
+            final String persistentTaskName = task.getName();
+            final String persistentTaskUserId = task.getUserId();
+            final String persistentTaskProjectId = task.getProjectId();
+            if (persistentTaskUserId.equals(userId) &&
+                    persistentTaskName.equals(taskName) &&
+                    persistentTaskProjectId.equals(projectId)) {
+                return task;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Task findTaskById(final String userId, final String taskId) {
         if (userId == null || userId.isEmpty()) return null;
         if (taskId == null || taskId.isEmpty()) return null;
@@ -44,6 +62,7 @@ public class TaskRepository extends AbstractRepository<Task> implements ITaskRep
     public List<Task> findAllTask() {
         return findAll();
     }
+
 
     @Override
     public List<Task> findAllProjectTask(final String userId, final String projectId) {

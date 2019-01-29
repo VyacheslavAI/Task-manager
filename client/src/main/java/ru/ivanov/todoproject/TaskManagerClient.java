@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject;
 
+import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.command.*;
 
@@ -13,7 +14,7 @@ public class TaskManagerClient {
             UserReadCommand.class, UserUpdateCommand.class, UserDeleteCommand.class, SignInCommand.class,
             SignOutCommand.class, UserShowCommand.class, RegistryCommand.class};
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException, JsonProcessingException_Exception, ObjectIsNotValidException_Exception, AuthorizationException_Exception, NoSuchAlgorithmException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, AuthenticationException_Exception {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.register(commands);
         bootstrap.run();

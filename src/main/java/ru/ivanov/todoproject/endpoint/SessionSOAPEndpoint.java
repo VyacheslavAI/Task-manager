@@ -66,7 +66,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
 //    }
 
     @Override
-    public void setSecurityManager(SecurityServerManager securityManager) {
+    public void setSecurityServerManager(SecurityServerManager securityManager) {
         this.securityManager = securityManager;
     }
 }

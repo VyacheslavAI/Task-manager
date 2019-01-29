@@ -38,7 +38,7 @@ public class Bootstrap implements ServiceLocator {
         }
     }
 
-    public void run() throws ObjectIsNotValidException_Exception, RequestNotAuthenticatedException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception {
+    public void run() throws ObjectIsNotValidException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, AuthenticationException_Exception, AuthorizationException_Exception, InvalidArgumentException_Exception, ObjectNotFoundException_Exception {
         printWelcome();
         String operation;
         do {

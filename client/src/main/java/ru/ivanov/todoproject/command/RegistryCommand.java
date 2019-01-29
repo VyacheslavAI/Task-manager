@@ -28,6 +28,11 @@ public class RegistryCommand extends AbstractCommand {
         final String login = readString();
         print("Enter password:");
         final String password = readString();
-        serviceLocator.getSessionSOAPEndpoint().userRegistry(login, password);
+        final boolean isRegisterSuccess = serviceLocator.getSessionSOAPEndpoint().userRegistry(login, password);
+        if (isRegisterSuccess) {
+            print(String.format("User %s registered successfully", login));
+            return;
+        }
+        print("Registration failed");
     }
 }

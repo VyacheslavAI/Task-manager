@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.command;
 
-import ru.ivanov.todoproject.api.Session;
+import ru.ivanov.todoproject.api.*;
 
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 import static ru.ivanov.todoproject.util.ConsoleHelper.readString;
@@ -23,9 +23,17 @@ public class TaskCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws AuthenticationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, ObjectIsNotValidException_Exception {
         final Session session = userData.getSession();
-        print("Enter project task name:");
+        print("Enter project name:");
         final String projectName = readString();
+        final Project project = serviceLocator.getProjectSOAPEndpoint().readProject(session, projectName);
+        print("Enter task name:");
+        final String taskName = readString();
+        final Task task = new Task();
+        task.setName(taskName);
+        task.setProjectId(project.getId());
+        serviceLocator.getTaskSOAPEndpoint().createTask(session, task);
+        print(String.format("Task %s has been created", taskName));
     }
 }

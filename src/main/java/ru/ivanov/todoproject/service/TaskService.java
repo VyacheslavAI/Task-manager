@@ -65,10 +65,20 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<Task> loadUserTaskByProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
+    public List<Task> loadAllUserTaskByProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
         return taskRepository.findAllProjectTask(userId, project.getId());
+    }
+
+    @Override
+    public Task loadTaskByProject(final String userId, final Project project, final String taskName) throws InvalidArgumentException, ObjectIsNotValidException, ObjectNotFoundException {
+        if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
+        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        if (taskName == null || taskName.isEmpty()) throw new InvalidArgumentException();
+        final Task task = taskRepository.findTaskByName(userId, project.getId(), taskName);
+        if (task == null) throw new ObjectNotFoundException();
+        return task;
     }
 
     @Override
@@ -83,10 +93,11 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task deleteTask(final String userId, final String taskName) throws ObjectNotFoundException, InvalidArgumentException {
+    public Task deleteTask(final String userId, final String projectId, final String taskName) throws ObjectNotFoundException, InvalidArgumentException {
         if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        if (projectId == null || projectId.isEmpty()) throw new IllegalArgumentException();
         if (taskName == null || taskName.isEmpty()) throw new InvalidArgumentException();
-        final Task task = taskRepository.findTaskByName(userId, taskName);
+        final Task task = taskRepository.findTaskByName(userId, projectId, taskName);
         if (task == null) throw new ObjectNotFoundException();
         return taskRepository.delete(task);
     }

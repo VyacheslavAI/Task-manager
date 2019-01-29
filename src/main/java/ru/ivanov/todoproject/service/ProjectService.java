@@ -54,7 +54,7 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-     public Project loadUserProjectByName(final String userId, final String projectName) throws InvalidArgumentException, ObjectNotFoundException {
+    public Project loadUserProjectByName(final String userId, final String projectName) throws InvalidArgumentException, ObjectNotFoundException {
         if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
         if (projectName == null || projectName.isEmpty()) throw new InvalidArgumentException();
         final Project project = projectRepository.findProjectByName(userId, projectName);

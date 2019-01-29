@@ -94,7 +94,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.ivanov.todoproject.TaskManager</mainClass>
+                            <mainClass>ru.ivanov.todoproject.TaskManagerServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

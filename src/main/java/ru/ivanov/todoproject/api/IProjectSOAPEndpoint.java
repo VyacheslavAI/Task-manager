@@ -1,7 +1,6 @@
 package ru.ivanov.todoproject.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import ru.ivanov.todoproject.bootstrap.Bootstrap;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.exception.AuthenticationException;
@@ -12,7 +11,6 @@ import ru.ivanov.todoproject.security.SecurityServerManager;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -36,5 +34,5 @@ public interface IProjectSOAPEndpoint {
 
 //    void setServiceLocator(ServiceLocator serviceLocator);
 
-    void setSecurityManager(SecurityServerManager securityManager);
+    void setSecurityServerManager(SecurityServerManager securityManager);
 }

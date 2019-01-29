@@ -28,9 +28,9 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     }
 
     @Override
-    public Task readTask(final Session session, final String taskName) throws AuthenticationException, InvalidArgumentException, ObjectNotFoundException {
+    public Task readTask(final Session session, final Project project, final String taskName) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().loadUserTaskByName(session.getUserId(), taskName);
+        return serviceLocator.getTaskService().loadTaskByProject(session.getUserId(), project, taskName);
     }
 
     @Override
@@ -40,9 +40,9 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     }
 
     @Override
-    public Task deleteTask(final Session session, final String taskName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException {
+    public Task deleteTask(final Session session, final String projectId, final String taskName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().deleteTask(session.getUserId(), taskName);
+        return serviceLocator.getTaskService().deleteTask(session.getUserId(), projectId, taskName);
     }
 
     @Override
@@ -52,9 +52,9 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     }
 
     @Override
-    public List<Task> getTasksByProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, InvalidArgumentException {
+    public List<Task> getAllTaskByProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().loadUserTaskByProject(session.getUserId(), project);
+        return serviceLocator.getTaskService().loadAllUserTaskByProject(session.getUserId(), project);
     }
 
 //    @Override
@@ -63,7 +63,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
 //    }
 
     @Override
-    public void setSecurityManager(final SecurityServerManager securityManager) {
+    public void setSecurityServerManager(final SecurityServerManager securityManager) {
         this.securityManager = securityManager;
     }
 }

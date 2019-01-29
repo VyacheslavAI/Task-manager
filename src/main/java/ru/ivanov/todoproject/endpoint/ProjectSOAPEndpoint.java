@@ -56,7 +56,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
 //    }
 
     @Override
-    public void setSecurityManager(SecurityServerManager securityManager) {
+    public void setSecurityServerManager(SecurityServerManager securityManager) {
         this.securityManager = securityManager;
     }
 }

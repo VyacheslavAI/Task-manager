@@ -2,7 +2,6 @@ package ru.ivanov.todoproject.command;
 
 import ru.ivanov.todoproject.ServiceLocator;
 import ru.ivanov.todoproject.api.*;
-import ru.ivanov.todoproject.api.RequestNotAuthenticatedException_Exception;
 import ru.ivanov.todoproject.userdata.UserData;
 
 public abstract class AbstractCommand {
@@ -17,7 +16,7 @@ public abstract class AbstractCommand {
 
     public abstract boolean isAuthorizationRequired();
 
-    public abstract void execute() throws ObjectIsNotValidException_Exception, RequestNotAuthenticatedException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, AuthenticationException_Exception, InvalidArgumentException_Exception, ObjectNotFoundException_Exception;
+    public abstract void execute() throws ObjectIsNotValidException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, AuthenticationException_Exception, InvalidArgumentException_Exception, ObjectNotFoundException_Exception, AuthorizationException_Exception;
 
     public void setServiceLocator(ServiceLocator serviceLocator) {
         this.serviceLocator = serviceLocator;

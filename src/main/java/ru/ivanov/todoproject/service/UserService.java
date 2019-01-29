@@ -98,7 +98,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void setSecurityManager(SecurityServerManager securityManager) {
+    public void setSecurityServerManager(SecurityServerManager securityManager) {
         this.securityManager = securityManager;
     }
 

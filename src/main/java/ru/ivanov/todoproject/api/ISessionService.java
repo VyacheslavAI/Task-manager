@@ -8,6 +8,7 @@ import ru.ivanov.todoproject.validator.Validator;
 import java.util.List;
 
 public interface ISessionService {
+
     Session createOrUpdateSession(Session session) throws ObjectIsNotValidException;
 
     Session loadSessionById(String id) throws InvalidArgumentException;

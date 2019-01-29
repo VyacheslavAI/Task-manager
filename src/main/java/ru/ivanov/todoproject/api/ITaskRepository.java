@@ -8,6 +8,8 @@ public interface ITaskRepository extends IRepository<Task> {
 
     Task findTaskByName(String userId, String name);
 
+    Task findTaskByName(String userId, String projectName, String taskName);
+
     Task findTaskById(String userId, String taskName);
 
     List<Task> findAllTask(String userId);

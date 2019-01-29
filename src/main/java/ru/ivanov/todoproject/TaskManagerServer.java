@@ -7,7 +7,7 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 
 import java.security.NoSuchAlgorithmException;
 
-public class TaskManager {
+public class TaskManagerServer {
 
     public static void main(String[] args) throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException {
         final Bootstrap bootstrap = new Bootstrap();
