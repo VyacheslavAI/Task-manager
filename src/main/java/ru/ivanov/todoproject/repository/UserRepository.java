@@ -19,4 +19,14 @@ public class UserRepository extends AbstractRepository<User> implements IUserRep
         }
         return null;
     }
+
+    @Override
+    public User findBySession(final String sessionUserId) {
+        for (final User user : entities.values()) {
+            if (user.getId().equals(sessionUserId)) {
+                return user;
+            }
+        }
+        return null;
+    }
 }

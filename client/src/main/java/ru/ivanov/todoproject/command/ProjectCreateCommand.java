@@ -31,5 +31,6 @@ public class ProjectCreateCommand extends AbstractCommand {
         project.setName(projectName);
         project.setUserId(userData.getSession().getUserId());
         serviceLocator.getProjectSOAPEndpoint().createProject(session, project);
+        print(String.format("Project %s has been added", projectName));
     }
 }

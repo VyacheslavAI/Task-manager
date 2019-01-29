@@ -7,6 +7,7 @@ import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.UserRepository;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
@@ -68,15 +69,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserBySession(final Session session) throws ObjectIsNotValidException {
+    public User getUserBySession(final Session session) throws ObjectIsNotValidException, ObjectNotFoundException {
         if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
-        final List<User> users = loadAllUser();
-        for (final User user : users) {
-            if (user.getId().equals(session.getUserId())) {
-                return user;
-            }
-        }
-        return null;
+        final User user = userRepository.findBySession(session.getUserId());
+        if (user == null) throw new ObjectNotFoundException();
+        return user;
     }
 
     @Override

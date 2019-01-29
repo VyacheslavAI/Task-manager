@@ -12,19 +12,19 @@ public interface IProjectService {
 
     Project createProject(String userId, Project project) throws ObjectIsNotValidException, InvalidArgumentException;
 
-    Project updateProject(Project project) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
+    Project updateProject(String userId, Project project) throws ObjectIsNotValidException, ObjectNotFoundException;
 
     boolean addAllProject(List<Project> projects);
 
     Project loadUserProjectById(String userId, String projectId) throws ObjectNotFoundException, InvalidArgumentException;
 
-    List<Project> loadUserProjectByName(String userId, String name) throws InvalidArgumentException;
+    Project loadUserProjectByName(String userId, String name) throws InvalidArgumentException, ObjectNotFoundException;
 
     List<Project> loadAllUserProject(String userId) throws InvalidArgumentException;
 
     List<Project> loadAllProject();
 
-    Project deleteProject(Project project) throws ObjectIsNotValidException, ObjectNotFoundException;
+    Project deleteProject(String userId, String projectName) throws ObjectNotFoundException, InvalidArgumentException;
 
     boolean deleteAllProject();
 

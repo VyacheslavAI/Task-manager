@@ -13,13 +13,13 @@ public interface ITaskService {
 
     Task createTask(String userId, Task task) throws ObjectIsNotValidException, InvalidArgumentException;
 
-    Task updateTask(Task task) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
+    Task updateTask(String userId, Task task) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException;
 
     boolean addAllTask(List<Task> tasks);
 
     Task loadTaskById(String userId, String id) throws InvalidArgumentException, ObjectNotFoundException;
 
-    List<Task> loadUserTaskByName(String userId, String name) throws InvalidArgumentException;
+    Task loadUserTaskByName(String userId, String name) throws InvalidArgumentException, ObjectNotFoundException;
 
     List<Task> loadUserTaskByProject(String userId, Project project) throws ObjectIsNotValidException, InvalidArgumentException;
 
@@ -27,7 +27,7 @@ public interface ITaskService {
 
     List<Task> loadAllTask();
 
-    Task deleteTask(Task task) throws ObjectIsNotValidException, ObjectNotFoundException;
+    Task deleteTask(String userId, String taskName) throws ObjectNotFoundException, InvalidArgumentException;
 
     boolean deleteAllTask();
 

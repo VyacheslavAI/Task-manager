@@ -6,5 +6,11 @@ import java.util.List;
 
 public interface IProjectRepository extends IRepository<Project> {
 
-    List<Project> findByName(final String name);
+    Project findProjectByName(String userId, String name);
+
+    List<Project> findAllProject(String userId);
+
+    List<Project> findAllProject();
+
+    Project findProjectById(String userId, String projectId);
 }

@@ -11,7 +11,6 @@ import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.TaskRepository;
 import ru.ivanov.todoproject.validator.Validator;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,11 +31,11 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task updateTask(final Task task) throws ObjectIsNotValidException, ObjectNotFoundException {
+    public Task updateTask(final String userId, final Task task) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
-        final Task persistentTask = taskRepository.findById(task.getId());
+        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        final Task persistentTask = taskRepository.findTaskById(userId, task.getId());
         if (persistentTask == null) throw new ObjectNotFoundException();
-        if (!persistentTask.getUserId().equals(task.getUserId())) throw new ObjectNotFoundException();
         return taskRepository.merge(task);
     }
 
@@ -51,77 +50,50 @@ public class TaskService implements ITaskService {
     public Task loadTaskById(final String userId, final String taskId) throws InvalidArgumentException, ObjectNotFoundException {
         if (taskId == null || taskId.isEmpty()) throw new InvalidArgumentException();
         if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
-        final Task persistentTask = taskRepository.findById(taskId);
+        final Task persistentTask = taskRepository.findTaskById(userId, taskId);
         if (persistentTask == null) throw new ObjectNotFoundException();
-        if (!persistentTask.getUserId().equals(userId)) throw new ObjectNotFoundException();
         return persistentTask;
     }
 
     @Override
-    public List<Task> loadUserTaskByName(final String userId, final String name) throws InvalidArgumentException {
-        if (name == null || name.isEmpty()) return Collections.emptyList();
+    public Task loadUserTaskByName(final String userId, final String name) throws InvalidArgumentException, ObjectNotFoundException {
+        if (name == null || name.isEmpty()) throw new InvalidArgumentException();
         if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
-        final List<Task> tasks = taskRepository.findByName(name);
-        return filterTasksByUserId(tasks, userId);
+        final Task task = taskRepository.findTaskByName(userId, name);
+        if (task == null) throw new ObjectNotFoundException();
+        return task;
     }
 
     @Override
     public List<Task> loadUserTaskByProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
-        final List<Task> tasks = taskRepository.findAll();
-        List<Task> projectTasks = filterTasksByProjectId(tasks, project.getId());
-        return filterTasksByUserId(projectTasks, userId);
+        return taskRepository.findAllProjectTask(userId, project.getId());
     }
 
     @Override
     public List<Task> loadAllTask() {
-        return taskRepository.findAll();
+        return taskRepository.findAllTask();
     }
 
     @Override
     public List<Task> loadAllUserTask(final String userId) throws InvalidArgumentException {
         if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
-        final List<Task> allTask = taskRepository.findAll();
-        return filterTasksByUserId(allTask, userId);
+        return taskRepository.findAllTask(userId);
     }
 
     @Override
-    public Task deleteTask(final Task task) throws ObjectIsNotValidException, ObjectNotFoundException {
-        if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
-        final Task persistentTask = taskRepository.findById(task.getId());
-        if (persistentTask == null) throw new ObjectNotFoundException();
-        if (!persistentTask.getUserId().equals(task.getUserId())) throw new ObjectNotFoundException();
+    public Task deleteTask(final String userId, final String taskName) throws ObjectNotFoundException, InvalidArgumentException {
+        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        if (taskName == null || taskName.isEmpty()) throw new InvalidArgumentException();
+        final Task task = taskRepository.findTaskByName(userId, taskName);
+        if (task == null) throw new ObjectNotFoundException();
         return taskRepository.delete(task);
     }
 
     @Override
     public boolean deleteAllTask() {
         return taskRepository.deleteAll();
-    }
-
-    private List<Task> filterTasksByUserId(final List<Task> tasks, final String userId) {
-        if (tasks == null || tasks.isEmpty()) return Collections.emptyList();
-        if (userId == null || userId.isEmpty()) return Collections.emptyList();
-        final List<Task> result = new ArrayList<>();
-        for (final Task task : tasks) {
-            if (task.getUserId().equals(userId)) {
-                result.add(task);
-            }
-        }
-        return result;
-    }
-
-    private List<Task> filterTasksByProjectId(final List<Task> tasks, final String projectId) {
-        if (tasks == null || tasks.isEmpty()) return Collections.emptyList();
-        if (projectId == null || projectId.isEmpty()) return Collections.emptyList();
-        final List<Task> result = new ArrayList<>();
-        for (final Task task : tasks) {
-            if (task.getProjectId().equals(projectId)) {
-                result.add(task);
-            }
-        }
-        return result;
     }
 
     @Override

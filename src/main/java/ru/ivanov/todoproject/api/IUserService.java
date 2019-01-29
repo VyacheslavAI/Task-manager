@@ -5,6 +5,7 @@ import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
@@ -26,7 +27,7 @@ public interface IUserService {
 
     boolean deleteAllUser();
 
-    User getUserBySession(Session session) throws ObjectIsNotValidException;
+    User getUserBySession(Session session) throws ObjectIsNotValidException, ObjectNotFoundException;
 
     void userInitialize(String login, String password) throws NoSuchAlgorithmException, JsonProcessingException, ObjectIsNotValidException, InvalidArgumentException;
 

@@ -5,4 +5,6 @@ import ru.ivanov.todoproject.entity.User;
 public interface IUserRepository extends IRepository<User> {
 
     User findByLogin(final String login);
+
+    User findBySession(String sessionId);
 }
