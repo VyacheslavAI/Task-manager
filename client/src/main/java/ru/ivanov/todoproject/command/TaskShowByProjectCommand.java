@@ -1,5 +1,14 @@
 package ru.ivanov.todoproject.command;
 
+import ru.ivanov.todoproject.api.AuthenticationException_Exception;
+import ru.ivanov.todoproject.api.InvalidArgumentException_Exception;
+import ru.ivanov.todoproject.api.Session;
+import ru.ivanov.todoproject.api.Task;
+
+import static ru.ivanov.todoproject.util.ConsoleHelper.*;
+
+import java.util.List;
+
 public class TaskShowByProjectCommand extends AbstractCommand {
 
     @Override
@@ -18,7 +27,11 @@ public class TaskShowByProjectCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
-
+    public void execute() throws AuthenticationException_Exception, InvalidArgumentException_Exception {
+        final Session session = userData.getSession();
+        final List<Task> tasks = serviceLocator.getTaskSOAPEndpoint().showTasks(session);
+        for (final Task task : tasks) {
+            print(String.format("%s - %s", task.getName(), task.getId()));
+        }
     }
 }

@@ -43,8 +43,10 @@ public class SecurityServerManager {
     public boolean isSessionVerified(final Session session) {
         if (!validator.isSessionValid(session)) return false;
         final Session clone = new Session();
-        clone.setTimestamp(session.getTimestamp());
+        clone.setId(session.getId());
         clone.setUserId(session.getUserId());
+        clone.setTimestamp(session.getTimestamp());
+        clone.setCreated(session.getCreated());
         final String expectedSignature = sign(clone);
         final String transferredSignature = session.getSignature();
         return expectedSignature.equals(transferredSignature);

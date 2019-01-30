@@ -22,7 +22,7 @@
                         <id>generate-sources</id>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <sourceRoot>${project.basedir}/src/main/java/ru/ivanov/todoproject/soapservice</sourceRoot>
+                            <sourceRoot>${project.basedir}/src/main/java/</sourceRoot>
 
                             <wsdlOptions>
                                 <wsdlOption>

@@ -1,10 +1,8 @@
 package ru.ivanov.todoproject.entity;
 
-import java.util.Date;
-
 public class Session extends AbstractEntity {
 
-    private long timestamp = new Date().getTime();
+    private long timestamp;
 
     private String userId;
 

@@ -39,7 +39,8 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
         if (!user.getPasswordHash().equals(passwordHash)) throw new AuthorizationException();
         final Session userSession = new Session();
         userSession.setUserId(user.getId());
-        userSession.setTimestamp(System.currentTimeMillis());
+        final long currentTimeMillis = System.currentTimeMillis();
+        userSession.setTimestamp(currentTimeMillis);
         final String signature = securityManager.sign(userSession);
         userSession.setSignature(signature);
         serviceLocator.getSessionService().createOrUpdateSession(userSession);
@@ -48,14 +49,14 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
 
     @Override
     public boolean logout(final Session session) throws AuthenticationException, ObjectIsNotValidException {
-        if (securityManager.isSessionVerified(session)) throw new AuthenticationException();
+        if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
         serviceLocator.getSessionService().deleteSession(session);
         return true;
     }
 
     @Override
     public boolean fullSignOut(final Session session) throws AuthenticationException {
-        if (securityManager.isSessionVerified(session)) throw new AuthenticationException();
+        if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
         serviceLocator.getSessionService().deleteAllSession();
         return true;
     }

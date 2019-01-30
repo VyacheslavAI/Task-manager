@@ -85,7 +85,8 @@ public class UserService implements IUserService {
         user.setLogin(login);
         user.setPasswordHash(hashPassword);
         final Session session = new Session();
-        session.setTimestamp(session.getCreated().getTime());
+        final long currentTimeMillis = System.currentTimeMillis();
+        session.setTimestamp(currentTimeMillis);
         session.setUserId(user.getId());
         session.setSignature(securityManager.sign(session));
         createOrUpdateUser(user);
