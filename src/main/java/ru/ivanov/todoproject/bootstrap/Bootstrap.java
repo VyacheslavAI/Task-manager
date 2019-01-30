@@ -91,6 +91,11 @@ public class Bootstrap implements ServiceLocator {
         userService.setValidator(validator);
         sessionService.setValidator(validator);
         securityServerManager.setValidator(validator);
+
+        projectRepository.setConnection(connection);
+        taskRepository.setConnection(connection);
+        userRepository.setConnection(connection);
+        sessionRepository.setConnection(connection);
     }
 
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, SQLException, ClassNotFoundException {
