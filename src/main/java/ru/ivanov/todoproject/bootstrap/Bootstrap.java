@@ -109,18 +109,18 @@ public class Bootstrap implements ServiceLocator {
         print("Server started successfully");
     }
 
-    public void userInitialization() throws InvalidArgumentException, NoSuchAlgorithmException, ObjectIsNotValidException, JsonProcessingException {
+    private void userInitialization() throws InvalidArgumentException, NoSuchAlgorithmException, ObjectIsNotValidException, JsonProcessingException {
         userService.userInitialize("admin", "admin");
         userService.userInitialize("root", "root");
         print("Users initialized successfully");
     }
 
-    public void createConnection() throws SQLException, ClassNotFoundException {
+    private void createConnection() throws SQLException, ClassNotFoundException {
         final String connectionUrl = databaseConfig.getConnectionUrl();
         final String userName = databaseConfig.getUserName();
         final String password = databaseConfig.getPassword();
         Class.forName("com.mysql.jdbc.Driver");
-        final Connection connection = DriverManager.getConnection(connectionUrl, userName,  password);
+        connection = DriverManager.getConnection(connectionUrl, userName,  password);
         print("Connection created successfully");
     }
 
