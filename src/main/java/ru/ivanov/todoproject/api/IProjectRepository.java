@@ -13,4 +13,6 @@ public interface IProjectRepository extends IRepository<Project> {
     List<Project> findAllProject();
 
     Project findProjectById(String userId, String projectId);
+
+    List<Project> filterProjectsByUserId(List<Project> projects, String userId);
 }
