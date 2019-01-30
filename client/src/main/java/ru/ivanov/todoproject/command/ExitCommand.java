@@ -22,7 +22,7 @@ public class ExitCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws ObjectIsNotValidException_Exception, AuthenticationException_Exception {
+    public void executeCommand() throws ObjectIsNotValidException_Exception, AuthenticationException_Exception {
         serviceLocator.getSessionSOAPEndpoint().logout(userData.getSession());
         userData.setSession(null);
         ConsoleHelper.print("Good bye!");

@@ -29,7 +29,7 @@ public class SignInCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws ObjectIsNotValidException_Exception, AuthorizationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, NoSuchAlgorithmException {
+    public void executeCommand() throws ObjectIsNotValidException_Exception, AuthorizationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, NoSuchAlgorithmException {
         print("Enter login:");
         final String login = readString();
         print("Enter password:");

@@ -29,7 +29,7 @@ public class ProjectUpdateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws InvalidArgumentException_Exception, ObjectIsNotValidException_Exception, ObjectNotFoundException_Exception, AuthenticationException_Exception {
+    public void executeCommand() throws InvalidArgumentException_Exception, ObjectIsNotValidException_Exception, ObjectNotFoundException_Exception, AuthenticationException_Exception {
         final Session session = userData.getSession();
         print("Enter project name:");
         final String projectName = readString();

@@ -16,7 +16,7 @@ public class TaskUpdateCommand extends AbstractCommand {
 
     @Override
     public String getConsoleCommand() {
-        return "edit task";
+        return "task edit";
     }
 
     @Override
@@ -30,11 +30,12 @@ public class TaskUpdateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, ObjectIsNotValidException_Exception {
+    public void executeCommand() throws AuthenticationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, ObjectIsNotValidException_Exception {
         final Session session = userData.getSession();
         print("Enter project name:");
         final String projectName = readString();
         final Project project = serviceLocator.getProjectSOAPEndpoint().readProject(session, projectName);
+        print("Enter task name:");
         final String taskName = readString();
         final Task task = serviceLocator.getTaskSOAPEndpoint().readTask(session, project, taskName);
         print("Enter new name:");

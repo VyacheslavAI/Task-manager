@@ -11,6 +11,7 @@ import ru.ivanov.todoproject.api.IUserSOAPEndpoint;
 import ru.ivanov.todoproject.api.InvalidArgumentException_Exception;
 import ru.ivanov.todoproject.api.JsonProcessingException_Exception;
 import ru.ivanov.todoproject.api.NoSuchAlgorithmException_Exception;
+import ru.ivanov.todoproject.api.ObjectIsNotValidException_Exception;
 import ru.ivanov.todoproject.api.ObjectNotFoundException_Exception;
 import ru.ivanov.todoproject.command.AbstractCommand;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpointService;
@@ -53,7 +54,7 @@ public class Bootstrap implements ServiceLocator {
         }
     }
 
-    public void run() throws ru.ivanov.todoproject.api.ObjectIsNotValidException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, AuthenticationException_Exception, AuthorizationException_Exception, InvalidArgumentException_Exception, ObjectNotFoundException_Exception, NoSuchAlgorithmException {
+    public void run() throws ObjectIsNotValidException_Exception, NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, AuthenticationException_Exception, AuthorizationException_Exception, InvalidArgumentException_Exception, ObjectNotFoundException_Exception, NoSuchAlgorithmException {
         printWelcome();
         String operation;
         do {

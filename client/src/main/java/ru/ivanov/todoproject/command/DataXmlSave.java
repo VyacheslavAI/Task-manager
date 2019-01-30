@@ -18,6 +18,6 @@ public class DataXmlSave extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void executeCommand() {
     }
 }

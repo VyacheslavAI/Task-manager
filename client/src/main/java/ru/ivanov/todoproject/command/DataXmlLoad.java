@@ -18,7 +18,7 @@ public class DataXmlLoad extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void executeCommand() {
 
     }
 }

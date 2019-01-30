@@ -27,7 +27,7 @@ public class ProjectShowCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationException_Exception, InvalidArgumentException_Exception {
+    public void executeCommand() throws AuthenticationException_Exception, InvalidArgumentException_Exception {
         final Session session = userData.getSession();
         final List<Project> allUserProject = serviceLocator.getProjectSOAPEndpoint().showProjects(session);
         for (Project project : allUserProject) {

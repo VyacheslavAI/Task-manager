@@ -18,7 +18,7 @@ public class DataBinarySave extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void executeCommand() {
 
     }
 }

@@ -18,6 +18,6 @@ public class DataJsonLoad extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void executeCommand() {
     }
 }

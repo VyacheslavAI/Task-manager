@@ -29,7 +29,7 @@ public class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, ObjectIsNotValidException_Exception, AuthenticationException_Exception, ru.ivanov.todoproject.api.InvalidArgumentException_Exception {
+    public void executeCommand() throws NoSuchAlgorithmException_Exception, JsonProcessingException_Exception, ObjectIsNotValidException_Exception, AuthenticationException_Exception, ru.ivanov.todoproject.api.InvalidArgumentException_Exception {
         final Session session = userData.getSession();
         print("Enter project name:");
         final String projectName = readString();

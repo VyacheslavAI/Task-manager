@@ -1,5 +1,7 @@
 package ru.ivanov.todoproject.command;
 
+import javax.naming.OperationNotSupportedException;
+
 public class UserDeleteCommand extends AbstractCommand {
 
     @Override
@@ -18,7 +20,7 @@ public class UserDeleteCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
-
+    public void executeCommand() throws OperationNotSupportedException {
+        throw new OperationNotSupportedException();
     }
 }

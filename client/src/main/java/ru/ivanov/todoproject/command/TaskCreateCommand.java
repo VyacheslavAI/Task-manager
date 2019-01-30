@@ -30,7 +30,7 @@ public class TaskCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, ObjectIsNotValidException_Exception {
+    public void executeCommand() throws AuthenticationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception, ObjectIsNotValidException_Exception {
         final Session session = userData.getSession();
         print("Enter project name:");
         final String projectName = readString();

@@ -28,7 +28,7 @@ public class TaskDeleteCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception {
+    public void executeCommand() throws AuthenticationException_Exception, ObjectNotFoundException_Exception, InvalidArgumentException_Exception {
         final Session session = userData.getSession();
         print("Enter project name:");
         final String projectName = readString();

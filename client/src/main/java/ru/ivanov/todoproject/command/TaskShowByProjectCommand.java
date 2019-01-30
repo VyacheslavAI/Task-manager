@@ -27,7 +27,7 @@ public class TaskShowByProjectCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationException_Exception, InvalidArgumentException_Exception {
+    public void executeCommand() throws AuthenticationException_Exception, InvalidArgumentException_Exception {
         final Session session = userData.getSession();
         final List<Task> tasks = serviceLocator.getTaskSOAPEndpoint().showTasks(session);
         for (final Task task : tasks) {

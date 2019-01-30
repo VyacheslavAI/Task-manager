@@ -23,7 +23,7 @@ public class HelpCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void executeCommand() {
         ConsoleHelper.print("The following commands are available to you:");
         final Map<String, AbstractCommand> commands = ((Bootstrap) serviceLocator).getCommands();
         final List<AbstractCommand> availableCommands = new ArrayList<>(commands.values());

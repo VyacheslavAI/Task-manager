@@ -25,7 +25,7 @@ public class RegistryCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws ObjectIsNotValidException_Exception, NoSuchAlgorithmException {
+    public void executeCommand() throws ObjectIsNotValidException_Exception, NoSuchAlgorithmException {
         print("Enter new login:");
         final String login = readString();
         print("Enter password:");
