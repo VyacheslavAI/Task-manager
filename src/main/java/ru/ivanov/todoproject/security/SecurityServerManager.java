@@ -18,7 +18,7 @@ public class SecurityServerManager {
 
     private final String signHashAlgorithm = "MD5";
 
-    private final int numberOfIterations = 1466;
+    private final int countOfIterations = 1466;
 
     private Validator validator;
 
@@ -27,7 +27,7 @@ public class SecurityServerManager {
         try {
             final ObjectWriter jsonMapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
             String signature = jsonMapper.writeValueAsString(object);
-            for (int i = 0; i < numberOfIterations; i++) {
+            for (int i = 0; i < countOfIterations; i++) {
                 signature = salt + signature + salt;
                 signature = getHashByAlgorithm(signHashAlgorithm, signature);
             }
