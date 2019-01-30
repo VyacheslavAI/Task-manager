@@ -28,7 +28,8 @@ public class SecurityServerManager {
             final ObjectWriter jsonMapper = new ObjectMapper().writer().withDefaultPrettyPrinter();
             String signature = jsonMapper.writeValueAsString(object);
             for (int i = 0; i < numberOfIterations; i++) {
-                signature = salt + getHashByAlgorithm(signHashAlgorithm, signature) + salt;
+                signature = salt + signature + salt;
+                signature = getHashByAlgorithm(signHashAlgorithm, signature);
             }
             return signature;
         } catch (JsonProcessingException | NoSuchAlgorithmException e) {
