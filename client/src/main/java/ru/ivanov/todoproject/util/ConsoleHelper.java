@@ -60,7 +60,7 @@ public final class ConsoleHelper {
     }
 
     public static void printDelimiter() {
-        print("=================================================");
+        print("==================================================");
     }
 
     public static Date readDate() {
