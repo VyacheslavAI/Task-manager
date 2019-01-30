@@ -34,14 +34,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User loadById(final String id) throws InvalidArgumentException {
-        if (id == null || id.isEmpty()) throw new InvalidArgumentException();
-        return userRepository.findById(id);
+    public User loadById(final String userId) throws InvalidArgumentException {
+        if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
+        return userRepository.findById(userId);
     }
 
     @Override
     public User loadUserByLogin(final String login) throws InvalidArgumentException {
-        if (login == null || login.isEmpty()) throw new InvalidArgumentException();
+        if (!Validator.isArgumentsValid(login)) throw new InvalidArgumentException();
         return userRepository.findByLogin(login);
     }
 
@@ -78,8 +78,7 @@ public class UserService implements IUserService {
 
     @Override
     public void userInitialize(final String login, final String password) throws ObjectIsNotValidException, InvalidArgumentException, NoSuchAlgorithmException {
-        if (login == null || login.isEmpty()) throw new InvalidArgumentException();
-        if (password == null || password.isEmpty()) throw new InvalidArgumentException();
+        if (!Validator.isArgumentsValid(login, password)) throw new InvalidArgumentException();
         final User user = new User();
         final String hashPassword = securityManager.getPasswordHash(password);
         user.setLogin(login);

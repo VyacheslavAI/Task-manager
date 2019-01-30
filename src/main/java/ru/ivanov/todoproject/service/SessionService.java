@@ -26,9 +26,9 @@ public class SessionService implements ISessionService {
     }
 
     @Override
-    public Session loadSessionById(final String id) throws InvalidArgumentException {
-        if (id == null || id.isEmpty()) throw new InvalidArgumentException();
-        return sessionRepository.findById(id);
+    public Session loadSessionById(final String sessionId) throws InvalidArgumentException {
+        if (!Validator.isArgumentsValid(sessionId)) throw new InvalidArgumentException();
+        return sessionRepository.findById(sessionId);
     }
 
     @Override

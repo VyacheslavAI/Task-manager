@@ -24,14 +24,15 @@ public class ProjectService implements IProjectService {
     @Override
     public Project createProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
-        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         project.setUserId(userId);
         return projectRepository.merge(project);
     }
 
     @Override
-    public Project updateProject(final String userId, final Project project) throws ObjectIsNotValidException, ObjectNotFoundException {
+    public Project updateProject(final String userId, final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
+        if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         final Project persistentProject = projectRepository.findProjectById(userId, project.getId());
         if (persistentProject == null) throw new ObjectNotFoundException();
         return projectRepository.merge(project);
@@ -46,8 +47,7 @@ public class ProjectService implements IProjectService {
 
     @Override
     public Project loadUserProjectById(final String userId, final String projectId) throws InvalidArgumentException, ObjectNotFoundException {
-        if (projectId == null || projectId.isEmpty()) throw new InvalidArgumentException();
-        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        if (!Validator.isArgumentsValid(userId, projectId)) throw new InvalidArgumentException();
         final Project persistentProject = projectRepository.findProjectById(userId, projectId);
         if (persistentProject == null) throw new ObjectNotFoundException();
         return persistentProject;
@@ -55,8 +55,7 @@ public class ProjectService implements IProjectService {
 
     @Override
     public Project loadUserProjectByName(final String userId, final String projectName) throws InvalidArgumentException, ObjectNotFoundException {
-        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
-        if (projectName == null || projectName.isEmpty()) throw new InvalidArgumentException();
+        if (!Validator.isArgumentsValid(userId, projectName)) throw new InvalidArgumentException();
         final Project project = projectRepository.findProjectByName(userId, projectName);
         if (project == null) throw new ObjectNotFoundException();
         return project;
@@ -64,7 +63,7 @@ public class ProjectService implements IProjectService {
 
     @Override
     public List<Project> loadAllUserProject(final String userId) throws InvalidArgumentException {
-        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
+        if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         return projectRepository.findAllProject(userId);
     }
 
@@ -75,8 +74,7 @@ public class ProjectService implements IProjectService {
 
     @Override
     public Project deleteProject(final String userId, final String projectName) throws ObjectNotFoundException, InvalidArgumentException {
-        if (userId == null || userId.isEmpty()) throw new InvalidArgumentException();
-        if (projectName == null || projectName.isEmpty()) throw new InvalidArgumentException();
+        if (!Validator.isArgumentsValid(userId, projectName)) throw new InvalidArgumentException();
         final Project project = projectRepository.findProjectByName(userId, projectName);
         if (project == null) throw new ObjectNotFoundException();
         return projectRepository.delete(project);
