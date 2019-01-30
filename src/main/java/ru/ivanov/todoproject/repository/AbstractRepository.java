@@ -3,12 +3,15 @@ package ru.ivanov.todoproject.repository;
 import ru.ivanov.todoproject.api.IRepository;
 import ru.ivanov.todoproject.entity.AbstractEntity;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractRepository<E extends AbstractEntity> implements IRepository<E> {
+
+    Connection connection;
 
     final Map<String, E> entities = new HashMap<>();
 
@@ -50,5 +53,10 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
             entities.put(entity.getId(), entity);
         }
         return true;
+    }
+
+    @Override
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 }
