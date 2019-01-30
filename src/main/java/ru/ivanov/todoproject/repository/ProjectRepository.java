@@ -44,6 +44,7 @@ public class ProjectRepository extends AbstractRepository<Project> implements IP
         return project;
     }
 
+    @Override
     public List<Project> filterProjectsByUserId(final List<Project> projects, final String userId) {
         if (projects == null || projects.isEmpty()) return Collections.emptyList();
         if (!Validator.isArgumentsValid(userId)) return Collections.emptyList();
