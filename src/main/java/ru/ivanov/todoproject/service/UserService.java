@@ -8,7 +8,6 @@ import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
-import ru.ivanov.todoproject.repository.UserRepository;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
@@ -19,7 +18,7 @@ import java.util.List;
 
 public class UserService implements IUserService {
 
-    private IUserRepository userRepository = new UserRepository();
+    private IUserRepository userRepository;
 
     private ServiceLocator serviceLocator;
 

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ProjectService implements IProjectService {
 
-    private IProjectRepository projectRepository = new ProjectRepository();
+    private IProjectRepository projectRepository;
 
     private ServiceLocator serviceLocator;
 

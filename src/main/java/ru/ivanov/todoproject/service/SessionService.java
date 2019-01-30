@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SessionService implements ISessionService {
 
-    private ISessionRepository sessionRepository = new SessionRepository();
+    private ISessionRepository sessionRepository;
 
     private ServiceLocator serviceLocator;
 

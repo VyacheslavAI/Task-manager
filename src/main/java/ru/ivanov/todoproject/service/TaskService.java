@@ -16,7 +16,7 @@ import java.util.List;
 
 public class TaskService implements ITaskService {
 
-    private ITaskRepository taskRepository = new TaskRepository();
+    private ITaskRepository taskRepository;
 
     private ServiceLocator serviceLocator;
 
