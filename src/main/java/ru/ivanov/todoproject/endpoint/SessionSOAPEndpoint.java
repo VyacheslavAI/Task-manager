@@ -9,6 +9,7 @@ import ru.ivanov.todoproject.exception.AuthorizationException;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.security.SecurityServerManager;
+import ru.ivanov.todoproject.validator.Validator;
 
 import javax.jws.WebService;
 
@@ -21,8 +22,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
 
     @Override
     public boolean userRegistry(final String login, final String passwordHash) throws ObjectIsNotValidException {
-        if (login == null || login.isEmpty()) return false;
-        if (passwordHash == null || passwordHash.isEmpty()) return false;
+        if (!Validator.isArgumentsValid(login, passwordHash)) return false;
         final User user = new User();
         user.setLogin(login);
         user.setPasswordHash(passwordHash);
@@ -32,8 +32,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
 
     @Override
     public Session login(final String login, final String passwordHash) throws ObjectIsNotValidException, InvalidArgumentException, AuthorizationException {
-        if (login == null || login.isEmpty()) throw new InvalidArgumentException();
-        if (passwordHash == null || passwordHash.isEmpty()) throw new InvalidArgumentException();
+        if (!Validator.isArgumentsValid(login, passwordHash)) throw new InvalidArgumentException();
         final User user = serviceLocator.getUserService().loadUserByLogin(login);
         if (user == null) throw new AuthorizationException();
         if (!user.getPasswordHash().equals(passwordHash)) throw new AuthorizationException();
