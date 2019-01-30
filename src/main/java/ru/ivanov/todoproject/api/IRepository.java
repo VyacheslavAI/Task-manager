@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.api;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface IRepository<E> {
@@ -15,4 +16,6 @@ public interface IRepository<E> {
     boolean deleteAll();
 
     boolean addAll(final List<E> entityList);
+
+    void setConnection(Connection connection);
 }
