@@ -16,7 +16,7 @@ import java.util.List;
 
 public class TaskService implements ITaskService {
 
-    private final ITaskRepository taskRepository = new TaskRepository();
+    private ITaskRepository taskRepository = new TaskRepository();
 
     private ServiceLocator serviceLocator;
 
@@ -111,5 +111,10 @@ public class TaskService implements ITaskService {
     @Override
     public void setValidator(Validator validator) {
         this.validator = validator;
+    }
+
+    @Override
+    public void setTaskRepository(ITaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 }

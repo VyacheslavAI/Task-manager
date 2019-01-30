@@ -26,4 +26,6 @@ public interface ISessionService {
     void setServiceLocator(ServiceLocator serviceLocator);
 
     void setValidator(Validator validator);
+
+    void setSessionRepository(ISessionRepository sessionRepository);
 }

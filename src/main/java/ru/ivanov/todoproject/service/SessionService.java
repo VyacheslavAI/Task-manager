@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.service;
 
+import ru.ivanov.todoproject.api.ISessionRepository;
 import ru.ivanov.todoproject.api.ISessionService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class SessionService implements ISessionService {
 
-    private SessionRepository sessionRepository = new SessionRepository();
+    private ISessionRepository sessionRepository = new SessionRepository();
 
     private ServiceLocator serviceLocator;
 
@@ -62,5 +63,10 @@ public class SessionService implements ISessionService {
     @Override
     public void setValidator(Validator validator) {
         this.validator = validator;
+    }
+
+    @Override
+    public void setSessionRepository(ISessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
     }
 }

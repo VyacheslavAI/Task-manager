@@ -38,4 +38,6 @@ public interface ITaskService {
     void setServiceLocator(ServiceLocator serviceLocator);
 
     void setValidator(Validator validator);
+
+    void setTaskRepository(ITaskRepository taskRepository);
 }

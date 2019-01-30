@@ -2,6 +2,7 @@ package ru.ivanov.todoproject.bootstrap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.*;
+import ru.ivanov.todoproject.config.DatabaseConfig;
 import ru.ivanov.todoproject.dto.Serializer;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpoint;
@@ -9,6 +10,10 @@ import ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpoint;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.repository.ProjectRepository;
+import ru.ivanov.todoproject.repository.SessionRepository;
+import ru.ivanov.todoproject.repository.TaskRepository;
+import ru.ivanov.todoproject.repository.UserRepository;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.service.ProjectService;
 import ru.ivanov.todoproject.service.SessionService;
@@ -18,8 +23,21 @@ import ru.ivanov.todoproject.validator.Validator;
 
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
 public class Bootstrap implements ServiceLocator {
+
+    private IProjectRepository projectRepository = new ProjectRepository();
+
+    private ITaskRepository taskRepository = new TaskRepository();
+
+    private IUserRepository userRepository = new UserRepository();
+
+    private ISessionRepository sessionRepository = new SessionRepository();
 
     private IProjectService projectService = new ProjectService();
 
@@ -43,7 +61,16 @@ public class Bootstrap implements ServiceLocator {
 
     private Serializer serializer = new Serializer();
 
+    private DatabaseConfig databaseConfig = new DatabaseConfig();
+
+    private Connection connection;
+
     {
+        projectService.setProjectRepository(projectRepository);
+        taskService.setTaskRepository(taskRepository);
+        userService.setUserRepository(userRepository);
+        sessionService.setSessionRepository(sessionRepository);
+
         projectService.setServiceLocator(this);
         taskService.setServiceLocator(this);
         userService.setServiceLocator(this);
@@ -66,14 +93,30 @@ public class Bootstrap implements ServiceLocator {
         securityServerManager.setValidator(validator);
     }
 
-    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException {
+    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, SQLException, ClassNotFoundException {
         serializer.loadApplicationDataFromBinary(this);
-        userService.userInitialize("admin", "admin");
-        userService.userInitialize("root", "root");
+        createConnection();
+        userInitialization();
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/user", userSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/session", sessionSOAPEndpoint);
+        print("Server started successfully");
+    }
+
+    public void userInitialization() throws InvalidArgumentException, NoSuchAlgorithmException, ObjectIsNotValidException, JsonProcessingException {
+        userService.userInitialize("admin", "admin");
+        userService.userInitialize("root", "root");
+        print("Users initialized successfully");
+    }
+
+    public void createConnection() throws SQLException, ClassNotFoundException {
+        final String connectionUrl = databaseConfig.getConnectionUrl();
+        final String userName = databaseConfig.getUserName();
+        final String password = databaseConfig.getPassword();
+        Class.forName("com.mysql.jdbc.Driver");
+        final Connection connection = DriverManager.getConnection(connectionUrl, userName,  password);
+        print("Connection created successfully");
     }
 
     @Override
@@ -110,5 +153,21 @@ public class Bootstrap implements ServiceLocator {
 
     public void setSessionService(ISessionService ISessionService) {
         this.sessionService = ISessionService;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
+    public DatabaseConfig getDatabaseConfig() {
+        return databaseConfig;
+    }
+
+    public void setDatabaseConfig(DatabaseConfig databaseConfig) {
+        this.databaseConfig = databaseConfig;
     }
 }

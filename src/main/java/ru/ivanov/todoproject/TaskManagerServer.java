@@ -6,10 +6,11 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 public class TaskManagerServer {
 
-    public static void main(String[] args) throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException {
+    public static void main(String[] args) throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, SQLException, ClassNotFoundException {
         final Bootstrap bootstrap = new Bootstrap();
         bootstrap.run();
     }

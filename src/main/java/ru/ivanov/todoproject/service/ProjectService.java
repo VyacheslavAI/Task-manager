@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ProjectService implements IProjectService {
 
-    private final IProjectRepository projectRepository = new ProjectRepository();
+    private IProjectRepository projectRepository = new ProjectRepository();
 
     private ServiceLocator serviceLocator;
 
@@ -93,5 +93,10 @@ public class ProjectService implements IProjectService {
     @Override
     public void setValidator(Validator validator) {
         this.validator = validator;
+    }
+
+    @Override
+    public void setProjectRepository(IProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
     }
 }

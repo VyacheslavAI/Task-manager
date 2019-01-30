@@ -33,4 +33,6 @@ public interface IProjectService {
     void setServiceLocator(ServiceLocator serviceLocator);
 
     void setValidator(Validator validator);
+
+    void setProjectRepository(IProjectRepository projectRepository);
 }

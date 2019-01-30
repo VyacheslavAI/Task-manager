@@ -19,7 +19,7 @@ import java.util.List;
 
 public class UserService implements IUserService {
 
-    private final IUserRepository userRepository = new UserRepository();
+    private IUserRepository userRepository = new UserRepository();
 
     private ServiceLocator serviceLocator;
 
@@ -105,5 +105,10 @@ public class UserService implements IUserService {
     @Override
     public void setValidator(Validator validator) {
         this.validator = validator;
+    }
+
+    @Override
+    public void setUserRepository(IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

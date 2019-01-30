@@ -39,4 +39,6 @@ public interface IUserService {
     void setSecurityServerManager(SecurityServerManager securityManager);
 
     void setValidator(Validator validator);
+
+    void setUserRepository(IUserRepository userRepository);
 }
