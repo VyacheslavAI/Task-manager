@@ -27,7 +27,7 @@ public class TaskService implements ITaskService {
         if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         task.setUserId(userId);
-        return taskRepository.merge(task);
+        return taskRepository.createTask(task);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class TaskService implements ITaskService {
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         final Task persistentTask = taskRepository.findTaskById(userId, task.getId());
         if (persistentTask == null) throw new ObjectNotFoundException();
-        return taskRepository.merge(task);
+        return taskRepository.updateTask(task);
     }
 
     @Override

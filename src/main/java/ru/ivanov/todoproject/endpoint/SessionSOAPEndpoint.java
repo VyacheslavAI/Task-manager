@@ -26,7 +26,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
         final User user = new User();
         user.setLogin(login);
         user.setPasswordHash(passwordHash);
-        serviceLocator.getUserService().createOrUpdateUser(user);
+        serviceLocator.getUserService().createUser(user);
         return true;
     }
 
@@ -42,7 +42,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
         userSession.setTimestamp(currentTimeMillis);
         final String signature = securityManager.sign(userSession);
         userSession.setSignature(signature);
-        serviceLocator.getSessionService().createOrUpdateSession(userSession);
+        serviceLocator.getSessionService().createSession(userSession);
         return userSession;
     }
 

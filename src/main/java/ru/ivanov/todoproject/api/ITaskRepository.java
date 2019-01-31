@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface ITaskRepository extends IRepository<Task> {
 
+    Task createTask(Task task);
+
+    Task updateTask(Task task);
+
     Task findTaskByName(String userId, String name);
 
     Task findTaskByName(String userId, String projectName, String taskName);

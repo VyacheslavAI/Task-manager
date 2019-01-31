@@ -6,7 +6,6 @@ import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
-import ru.ivanov.todoproject.repository.SessionRepository;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.util.Collections;
@@ -21,9 +20,9 @@ public class SessionService implements ISessionService {
     private Validator validator;
 
     @Override
-    public Session createOrUpdateSession(final Session session) throws ObjectIsNotValidException {
+    public Session createSession(final Session session) throws ObjectIsNotValidException {
         if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
-        return sessionRepository.merge(session);
+        return sessionRepository.createSession(session);
     }
 
     @Override

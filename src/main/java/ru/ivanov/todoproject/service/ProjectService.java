@@ -25,7 +25,7 @@ public class ProjectService implements IProjectService {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         project.setUserId(userId);
-        return projectRepository.merge(project);
+        return projectRepository.createProject(project);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ProjectService implements IProjectService {
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         final Project persistentProject = projectRepository.findProjectById(userId, project.getId());
         if (persistentProject == null) throw new ObjectNotFoundException();
-        return projectRepository.merge(project);
+        return projectRepository.updateProject(project);
     }
 
     @Override

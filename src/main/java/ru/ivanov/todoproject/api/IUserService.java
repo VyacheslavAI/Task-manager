@@ -16,7 +16,9 @@ import java.util.List;
 @XmlJavaTypeAdapter(ServiceLocator.UserServiceAdapter.class)
 public interface IUserService {
 
-    User createOrUpdateUser(User user) throws ObjectIsNotValidException;
+    User createUser(User user) throws ObjectIsNotValidException;
+
+    User updateUser(User user) throws ObjectIsNotValidException;
 
     User loadById(String id) throws InvalidArgumentException;
 

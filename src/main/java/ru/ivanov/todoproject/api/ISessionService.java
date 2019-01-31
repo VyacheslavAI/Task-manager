@@ -11,7 +11,7 @@ import java.util.List;
 @XmlJavaTypeAdapter(ServiceLocator.SessionServiceAdapter.class)
 public interface ISessionService {
 
-    Session createOrUpdateSession(Session session) throws ObjectIsNotValidException;
+    Session createSession(Session session) throws ObjectIsNotValidException;
 
     Session loadSessionById(String id) throws InvalidArgumentException;
 

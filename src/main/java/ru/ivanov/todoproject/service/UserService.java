@@ -27,9 +27,15 @@ public class UserService implements IUserService {
     private Validator validator;
 
     @Override
-    public User createOrUpdateUser(final User user) throws ObjectIsNotValidException {
+    public User createUser(final User user) throws ObjectIsNotValidException {
         if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
-        return userRepository.merge(user);
+        return userRepository.createUser(user);
+    }
+
+    @Override
+    public User updateUser(final User user) throws ObjectIsNotValidException {
+        if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
+        return userRepository.updateUser(user);
     }
 
     @Override
@@ -87,8 +93,8 @@ public class UserService implements IUserService {
         session.setTimestamp(currentTimeMillis);
         session.setUserId(user.getId());
         session.setSignature(securityManager.sign(session));
-        createOrUpdateUser(user);
-        serviceLocator.getSessionService().createOrUpdateSession(session);
+        createUser(user);
+        serviceLocator.getSessionService().createSession(session);
     }
 
     @Override
