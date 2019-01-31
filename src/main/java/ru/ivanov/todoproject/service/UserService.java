@@ -84,6 +84,8 @@ public class UserService implements IUserService {
     @Override
     public void userInitialize(final String login, final String password) throws ObjectIsNotValidException, InvalidArgumentException, NoSuchAlgorithmException {
         if (!Validator.isArgumentsValid(login, password)) throw new InvalidArgumentException();
+        final User targetUser = userRepository.findByLogin(login);
+        if (targetUser != null) return;
         final User user = new User();
         final String hashPassword = securityManager.getPasswordHash(password);
         user.setLogin(login);

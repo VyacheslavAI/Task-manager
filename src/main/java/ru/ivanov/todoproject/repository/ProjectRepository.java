@@ -100,7 +100,7 @@ public class ProjectRepository extends AbstractRepository<Project> implements IP
             statement.setString(1, userId);
             statement.setString(2, name);
             final ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
+            if (resultSet.next()) return fetch(resultSet);
             return fetch(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -148,7 +148,7 @@ public class ProjectRepository extends AbstractRepository<Project> implements IP
             statement.setString(1, userId);
             statement.setString(2, projectId);
             final ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
+            if (resultSet.next()) return fetch(resultSet);
             return fetch(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();

@@ -32,8 +32,7 @@ public class UserRepository extends AbstractRepository<User> implements IUserRep
         try (final PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, login);
             final ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return fetch(resultSet);
+            if (resultSet.next()) return fetch(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }

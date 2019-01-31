@@ -91,7 +91,7 @@ public class TaskRepository extends AbstractRepository<Task> implements ITaskRep
             statement.setString(1, userId);
             statement.setString(2, name);
             final ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
+            if (resultSet.next()) return fetch(resultSet);
             return fetch(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -108,7 +108,7 @@ public class TaskRepository extends AbstractRepository<Task> implements ITaskRep
             statement.setString(2, projectId);
             statement.setString(3, taskName);
             final ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
+            if (resultSet.next()) return fetch(resultSet);
             return fetch(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,7 +124,7 @@ public class TaskRepository extends AbstractRepository<Task> implements ITaskRep
             statement.setString(1, userId);
             statement.setString(2, taskId);
             final ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
+            if (resultSet.next()) return fetch(resultSet);
             return fetch(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
