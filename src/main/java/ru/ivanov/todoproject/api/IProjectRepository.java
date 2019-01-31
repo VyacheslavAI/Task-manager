@@ -8,11 +8,9 @@ public interface IProjectRepository extends IRepository<Project> {
 
     Project findProjectByName(String userId, String name);
 
-    List<Project> findAllProject(String userId);
+    List<Project> findAllProjectByUserId(String userId);
 
     List<Project> findAllProject();
 
     Project findProjectById(String userId, String projectId);
-
-    List<Project> filterProjectsByUserId(List<Project> projects, String userId);
 }

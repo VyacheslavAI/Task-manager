@@ -7,7 +7,6 @@ import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
-import ru.ivanov.todoproject.repository.ProjectRepository;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.util.Collections;
@@ -64,7 +63,7 @@ public class ProjectService implements IProjectService {
     @Override
     public List<Project> loadAllUserProject(final String userId) throws InvalidArgumentException {
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-        return projectRepository.findAllProject(userId);
+        return projectRepository.findAllProjectByUserId(userId);
     }
 
     @Override

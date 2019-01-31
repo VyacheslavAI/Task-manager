@@ -4,21 +4,43 @@ import ru.ivanov.todoproject.api.ITaskRepository;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.validator.Validator;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class TaskRepository extends AbstractRepository<Task> implements ITaskRepository {
 
     @Override
+    public Task fetch(ResultSet resultSet) throws SQLException {
+        final String id = resultSet.getString(1);
+        final String taskName = resultSet.getString(2);
+        final Date created = resultSet.getDate(3);
+        final String projectId = resultSet.getString(4);
+        final String userId = resultSet.getString(5);
+        final Task task = new Task();
+        task.setId(id);
+        task.setName(taskName);
+        task.setCreated(created);
+        task.setProjectId(projectId);
+        task.setUserId(userId);
+        return task;
+    }
+
+    @Override
     public Task findTaskByName(final String userId, final String name) {
         if (!Validator.isArgumentsValid(userId, name)) return null;
-        for (final Task task : entities.values()) {
-            final String taskName = task.getName();
-            final String taskUserId = task.getUserId();
-            if (taskUserId.equals(userId) && taskName.equals(name)) {
-                return task;
-            }
+        final String query = "select * from 'task' where 'user_id' = ? and 'name' = ?";
+        try (final PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, userId);
+            statement.setString(2, name);
+            final ResultSet resultSet = statement.executeQuery();
+            return fetch(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -26,15 +48,15 @@ public class TaskRepository extends AbstractRepository<Task> implements ITaskRep
     @Override
     public Task findTaskByName(final String userId, final String projectId, final String taskName) {
         if (!Validator.isArgumentsValid(userId, projectId, taskName)) return null;
-        for (final Task task : entities.values()) {
-            final String persistentTaskName = task.getName();
-            final String persistentTaskUserId = task.getUserId();
-            final String persistentTaskProjectId = task.getProjectId();
-            if (persistentTaskUserId.equals(userId) &&
-                    persistentTaskName.equals(taskName) &&
-                    persistentTaskProjectId.equals(projectId)) {
-                return task;
-            }
+        final String query = "select * from 'task' where 'user_id' = ? and 'project_id' = ? and 'name' = ?";
+        try (final PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, userId);
+            statement.setString(2, projectId);
+            statement.setString(3, taskName);
+            final ResultSet resultSet = statement.executeQuery();
+            return fetch(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -42,53 +64,65 @@ public class TaskRepository extends AbstractRepository<Task> implements ITaskRep
     @Override
     public Task findTaskById(final String userId, final String taskId) {
         if (!Validator.isArgumentsValid(userId, taskId)) return null;
-        final Task task = super.findById(taskId);
-        if (task == null) return null;
-        if (!userId.equals(task.getUserId())) return null;
-        return task;
+        final String query = "select * from 'task' where 'user_id' =  ? and 'id' = ?";
+        try (final PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, userId);
+            statement.setString(2, taskId);
+            final ResultSet resultSet = statement.executeQuery();
+            return fetch(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public List<Task> findAllTask(final String userId) {
         if (!Validator.isArgumentsValid(userId)) return Collections.emptyList();
-        final List<Task> tasks = findAll();
-        return filterTasksByUserId(tasks, userId);
+        final List<Task> tasks = new ArrayList<>();
+        final String query = "select * from 'task' where 'user_id' = ?";
+        try (final PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, userId);
+            final ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                tasks.add(fetch(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
     }
 
     @Override
     public List<Task> findAllTask() {
-        return findAll();
+        final List<Task> tasks = new ArrayList<>();
+        final String query = "select * from 'task'";
+        try (final PreparedStatement statement = connection.prepareStatement(query)) {
+            final ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                tasks.add(fetch(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
     }
-
 
     @Override
     public List<Task> findAllProjectTask(final String userId, final String projectId) {
         if (!Validator.isArgumentsValid(userId, projectId)) return Collections.emptyList();
-        final List<Task> userTasks = findAllTask(userId);
-        return filterTasksByProjectId(userTasks, projectId);
-    }
-
-    private List<Task> filterTasksByUserId(final List<Task> tasks, final String userId) {
-        if (tasks == null || tasks.isEmpty()) return Collections.emptyList();
-        if (!Validator.isArgumentsValid(userId)) return Collections.emptyList();
-        final List<Task> result = new ArrayList<>();
-        for (final Task task : tasks) {
-            if (task.getUserId().equals(userId)) {
-                result.add(task);
+        final List<Task> tasks = new ArrayList<>();
+        final String query = "select * from 'task' where 'user_id' = ? and 'project_id' = ?";
+        try (final PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, userId);
+            statement.setString(2, projectId);
+            final ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                tasks.add(fetch(resultSet));
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return result;
-    }
-
-    private List<Task> filterTasksByProjectId(final List<Task> tasks, final String projectId) {
-        if (tasks == null || tasks.isEmpty()) return Collections.emptyList();
-        if (!Validator.isArgumentsValid(projectId)) return Collections.emptyList();
-        final List<Task> result = new ArrayList<>();
-        for (final Task task : tasks) {
-            if (task.getProjectId().equals(projectId)) {
-                result.add(task);
-            }
-        }
-        return result;
+        return tasks;
     }
 }
