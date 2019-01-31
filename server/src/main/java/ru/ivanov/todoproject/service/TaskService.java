@@ -8,7 +8,6 @@ import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
-import ru.ivanov.todoproject.repository.TaskRepository;
 import ru.ivanov.todoproject.validator.Validator;
 
 import java.util.Collections;
