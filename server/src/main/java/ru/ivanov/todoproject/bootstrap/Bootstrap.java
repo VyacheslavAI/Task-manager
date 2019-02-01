@@ -1,8 +1,15 @@
 package ru.ivanov.todoproject.bootstrap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.config.DatabaseConfig;
+import ru.ivanov.todoproject.config.MyDataSourceFactory;
 import ru.ivanov.todoproject.dto.Serializer;
 import ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.SessionSOAPEndpoint;
@@ -21,11 +28,13 @@ import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
@@ -65,6 +74,8 @@ public class Bootstrap implements ServiceLocator {
 
     private Connection connection;
 
+    private SqlSessionFactory sqlSessionFactory;
+
     {
         projectService.setProjectRepository(projectRepository);
         taskService.setTaskRepository(taskRepository);
@@ -94,8 +105,7 @@ public class Bootstrap implements ServiceLocator {
     }
 
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, SQLException, ClassNotFoundException {
-        serializer.loadApplicationDataFromBinary(this);
-        createConnection();
+        createSqlSessionFactory();
         userInitialization();
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
@@ -115,12 +125,36 @@ public class Bootstrap implements ServiceLocator {
         final String userName = databaseConfig.getUserName();
         final String password = databaseConfig.getPassword();
         Class.forName("com.mysql.jdbc.Driver");
-        connection = DriverManager.getConnection(connectionUrl, userName,  password);
+        connection = DriverManager.getConnection(connectionUrl, userName, password);
         projectRepository.setConnection(connection);
         taskRepository.setConnection(connection);
         userRepository.setConnection(connection);
         sessionRepository.setConnection(connection);
         print("Connection created successfully");
+    }
+
+    private void createSqlSessionFactory() {
+        final Properties properties = new Properties();
+        properties.setProperty("url", databaseConfig.getConnectionUrl());
+        properties.setProperty("username", databaseConfig.getUserName());
+        properties.setProperty("password", databaseConfig.getPassword());
+        properties.setProperty("driver", databaseConfig.getDriver());
+        final MyDataSourceFactory dataSourceFactory = new MyDataSourceFactory();
+        dataSourceFactory.setProperties(properties);
+        final DataSource dataSource = dataSourceFactory.getDataSource();
+        final TransactionFactory transactionFactory = new JdbcTransactionFactory();
+        final Environment environment = new Environment("development", transactionFactory, dataSource);
+        final Configuration config = new Configuration(environment);
+        config.addMapper(IProjectRepository.class);
+        config.addMapper(ITaskRepository.class);
+        config.addMapper(ISessionRepository.class);
+        config.addMapper(IUserRepository.class);
+        sqlSessionFactory = new SqlSessionFactoryBuilder().build(config);
+        projectRepository.setSqlSessionFactory(sqlSessionFactory);
+        taskRepository.setSqlSessionFactory(sqlSessionFactory);
+        userRepository.setSqlSessionFactory(sqlSessionFactory);
+        sessionRepository.setSqlSessionFactory(sqlSessionFactory);
+        print("SqlSessionFactory created successfully");
     }
 
     @Override

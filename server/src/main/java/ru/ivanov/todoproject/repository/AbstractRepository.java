@@ -1,17 +1,18 @@
 package ru.ivanov.todoproject.repository;
 
+import org.apache.ibatis.session.SqlSessionFactory;
 import ru.ivanov.todoproject.api.IRepository;
 import ru.ivanov.todoproject.entity.AbstractEntity;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractRepository<E extends AbstractEntity> implements IRepository<E> {
 
     Connection connection;
+
+    SqlSessionFactory sqlSessionFactory;
 
     @Override
     public E merge(final E entity) {
@@ -29,9 +30,6 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
     public List<E> findAll() {
         return new ArrayList<>();
     }
-
-    @Override
-    public abstract E fetch(final ResultSet resultSet) throws SQLException;
 
     @Override
     public E delete(final E entity) {
@@ -55,5 +53,10 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements IR
     @Override
     public void setConnection(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+        this.sqlSessionFactory = sqlSessionFactory;
     }
 }

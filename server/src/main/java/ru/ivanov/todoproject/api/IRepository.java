@@ -1,5 +1,7 @@
 package ru.ivanov.todoproject.api;
 
+import org.apache.ibatis.session.SqlSessionFactory;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,8 +15,6 @@ public interface IRepository<E> {
 
     List<E> findAll();
 
-    E fetch(ResultSet resultSet) throws SQLException;
-
     E findById(final String id);
 
     boolean deleteAll();
@@ -22,4 +22,6 @@ public interface IRepository<E> {
     boolean addAll(final List<E> entityList);
 
     void setConnection(Connection connection);
+
+    void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory);
 }
