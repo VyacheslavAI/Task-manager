@@ -65,12 +65,12 @@ public class UserService implements IUserService {
     @Override
     public User deleteUser(final User user) throws ObjectIsNotValidException {
         if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
-        return userRepository.delete(user);
+        return userRepository.deleteUser(user);
     }
 
     @Override
     public boolean deleteAllUser() {
-        return userRepository.deleteAll();
+        return userRepository.deleteAllUser();
     }
 
     @Override

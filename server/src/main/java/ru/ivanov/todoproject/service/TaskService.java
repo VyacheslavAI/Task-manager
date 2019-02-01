@@ -34,6 +34,7 @@ public class TaskService implements ITaskService {
         if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         final Task persistentTask = taskRepository.findTaskById(userId, task.getId());
+        System.out.println(persistentTask);
         if (persistentTask == null) throw new ObjectNotFoundException();
         return taskRepository.updateTask(task);
     }
@@ -94,12 +95,12 @@ public class TaskService implements ITaskService {
         if (!Validator.isArgumentsValid(userId, taskName)) throw new InvalidArgumentException();
         final Task task = taskRepository.findTaskByName(userId, projectId, taskName);
         if (task == null) throw new ObjectNotFoundException();
-        return taskRepository.delete(task);
+        return taskRepository.deleteTask(task);
     }
 
     @Override
     public boolean deleteAllTask() {
-        return taskRepository.deleteAll();
+        return taskRepository.deleteAllTask();
     }
 
     @Override

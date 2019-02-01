@@ -34,12 +34,12 @@ public class SessionService implements ISessionService {
     @Override
     public Session deleteSession(final Session session) throws ObjectIsNotValidException {
         if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
-        return sessionRepository.delete(session);
+        return sessionRepository.deleteSession(session);
     }
 
     @Override
     public boolean deleteAllSession() {
-        return sessionRepository.deleteAll();
+        return sessionRepository.deleteAllSession();
     }
 
     @Override

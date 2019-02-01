@@ -8,7 +8,7 @@ import ru.ivanov.todoproject.entity.User;
 
 public interface IUserRepository extends IRepository<User> {
 
-    @Select("select * form user where login = #{login}")
+    @Select("select * from user where login = #{login}")
     User findByLogin(final String login);
 
     User findBySession(String sessionId);
