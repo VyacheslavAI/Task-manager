@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.api;
 
+import org.hibernate.SessionFactory;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
@@ -40,4 +41,6 @@ public interface ITaskService {
     void setValidator(Validator validator);
 
     void setTaskRepository(ITaskRepository taskRepository);
+
+    void setSessionFactory(SessionFactory sessionFactory);
 }

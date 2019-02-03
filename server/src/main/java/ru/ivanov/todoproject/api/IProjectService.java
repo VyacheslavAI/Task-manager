@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.api;
 
+import org.hibernate.SessionFactory;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
@@ -35,4 +36,6 @@ public interface IProjectService {
     void setValidator(Validator validator);
 
     void setProjectRepository(IProjectRepository projectRepository);
+
+    void setSessionFactory(SessionFactory sessionFactory);
 }

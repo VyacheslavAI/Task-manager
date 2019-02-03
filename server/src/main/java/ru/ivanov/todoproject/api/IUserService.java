@@ -1,6 +1,7 @@
 package ru.ivanov.todoproject.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.hibernate.SessionFactory;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
@@ -43,4 +44,6 @@ public interface IUserService {
     void setValidator(Validator validator);
 
     void setUserRepository(IUserRepository userRepository);
+
+    void setSessionFactory(SessionFactory sessionFactory);
 }
