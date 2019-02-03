@@ -1,6 +1,6 @@
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">jdbc:mysql://localhost:3306/taskmanager</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/taskmanager?useLegacyDatetimeCode=false&amp;serverTimezone=UTC</property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.username">root</property>
         <property name="connection.password">root</property>
@@ -8,7 +8,6 @@
 
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
-        <mapping class="ru.ivanov.todoproject.entity.AbstractEntity"/>
         <mapping class="ru.ivanov.todoproject.entity.Project"/>
         <mapping class="ru.ivanov.todoproject.entity.Task"/>
         <mapping class="ru.ivanov.todoproject.entity.User"/>

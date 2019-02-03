@@ -21,21 +21,21 @@ public interface IUserService {
 
     User updateUser(User user) throws ObjectIsNotValidException;
 
-    User loadById(String id) throws InvalidArgumentException;
+    User loadById(String id) throws InvalidArgumentException, ObjectNotFoundException;
 
-    User loadUserByLogin(String login) throws InvalidArgumentException;
+    User loadUserByLogin(String login) throws InvalidArgumentException, ObjectNotFoundException;
 
     List<User> loadAllUser();
 
     boolean addAllUser(List<User> users);
 
-    User deleteUser(User user) throws ObjectIsNotValidException;
+    User deleteUser(User user) throws ObjectIsNotValidException, ObjectNotFoundException;
 
     boolean deleteAllUser();
 
     User getUserBySession(Session session) throws ObjectIsNotValidException, ObjectNotFoundException;
 
-    void userInitialize(String login, String password) throws NoSuchAlgorithmException, JsonProcessingException, ObjectIsNotValidException, InvalidArgumentException;
+    void userInitialize(String login, String password) throws NoSuchAlgorithmException, JsonProcessingException, ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
 
     void setServiceLocator(ServiceLocator serviceLocator);
 

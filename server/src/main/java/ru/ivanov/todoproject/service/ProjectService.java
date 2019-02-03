@@ -97,9 +97,9 @@ public class ProjectService implements IProjectService {
 
         try (final Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            final Query query = session.createQuery("from Project where name = ? and userId = ?");
-            query.setParameter(0, projectName);
-            query.setParameter(1, userId);
+            final Query query = session.createQuery("from Project where name = :projectName and userId = :userId");
+            query.setParameter("projectName", projectName);
+            query.setParameter("userId", userId);
             final Project project = (Project) query.uniqueResult();
             session.getTransaction().commit();
             if (project == null) throw new ObjectNotFoundException();
@@ -114,8 +114,8 @@ public class ProjectService implements IProjectService {
 
         try (final Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            final Query query = session.createQuery("from Project where userId = ?");
-            query.setParameter(0, userId);
+            final Query query = session.createQuery("from Project where userId = :userId");
+            query.setParameter("userId", userId);
             final List<Project> projects = (List<Project>) query.getResultList();
             session.getTransaction().commit();
             return projects;
@@ -144,9 +144,9 @@ public class ProjectService implements IProjectService {
 
         try (final Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            final Query query = session.createQuery("from Project where userId = ? and name = ?");
-            query.setParameter(0, userId);
-            query.setParameter(1, projectName);
+            final Query query = session.createQuery("from Project where userId = :userId and name = :projectName");
+            query.setParameter("userId", userId);
+            query.setParameter("projectName", projectName);
             final Project project = (Project) query.uniqueResult();
             session.delete(project);
             session.getTransaction().commit();

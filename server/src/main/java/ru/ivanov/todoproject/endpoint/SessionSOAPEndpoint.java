@@ -4,10 +4,7 @@ import ru.ivanov.todoproject.api.ISessionSOAPEndpoint;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
-import ru.ivanov.todoproject.exception.AuthenticationException;
-import ru.ivanov.todoproject.exception.AuthorizationException;
-import ru.ivanov.todoproject.exception.InvalidArgumentException;
-import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.*;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
@@ -31,7 +28,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
     }
 
     @Override
-    public Session login(final String login, final String passwordHash) throws ObjectIsNotValidException, InvalidArgumentException, AuthorizationException {
+    public Session login(final String login, final String passwordHash) throws ObjectIsNotValidException, InvalidArgumentException, AuthorizationException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(login, passwordHash)) throw new InvalidArgumentException();
         final User user = serviceLocator.getUserService().loadUserByLogin(login);
         if (user == null) throw new AuthorizationException();

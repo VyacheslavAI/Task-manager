@@ -21,6 +21,7 @@ import ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint;
 import ru.ivanov.todoproject.endpoint.UserSOAPEndpoint;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
+import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.ProjectRepository;
 import ru.ivanov.todoproject.repository.SessionRepository;
 import ru.ivanov.todoproject.repository.TaskRepository;
@@ -110,8 +111,9 @@ public class Bootstrap implements ServiceLocator {
         securityServerManager.setValidator(validator);
     }
 
-    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, SQLException, ClassNotFoundException {
+    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, SQLException, ClassNotFoundException, ObjectNotFoundException {
         createHibernateSessionFactory();
+        createSqlSessionFactory();
         userInitialization();
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
@@ -120,7 +122,7 @@ public class Bootstrap implements ServiceLocator {
         print("Server started successfully");
     }
 
-    private void userInitialization() throws InvalidArgumentException, NoSuchAlgorithmException, ObjectIsNotValidException, JsonProcessingException {
+    private void userInitialization() throws InvalidArgumentException, NoSuchAlgorithmException, ObjectIsNotValidException, JsonProcessingException, ObjectNotFoundException {
         userService.userInitialize("admin", "admin");
         userService.userInitialize("root", "root");
         print("Users initialized successfully");
@@ -156,10 +158,10 @@ public class Bootstrap implements ServiceLocator {
         config.addMapper(ISessionRepository.class);
         config.addMapper(IUserRepository.class);
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(config);
-        projectRepository.setSqlSessionFactory(sqlSessionFactory);
-        taskRepository.setSqlSessionFactory(sqlSessionFactory);
-        userRepository.setSqlSessionFactory(sqlSessionFactory);
-        sessionRepository.setSqlSessionFactory(sqlSessionFactory);
+//        projectRepository.setSqlSessionFactory(sqlSessionFactory);
+//        taskRepository.setSqlSessionFactory(sqlSessionFactory);
+//        userRepository.setSqlSessionFactory(sqlSessionFactory);
+//        sessionRepository.setSqlSessionFactory(sqlSessionFactory);
         print("SqlSessionFactory created successfully");
     }
 
