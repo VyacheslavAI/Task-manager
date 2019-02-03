@@ -7,6 +7,10 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.config.DatabaseConfig;
 import ru.ivanov.todoproject.config.MyDataSourceFactory;
@@ -76,6 +80,8 @@ public class Bootstrap implements ServiceLocator {
 
     private SqlSessionFactory sqlSessionFactory;
 
+    private SessionFactory sessionFactory;
+
     {
         projectService.setProjectRepository(projectRepository);
         taskService.setTaskRepository(taskRepository);
@@ -105,7 +111,7 @@ public class Bootstrap implements ServiceLocator {
     }
 
     public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, SQLException, ClassNotFoundException {
-        createSqlSessionFactory();
+        createHibernateSessionFactory();
         userInitialization();
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
@@ -155,6 +161,17 @@ public class Bootstrap implements ServiceLocator {
         userRepository.setSqlSessionFactory(sqlSessionFactory);
         sessionRepository.setSqlSessionFactory(sqlSessionFactory);
         print("SqlSessionFactory created successfully");
+    }
+
+    private void createHibernateSessionFactory() {
+        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+        final SessionFactory sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+        setSessionFactory(sessionFactory);
+        projectService.setSessionFactory(sessionFactory);
+        taskService.setSessionFactory(sessionFactory);
+        userService.setSessionFactory(sessionFactory);
+        sessionService.setSessionFactory(sessionFactory);
+        print("Hibernate session factory created successfully");
     }
 
     @Override
@@ -207,5 +224,13 @@ public class Bootstrap implements ServiceLocator {
 
     public void setDatabaseConfig(DatabaseConfig databaseConfig) {
         this.databaseConfig = databaseConfig;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }
