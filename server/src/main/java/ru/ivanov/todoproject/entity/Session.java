@@ -1,5 +1,8 @@
 package ru.ivanov.todoproject.entity;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Session extends AbstractEntity {
 
     private long timestamp;
