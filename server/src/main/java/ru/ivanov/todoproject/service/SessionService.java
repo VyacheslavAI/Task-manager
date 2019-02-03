@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.service;
 
+import org.hibernate.SessionFactory;
 import ru.ivanov.todoproject.api.ISessionRepository;
 import ru.ivanov.todoproject.api.ISessionService;
 import ru.ivanov.todoproject.api.ServiceLocator;
@@ -18,6 +19,8 @@ public class SessionService implements ISessionService {
     private ServiceLocator serviceLocator;
 
     private Validator validator;
+
+    private SessionFactory sessionFactory;
 
     @Override
     public Session createSession(final Session session) throws ObjectIsNotValidException {
@@ -67,5 +70,10 @@ public class SessionService implements ISessionService {
     @Override
     public void setSessionRepository(ISessionRepository sessionRepository) {
         this.sessionRepository = sessionRepository;
+    }
+
+    @Override
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 }

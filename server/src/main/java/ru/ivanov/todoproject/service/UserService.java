@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.service;
 
+import org.hibernate.SessionFactory;
 import ru.ivanov.todoproject.api.IUserRepository;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.api.ServiceLocator;
@@ -25,6 +26,8 @@ public class UserService implements IUserService {
     private SecurityServerManager securityManager;
 
     private Validator validator;
+
+    private SessionFactory sessionFactory;
 
     @Override
     public User createUser(final User user) throws ObjectIsNotValidException {
@@ -117,5 +120,10 @@ public class UserService implements IUserService {
     @Override
     public void setUserRepository(IUserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 }

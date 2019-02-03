@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.service;
 
+import org.hibernate.SessionFactory;
 import ru.ivanov.todoproject.api.ITaskRepository;
 import ru.ivanov.todoproject.api.ITaskService;
 import ru.ivanov.todoproject.api.ServiceLocator;
@@ -20,6 +21,8 @@ public class TaskService implements ITaskService {
     private ServiceLocator serviceLocator;
 
     private Validator validator;
+
+    private SessionFactory sessionFactory;
 
     @Override
     public Task createTask(final String userId, final Task task) throws ObjectIsNotValidException, InvalidArgumentException {
@@ -116,5 +119,10 @@ public class TaskService implements ITaskService {
     @Override
     public void setTaskRepository(ITaskRepository taskRepository) {
         this.taskRepository = taskRepository;
+    }
+
+    @Override
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 }
