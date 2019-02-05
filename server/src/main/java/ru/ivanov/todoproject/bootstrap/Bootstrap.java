@@ -33,6 +33,7 @@ import ru.ivanov.todoproject.service.TaskService;
 import ru.ivanov.todoproject.service.UserService;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
@@ -45,22 +46,31 @@ import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
 public class Bootstrap implements ServiceLocator {
 
+    @Inject
     private IProjectRepository projectRepository = new ProjectRepository();
 
+    @Inject
     private ITaskRepository taskRepository = new TaskRepository();
 
+    @Inject
     private IUserRepository userRepository = new UserRepository();
 
+    @Inject
     private ISessionRepository sessionRepository = new SessionRepository();
 
+    @Inject
     private IProjectService projectService = new ProjectService();
 
+    @Inject
     private ITaskService taskService = new TaskService();
 
+    @Inject
     private IUserService userService = new UserService();
 
+    @Inject
     private ISessionService sessionService = new SessionService();
 
+    @Inject
     private IProjectSOAPEndpoint projectSOAPEndpoint = new ProjectSOAPEndpoint();
 
     private ITaskSOAPEndpoint taskSOAPEndpoint = new TaskSOAPEndpoint();
