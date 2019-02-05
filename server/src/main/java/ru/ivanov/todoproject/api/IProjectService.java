@@ -30,12 +30,4 @@ public interface IProjectService {
     Project deleteProject(String userId, String projectName) throws ObjectNotFoundException, InvalidArgumentException;
 
     boolean deleteAllProject();
-
-    void setServiceLocator(ServiceLocator serviceLocator);
-
-    void setValidator(Validator validator);
-
-    void setProjectRepository(IProjectRepository projectRepository);
-
-    void setSessionFactory(SessionFactory sessionFactory);
 }

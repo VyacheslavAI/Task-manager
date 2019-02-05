@@ -5,6 +5,9 @@ import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class Validator {
 
     public boolean isProjectValid(final Project project) {

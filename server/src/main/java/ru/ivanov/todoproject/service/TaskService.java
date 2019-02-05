@@ -13,16 +13,23 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public class TaskService implements ITaskService {
 
+    @Inject
     private ITaskRepository taskRepository;
 
+    @Inject
     private ServiceLocator serviceLocator;
 
+    @Inject
     private Validator validator;
 
+    @Inject
     private SessionFactory sessionFactory;
 
     @Override
@@ -195,25 +202,5 @@ public class TaskService implements ITaskService {
     public boolean deleteAllTask() {
 //        return taskRepository.deleteAllTask();
         return false;
-    }
-
-    @Override
-    public void setServiceLocator(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
-
-    @Override
-    public void setValidator(Validator validator) {
-        this.validator = validator;
-    }
-
-    @Override
-    public void setTaskRepository(ITaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
-
-    @Override
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

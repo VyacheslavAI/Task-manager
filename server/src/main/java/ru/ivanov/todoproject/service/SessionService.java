@@ -10,17 +10,24 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
 
+@Singleton
 public class SessionService implements ISessionService {
 
+    @Inject
     private ISessionRepository sessionRepository;
 
+    @Inject
     private ServiceLocator serviceLocator;
 
+    @Inject
     private Validator validator;
 
+    @Inject
     private SessionFactory sessionFactory;
 
     @Override
@@ -81,25 +88,5 @@ public class SessionService implements ISessionService {
     public List<Session> loadAllSession() {
 //        return sessionRepository.findAll();
         return Collections.emptyList();
-    }
-
-    @Override
-    public void setServiceLocator(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
-
-    @Override
-    public void setValidator(Validator validator) {
-        this.validator = validator;
-    }
-
-    @Override
-    public void setSessionRepository(ISessionRepository sessionRepository) {
-        this.sessionRepository = sessionRepository;
-    }
-
-    @Override
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

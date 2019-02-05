@@ -24,12 +24,4 @@ public interface ISessionService {
     boolean addAllSession(List<Session> sessions);
 
     List<Session> loadAllSession();
-
-    void setServiceLocator(ServiceLocator serviceLocator);
-
-    void setValidator(Validator validator);
-
-    void setSessionRepository(ISessionRepository sessionRepository);
-
-    void setSessionFactory(SessionFactory sessionFactory);
 }

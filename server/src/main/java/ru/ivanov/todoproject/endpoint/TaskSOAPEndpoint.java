@@ -11,14 +11,17 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 
+import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.List;
 
 @WebService(endpointInterface = "ru.ivanov.todoproject.api.ITaskSOAPEndpoint")
 public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
 
+    @Inject
     private ServiceLocator serviceLocator;
 
+    @Inject
     private SecurityServerManager securityManager;
 
     @Override
@@ -55,15 +58,5 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     public List<Task> getAllTaskByProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
         return serviceLocator.getTaskService().loadAllUserTaskByProject(session.getUserId(), project);
-    }
-
-    @Override
-    public void setServiceLocator(final ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
-
-    @Override
-    public void setSecurityServerManager(final SecurityServerManager securityManager) {
-        this.securityManager = securityManager;
     }
 }

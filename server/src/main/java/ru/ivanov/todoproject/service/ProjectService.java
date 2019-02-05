@@ -12,18 +12,24 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
 
-
+@Singleton
 public class ProjectService implements IProjectService {
 
+    @Inject
     private IProjectRepository projectRepository;
 
+    @Inject
     private ServiceLocator serviceLocator;
 
+    @Inject
     private Validator validator;
 
+    @Inject
     private SessionFactory sessionFactory;
 
     @Override
@@ -160,25 +166,5 @@ public class ProjectService implements IProjectService {
     public boolean deleteAllProject() {
 //        return projectRepository.deleteAllProject();
         return false;
-    }
-
-    @Override
-    public void setServiceLocator(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
-
-    @Override
-    public void setValidator(Validator validator) {
-        this.validator = validator;
-    }
-
-    @Override
-    public void setProjectRepository(IProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
-    }
-
-    @Override
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }

@@ -36,14 +36,4 @@ public interface IUserService {
     User getUserBySession(Session session) throws ObjectIsNotValidException, ObjectNotFoundException;
 
     void userInitialize(String login, String password) throws NoSuchAlgorithmException, JsonProcessingException, ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
-
-    void setServiceLocator(ServiceLocator serviceLocator);
-
-    void setSecurityServerManager(SecurityServerManager securityManager);
-
-    void setValidator(Validator validator);
-
-    void setUserRepository(IUserRepository userRepository);
-
-    void setSessionFactory(SessionFactory sessionFactory);
 }

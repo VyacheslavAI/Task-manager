@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Singleton
 public class SecurityServerManager {
 
     private final String salt = "184S8w076031";
@@ -20,6 +23,7 @@ public class SecurityServerManager {
 
     private final int countOfIterations = 1466;
 
+    @Inject
     private Validator validator;
 
     public String sign(final Object object) {

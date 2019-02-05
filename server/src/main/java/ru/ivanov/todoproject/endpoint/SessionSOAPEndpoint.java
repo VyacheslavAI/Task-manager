@@ -8,13 +8,16 @@ import ru.ivanov.todoproject.exception.*;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.inject.Inject;
 import javax.jws.WebService;
 
 @WebService(endpointInterface = "ru.ivanov.todoproject.api.ISessionSOAPEndpoint")
 public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
 
+    @Inject
     private ServiceLocator serviceLocator;
 
+    @Inject
     private SecurityServerManager securityManager;
 
     @Override
@@ -55,15 +58,5 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
         serviceLocator.getSessionService().deleteAllSession();
         return true;
-    }
-
-    @Override
-    public void setServiceLocator(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
-
-    @Override
-    public void setSecurityServerManager(SecurityServerManager securityManager) {
-        this.securityManager = securityManager;
     }
 }

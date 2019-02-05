@@ -2,12 +2,14 @@ package ru.ivanov.todoproject.dto;
 
 import ru.ivanov.todoproject.api.ServiceLocator;
 
+import javax.inject.Singleton;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
+@Singleton
 public class Serializer {
 
     private Domain saveDataToDomain(final ServiceLocator serviceLocator) {

@@ -21,10 +21,4 @@ public interface ISessionSOAPEndpoint {
 
     @WebMethod
     boolean fullSignOut(Session session) throws AuthenticationException;
-
-    @WebMethod(exclude = true)
-    void setSecurityServerManager(SecurityServerManager securityManager);
-
-    @WebMethod(exclude = true)
-    void setServiceLocator(ServiceLocator serviceLocator);
 }

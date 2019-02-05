@@ -18,6 +18,5 @@ public class TaskManagerServer {
         final WeldContainer weldContainer = weld.initialize();
         final Bootstrap bootstrap = weldContainer.instance().select(Bootstrap.class).get();
         bootstrap.run();
-        weld.shutdown();
     }
 }

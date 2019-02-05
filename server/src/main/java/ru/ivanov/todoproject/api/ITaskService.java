@@ -35,12 +35,4 @@ public interface ITaskService {
     Task deleteTask(String userId, String projectId, String taskName) throws ObjectNotFoundException, InvalidArgumentException;
 
     boolean deleteAllTask();
-
-    void setServiceLocator(ServiceLocator serviceLocator);
-
-    void setValidator(Validator validator);
-
-    void setTaskRepository(ITaskRepository taskRepository);
-
-    void setSessionFactory(SessionFactory sessionFactory);
 }

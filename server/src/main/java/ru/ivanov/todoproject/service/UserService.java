@@ -5,7 +5,6 @@ import org.hibernate.query.Query;
 import ru.ivanov.todoproject.api.IUserRepository;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
@@ -14,21 +13,28 @@ import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 
-
+@Singleton
 public class UserService implements IUserService {
 
+    @Inject
     private IUserRepository userRepository;
 
+    @Inject
     private ServiceLocator serviceLocator;
 
+    @Inject
     private SecurityServerManager securityManager;
 
+    @Inject
     private Validator validator;
 
+    @Inject
     private SessionFactory sessionFactory;
 
     @Override
@@ -72,11 +78,9 @@ public class UserService implements IUserService {
     @Override
     public User loadUserByLogin(final String login) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(login)) throw new InvalidArgumentException();
-//        return userRepository.findByLogin(login);
-
         try (final org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
             hibernateSession.beginTransaction();
-            final Query query = hibernateSession.createQuery("from User where login = :login");
+            final Query query = hibernateSession.createQuery("select from User where login = :login");
             query.setParameter("login", login);
             final User user = (User) query.uniqueResult();
             hibernateSession.getTransaction().commit();
@@ -162,30 +166,5 @@ public class UserService implements IUserService {
         session.setSignature(securityManager.sign(session));
         createUser(user);
         serviceLocator.getSessionService().createSession(session);
-    }
-
-    @Override
-    public void setServiceLocator(ServiceLocator serviceLocator) {
-        this.serviceLocator = serviceLocator;
-    }
-
-    @Override
-    public void setSecurityServerManager(SecurityServerManager securityManager) {
-        this.securityManager = securityManager;
-    }
-
-    @Override
-    public void setValidator(Validator validator) {
-        this.validator = validator;
-    }
-
-    @Override
-    public void setUserRepository(IUserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
     }
 }
