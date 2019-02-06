@@ -1,36 +1,33 @@
 package ru.ivanov.todoproject.api;
 
-import org.apache.ibatis.annotations.*;
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Query;
+import org.apache.deltaspike.data.api.Repository;
 import ru.ivanov.todoproject.entity.Project;
 
 import java.util.List;
 
-public interface IProjectRepository extends IRepository<Project> {
+@Repository(forEntity = Project.class)
+public interface IProjectRepository extends EntityRepository<Project, String> {
 
-    @Insert("insert into project (id, created, name, user_id) " +
-            "values (#{id}, #{created}, #{name}, #{userId})")
-    Project createProject(Project project);
 
-    @Update("update project set created = #{created}, name = #{name}, user_id = #{userId} where id = #{id}")
     Project updateProject(Project project);
 
-    @Select("select * from project where user_id = #{userId} and name = #{name}")
-    @Results({
-            @Result(column = "user_id", property = "userId")})
+    @Query("from Project p where p.userId = ?1 and p.name = ?2")
     Project findProjectByName(String userId, String name);
 
-    @Select("select * from project where user_id = #{userId}")
+    @Query("from Project p where p.userId = ?1")
     List<Project> findAllProjectByUserId(String userId);
 
-    @Select("select id, created, name, user_id from project")
+    @Query("from Project p")
     List<Project> findAllProject();
 
-    @Select("select * from project where user_id = #{userId} and id = #{projectId}")
+    @Query("from Project p where p.userId = ?1 and p.projectId = ?2")
     Project findProjectById(String userId, String projectId);
 
-    @Delete("delete from project where id = #{id}")
-    Project deleteProject(Project project);
+    @Query("delete from Project p where p.userId = ?1 and p.name = ?2")
+    void deleteProject(String userId, String name);
 
-    @Delete("delete * from project")
+    @Query("delete from Project p")
     boolean deleteAllProject();
 }

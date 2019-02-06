@@ -42,7 +42,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     }
 
     @Override
-    public Project deleteProject(final Session session, final String projectName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException {
+    public boolean deleteProject(final Session session, final String projectName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
         return serviceLocator.getProjectService().deleteProject(session.getUserId(), projectName);
     }

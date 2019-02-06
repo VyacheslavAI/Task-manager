@@ -5,6 +5,7 @@ import org.hibernate.query.Query;
 import ru.ivanov.todoproject.api.IUserRepository;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;

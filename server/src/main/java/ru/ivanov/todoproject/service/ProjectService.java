@@ -1,8 +1,6 @@
 package ru.ivanov.todoproject.service;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import ru.ivanov.todoproject.api.IProjectRepository;
 import ru.ivanov.todoproject.api.IProjectService;
 import ru.ivanov.todoproject.api.ServiceLocator;
@@ -12,12 +10,14 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.validator.Validator;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 
-@Singleton
+@Transactional
+@ApplicationScoped
 public class ProjectService implements IProjectService {
 
     @Inject
@@ -29,22 +29,12 @@ public class ProjectService implements IProjectService {
     @Inject
     private Validator validator;
 
-    @Inject
-    private SessionFactory sessionFactory;
-
     @Override
     public Project createProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-//        project.setUserId(userId);
-//                return projectRepository.createProject(project);
-
-        try (final Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            project.setUserId(userId);
-            session.save(project);
-            session.getTransaction().commit();
-        }
+//        projectRepository.createProject(project);
+        projectRepository.saveAndFlush(project);
         return project;
     }
 
@@ -52,16 +42,7 @@ public class ProjectService implements IProjectService {
     public Project updateProject(final String userId, final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-//        final Project persistentProject = projectRepository.findProjectById(userId, project.getId());
-//        if (persistentProject == null) throw new ObjectNotFoundException();
-//        return projectRepository.updateProject(project);
-
-        try (final Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            project.setUserId(userId);
-            session.update(project);
-            session.getTransaction().commit();
-        }
+        projectRepository.updateProject(project);
         return project;
     }
 
@@ -69,102 +50,42 @@ public class ProjectService implements IProjectService {
     public boolean addAllProject(final List<Project> projects) {
         if (projects == null || projects.isEmpty()) return false;
         projects.removeAll(Collections.singleton(null));
-//        return projectRepository.addAll(projects);
-
-        try (final Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            for (final Project project : projects) {
-                session.save(project);
-            }
-            session.getTransaction().commit();
-        }
         return true;
     }
 
     @Override
     public Project loadUserProjectById(final String userId, final String projectId) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, projectId)) throw new InvalidArgumentException();
-//        final Project persistentProject = projectRepository.findProjectById(userId, projectId);
-//        if (persistentProject == null) throw new ObjectNotFoundException();
-//        return persistentProject;
-
-        try (final Session session = sessionFactory.openSession()) {
-            final Project project = session.get(Project.class, projectId);
-            if (project == null) throw new ObjectNotFoundException();
-            return project;
-        }
+        return projectRepository.findProjectById(userId, projectId);
     }
 
     @Override
     public Project loadUserProjectByName(final String userId, final String projectName) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, projectName)) throw new InvalidArgumentException();
-//        final Project project = projectRepository.findProjectByName(userId, projectName);
-//        if (project == null) throw new ObjectNotFoundException();
-//        return project;
-
-        try (final Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            final Query query = session.createQuery("from Project where name = :projectName and userId = :userId");
-            query.setParameter("projectName", projectName);
-            query.setParameter("userId", userId);
-            final Project project = (Project) query.uniqueResult();
-            session.getTransaction().commit();
-            if (project == null) throw new ObjectNotFoundException();
-            return project;
-        }
+        return projectRepository.findProjectByName(userId, projectName);
     }
 
     @Override
     public List<Project> loadAllUserProject(final String userId) throws InvalidArgumentException {
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-//        return projectRepository.findAllProjectByUserId(userId);
-
-        try (final Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            final Query query = session.createQuery("from Project where userId = :userId");
-            query.setParameter("userId", userId);
-            final List<Project> projects = (List<Project>) query.getResultList();
-            session.getTransaction().commit();
-            return projects;
-        }
+        return projectRepository.findAllProjectByUserId(userId);
     }
 
     @Override
     public List<Project> loadAllProject() {
-//        return projectRepository.findAllProject();
-
-        try (final Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            final Query query = session.createQuery("from Project");
-            final List<Project> projects = query.getResultList();
-            session.getTransaction().commit();
-            return projects;
-        }
+        return projectRepository.findAllProject();
     }
 
     @Override
-    public Project deleteProject(final String userId, final String projectName) throws ObjectNotFoundException, InvalidArgumentException {
+    public boolean deleteProject(final String userId, final String projectName) throws ObjectNotFoundException, InvalidArgumentException {
         if (!Validator.isArgumentsValid(userId, projectName)) throw new InvalidArgumentException();
-//        final Project project = projectRepository.findProjectByName(userId, projectName);
-//        if (project == null) throw new ObjectNotFoundException();
-//        return projectRepository.deleteProject(project);
-
-        try (final Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            final Query query = session.createQuery("from Project where userId = :userId and name = :projectName");
-            query.setParameter("userId", userId);
-            query.setParameter("projectName", projectName);
-            final Project project = (Project) query.uniqueResult();
-            session.delete(project);
-            session.getTransaction().commit();
-            if (project == null) throw new ObjectNotFoundException();
-            return project;
-        }
+        projectRepository.deleteProject(userId, projectName);
+        return true;
     }
 
     @Override
     public boolean deleteAllProject() {
-//        return projectRepository.deleteAllProject();
-        return false;
+        projectRepository.deleteAllProject();
+        return true;
     }
 }

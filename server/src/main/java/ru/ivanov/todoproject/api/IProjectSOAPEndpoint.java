@@ -27,7 +27,7 @@ public interface IProjectSOAPEndpoint {
     Project updateProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException;
 
     @WebMethod
-    Project deleteProject(Session session, String projectName) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException;
+    boolean deleteProject(Session session, String projectName) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException;
 
     @WebMethod
     List<Project> showProjects(final Session session) throws AuthenticationException, InvalidArgumentException;
