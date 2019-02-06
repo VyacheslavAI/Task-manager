@@ -80,7 +80,7 @@ public class UserService implements IUserService {
         if (!Validator.isArgumentsValid(login)) throw new InvalidArgumentException();
         try (final org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
             hibernateSession.beginTransaction();
-            final Query query = hibernateSession.createQuery("select from User where login = :login");
+            final Query query = hibernateSession.createQuery("from User where login = :login");
             query.setParameter("login", login);
             final User user = (User) query.uniqueResult();
             hibernateSession.getTransaction().commit();
