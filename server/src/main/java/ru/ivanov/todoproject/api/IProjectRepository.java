@@ -7,9 +7,8 @@ import ru.ivanov.todoproject.entity.Project;
 
 import java.util.List;
 
-@Repository(forEntity = Project.class)
+@Repository
 public interface IProjectRepository extends EntityRepository<Project, String> {
-
 
     Project updateProject(Project project);
 
@@ -19,7 +18,7 @@ public interface IProjectRepository extends EntityRepository<Project, String> {
     @Query("from Project p where p.userId = ?1")
     List<Project> findAllProjectByUserId(String userId);
 
-    @Query("from Project p")
+    @Query("SELECT p from Project p")
     List<Project> findAllProject();
 
     @Query("from Project p where p.userId = ?1 and p.projectId = ?2")

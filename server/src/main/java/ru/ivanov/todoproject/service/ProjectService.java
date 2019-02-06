@@ -10,14 +10,11 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.validator.Validator;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 
 @Transactional
-@ApplicationScoped
 public class ProjectService implements IProjectService {
 
     @Inject
@@ -33,8 +30,7 @@ public class ProjectService implements IProjectService {
     public Project createProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-//        projectRepository.createProject(project);
-        projectRepository.saveAndFlush(project);
+        projectRepository.save(project);
         return project;
     }
 
