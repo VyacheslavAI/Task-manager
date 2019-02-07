@@ -11,7 +11,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
