@@ -95,8 +95,10 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public boolean deleteTask(final String userId, final String projectId, final String taskName) throws InvalidArgumentException {
+    public boolean deleteTask(final String userId, final String projectId, final String taskName) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, projectId, taskName)) throw new InvalidArgumentException();
+        final Task task = taskRepository.findTaskByNameAndProject(userId, projectId, taskName);
+        if (task == null) throw new ObjectNotFoundException();
         taskRepository.deleteTask(userId, projectId, taskName);
         return true;
     }

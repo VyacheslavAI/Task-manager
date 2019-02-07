@@ -80,8 +80,10 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public boolean deleteProject(final String userId, String projectName) throws InvalidArgumentException {
+    public boolean deleteProject(final String userId, String projectName) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, projectName)) throw new InvalidArgumentException();
+        final Project project = projectRepository.findProjectByName(userId, projectName);
+        if (project == null) throw new ObjectNotFoundException();
         projectRepository.deleteProject(userId, projectName);
         return true;
     }
