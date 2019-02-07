@@ -36,7 +36,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task updateTask(final Task task) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+    public Task updateTask(final Task task) throws ObjectIsNotValidException {
         if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
         return taskRepository.save(task);
     }
