@@ -64,8 +64,4 @@ public class SecurityServerManager {
         final BigInteger bigInt = new BigInteger(1, bytesValue);
         return bigInt.toString(16);
     }
-
-    public void setValidator(final Validator validator) {
-        this.validator = validator;
-    }
 }
