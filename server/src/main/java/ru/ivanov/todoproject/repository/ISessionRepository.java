@@ -1,12 +1,10 @@
 package ru.ivanov.todoproject.repository;
 
-import org.apache.deltaspike.data.api.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import ru.ivanov.todoproject.entity.Session;
 
 @Repository
-public interface ISessionRepository extends EntityRepository<Session, String> {
+public interface ISessionRepository extends JpaRepository<Session, String> {
 
-    @Modifying
-    @Query(value = "delete from Session s", singleResult = SingleResultType.ANY)
-    boolean deleteAllSession();
 }
