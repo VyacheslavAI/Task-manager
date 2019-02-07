@@ -1,7 +1,6 @@
 package ru.ivanov.todoproject.service;
 
 import org.apache.deltaspike.jpa.api.transaction.Transactional;
-import org.hibernate.SessionFactory;
 import ru.ivanov.todoproject.api.ISessionService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
@@ -44,7 +43,7 @@ public class SessionService implements ISessionService {
     @Override
     public Session deleteSession(final Session session) throws ObjectIsNotValidException {
         if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
-        sessionRepository.remove(session);
+        sessionRepository.attachAndRemove(session);
         return session;
     }
 

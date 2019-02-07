@@ -78,7 +78,7 @@ public class UserService implements IUserService {
     @Override
     public User deleteUser(final User user) throws ObjectIsNotValidException {
         if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
-        userRepository.remove(user);
+        userRepository.attachAndRemove(user);
         return user;
     }
 

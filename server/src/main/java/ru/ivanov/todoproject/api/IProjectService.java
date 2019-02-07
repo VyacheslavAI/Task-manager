@@ -13,7 +13,7 @@ public interface IProjectService {
 
     Project createProject(String userId, Project project) throws ObjectIsNotValidException, InvalidArgumentException;
 
-    Project updateProject(String userId, Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException;
+    Project updateProject(Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException;
 
     boolean addAllProject(List<Project> projects);
 

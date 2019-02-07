@@ -36,9 +36,8 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task updateTask(final String userId, final Task task) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+    public Task updateTask(final Task task) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
-        if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         return taskRepository.save(task);
     }
 
@@ -53,8 +52,8 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task findTaskById(final String userId, final String taskId) throws InvalidArgumentException, ObjectNotFoundException {
-        if (!Validator.isArgumentsValid(userId, taskId)) throw new InvalidArgumentException();
+    public Task findTaskById(final String taskId) throws InvalidArgumentException, ObjectNotFoundException {
+        if (!Validator.isArgumentsValid(taskId)) throw new InvalidArgumentException();
         final Task task = taskRepository.findBy(taskId);
         if (task == null) throw new ObjectNotFoundException();
         return task;
@@ -96,7 +95,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public boolean deleteTask(final String userId, final String projectId, final String taskName) throws ObjectNotFoundException, InvalidArgumentException {
+    public boolean deleteTask(final String userId, final String projectId, final String taskName) throws InvalidArgumentException {
         if (!Validator.isArgumentsValid(userId, projectId, taskName)) throw new InvalidArgumentException();
         taskRepository.deleteTask(userId, projectId, taskName);
         return true;

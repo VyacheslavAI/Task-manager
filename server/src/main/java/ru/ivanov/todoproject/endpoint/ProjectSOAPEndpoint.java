@@ -38,7 +38,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public Project updateProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getProjectService().updateProject(session.getUserId(), project);
+        return serviceLocator.getProjectService().updateProject(project);
     }
 
     @Override

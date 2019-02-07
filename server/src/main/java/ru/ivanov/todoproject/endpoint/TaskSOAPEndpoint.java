@@ -39,7 +39,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     @Override
     public Task updateTask(final Session session, final Task task) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().updateTask(session.getUserId(), task);
+        return serviceLocator.getTaskService().updateTask(task);
     }
 
     @Override
