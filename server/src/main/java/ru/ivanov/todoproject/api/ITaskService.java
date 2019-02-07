@@ -20,19 +20,19 @@ public interface ITaskService {
 
     boolean addAllTask(List<Task> tasks);
 
-    Task loadTaskById(String userId, String id) throws InvalidArgumentException, ObjectNotFoundException;
+    Task findTaskById(String userId, String id) throws InvalidArgumentException, ObjectNotFoundException;
 
-    Task loadUserTaskByName(String userId, String name) throws InvalidArgumentException, ObjectNotFoundException;
+    Task findTaskByName(String userId, String name) throws InvalidArgumentException, ObjectNotFoundException;
 
-    List<Task> loadAllUserTaskByProject(String userId, Project project) throws ObjectIsNotValidException, InvalidArgumentException;
+    List<Task> findAllTaskByProject(String userId, Project project) throws ObjectIsNotValidException, InvalidArgumentException;
 
-    List<Task> loadAllUserTask(String userId) throws InvalidArgumentException;
+    List<Task> findAllUserTask(String userId) throws InvalidArgumentException;
 
-    Task loadTaskByProject(String userId, Project project, String taskName) throws InvalidArgumentException, ObjectIsNotValidException, ObjectNotFoundException;
+    Task findTaskByProject(String userId, Project project, String taskName) throws InvalidArgumentException, ObjectIsNotValidException, ObjectNotFoundException;
 
-    List<Task> loadAllTask();
+    List<Task> findAllTask();
 
-    Task deleteTask(String userId, String projectId, String taskName) throws ObjectNotFoundException, InvalidArgumentException;
+    boolean deleteTask(String userId, String projectId, String taskName) throws ObjectNotFoundException, InvalidArgumentException;
 
     boolean deleteAllTask();
 }

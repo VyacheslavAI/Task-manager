@@ -26,7 +26,7 @@ public interface ITaskSOAPEndpoint {
     Task updateTask(final Session session, final Task task) throws ObjectIsNotValidException, AuthenticationException, ObjectNotFoundException, InvalidArgumentException;
 
     @WebMethod
-    Task deleteTask(Session session, String projectId, String taskName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException;
+    boolean deleteTask(Session session, String projectId, String taskName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException;
 
     @WebMethod
     List<Task> showTasks(final Session session) throws AuthenticationException, InvalidArgumentException;

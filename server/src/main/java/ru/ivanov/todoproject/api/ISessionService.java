@@ -15,7 +15,7 @@ public interface ISessionService {
 
     Session createSession(Session session) throws ObjectIsNotValidException;
 
-    Session loadSessionById(String id) throws InvalidArgumentException, ObjectNotFoundException;
+    Session findSessionById(String id) throws InvalidArgumentException, ObjectNotFoundException;
 
     Session deleteSession(Session session) throws ObjectIsNotValidException;
 
@@ -23,5 +23,5 @@ public interface ISessionService {
 
     boolean addAllSession(List<Session> sessions);
 
-    List<Session> loadAllSession();
+    List<Session> findAllSession();
 }

@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-
 public class EntityManagerProducer {
 
     @Inject
@@ -25,4 +24,5 @@ public class EntityManagerProducer {
     public void close(@Disposes EntityManager entityManager) {
         if (entityManager.isOpen()) entityManager.close();
     }
+
 }

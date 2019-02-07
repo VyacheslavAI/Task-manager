@@ -3,7 +3,6 @@ package ru.ivanov.todoproject.bootstrap;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.*;
 import ru.ivanov.todoproject.dto.Serializer;
-import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
@@ -13,7 +12,6 @@ import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.Date;
 
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
@@ -47,13 +45,8 @@ public class Bootstrap implements ServiceLocator {
     @Inject
     private Serializer serializer;
 
-    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, SQLException, ClassNotFoundException, ObjectNotFoundException {
+    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
         userInitialization();
-        final Project project = new Project();
-        project.setCreated(new Date());
-        project.setUserId(project.getId());
-        project.setName("third");
-        projectService.createProject(project.getId(), project);
         Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
         Endpoint.publish("http://localhost/8080/user", userSOAPEndpoint);

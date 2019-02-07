@@ -17,13 +17,13 @@ public interface IProjectService {
 
     boolean addAllProject(List<Project> projects);
 
-    Project loadUserProjectById(String userId, String projectId) throws ObjectNotFoundException, InvalidArgumentException;
+    Project findProjectById(String userId, String projectId) throws ObjectNotFoundException, InvalidArgumentException;
 
-    Project loadUserProjectByName(String userId, String name) throws InvalidArgumentException, ObjectNotFoundException;
+    Project findProjectByName(String userId, String name) throws InvalidArgumentException, ObjectNotFoundException;
 
-    List<Project> loadAllUserProject(String userId) throws InvalidArgumentException;
+    List<Project> findAllUserProject(String userId) throws InvalidArgumentException;
 
-    List<Project> loadAllProject();
+    List<Project> findAllProject();
 
     boolean deleteProject(String userId, String projectName) throws ObjectNotFoundException, InvalidArgumentException;
 

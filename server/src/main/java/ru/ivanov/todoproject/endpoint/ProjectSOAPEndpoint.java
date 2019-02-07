@@ -32,7 +32,7 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public Project readProject(final Session session, final String projectName) throws AuthenticationException, InvalidArgumentException, ObjectNotFoundException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getProjectService().loadUserProjectByName(session.getUserId(), projectName);
+        return serviceLocator.getProjectService().findProjectByName(session.getUserId(), projectName);
     }
 
     @Override
@@ -50,6 +50,6 @@ public class ProjectSOAPEndpoint implements IProjectSOAPEndpoint {
     @Override
     public List<Project> showProjects(final Session session) throws AuthenticationException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getProjectService().loadAllUserProject(session.getUserId());
+        return serviceLocator.getProjectService().findAllUserProject(session.getUserId());
     }
 }

@@ -33,7 +33,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     @Override
     public Task readTask(final Session session, final Project project, final String taskName) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().loadTaskByProject(session.getUserId(), project, taskName);
+        return serviceLocator.getTaskService().findTaskByProject(session.getUserId(), project, taskName);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     }
 
     @Override
-    public Task deleteTask(final Session session, final String projectId, final String taskName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException {
+    public boolean deleteTask(final Session session, final String projectId, final String taskName) throws AuthenticationException, ObjectNotFoundException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
         return serviceLocator.getTaskService().deleteTask(session.getUserId(), projectId, taskName);
     }
@@ -51,12 +51,12 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     @Override
     public List<Task> showTasks(final Session session) throws AuthenticationException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().loadAllUserTask(session.getUserId());
+        return serviceLocator.getTaskService().findAllUserTask(session.getUserId());
     }
 
     @Override
     public List<Task> getAllTaskByProject(final Session session, final Project project) throws AuthenticationException, ObjectIsNotValidException, InvalidArgumentException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
-        return serviceLocator.getTaskService().loadAllUserTaskByProject(session.getUserId(), project);
+        return serviceLocator.getTaskService().findAllTaskByProject(session.getUserId(), project);
     }
 }

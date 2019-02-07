@@ -1,7 +1,7 @@
 package ru.ivanov.todoproject.service;
 
 import org.apache.deltaspike.jpa.api.transaction.Transactional;
-import ru.ivanov.todoproject.api.IProjectRepository;
+import ru.ivanov.todoproject.repository.IProjectRepository;
 import ru.ivanov.todoproject.api.IProjectService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
@@ -30,15 +30,15 @@ public class ProjectService implements IProjectService {
     public Project createProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-        projectRepository.save(project);
-        return project;
+        project.setUserId(userId);
+        return projectRepository.save(project);
     }
 
     @Override
-    public Project updateProject(final String userId, final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+    public Project updateProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-        projectRepository.updateProject(project);
+        projectRepository.save(project);
         return project;
     }
 
@@ -46,34 +46,41 @@ public class ProjectService implements IProjectService {
     public boolean addAllProject(final List<Project> projects) {
         if (projects == null || projects.isEmpty()) return false;
         projects.removeAll(Collections.singleton(null));
+        for (final Project project : projects) {
+            projectRepository.save(project);
+        }
         return true;
     }
 
     @Override
-    public Project loadUserProjectById(final String userId, final String projectId) throws InvalidArgumentException, ObjectNotFoundException {
+    public Project findProjectById(final String userId, final String projectId) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, projectId)) throw new InvalidArgumentException();
-        return projectRepository.findProjectById(userId, projectId);
+        final Project project =  projectRepository.findBy(projectId);
+        if (project == null) throw new ObjectNotFoundException();
+        return project;
     }
 
     @Override
-    public Project loadUserProjectByName(final String userId, final String projectName) throws InvalidArgumentException, ObjectNotFoundException {
+    public Project findProjectByName(final String userId, final String projectName) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, projectName)) throw new InvalidArgumentException();
-        return projectRepository.findProjectByName(userId, projectName);
+        final Project project =  projectRepository.findProjectByName(userId, projectName);
+        if (project == null) throw new ObjectNotFoundException();
+        return project;
     }
 
     @Override
-    public List<Project> loadAllUserProject(final String userId) throws InvalidArgumentException {
+    public List<Project> findAllUserProject(final String userId) throws InvalidArgumentException {
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
         return projectRepository.findAllProjectByUserId(userId);
     }
 
     @Override
-    public List<Project> loadAllProject() {
-        return projectRepository.findAllProject();
+    public List<Project> findAllProject() {
+        return projectRepository.findAll();
     }
 
     @Override
-    public boolean deleteProject(final String userId, final String projectName) throws ObjectNotFoundException, InvalidArgumentException {
+    public boolean deleteProject(final String userId, final String projectName) throws InvalidArgumentException {
         if (!Validator.isArgumentsValid(userId, projectName)) throw new InvalidArgumentException();
         projectRepository.deleteProject(userId, projectName);
         return true;

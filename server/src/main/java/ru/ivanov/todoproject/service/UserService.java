@@ -1,26 +1,23 @@
 package ru.ivanov.todoproject.service;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-import ru.ivanov.todoproject.api.IUserRepository;
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
+import ru.ivanov.todoproject.repository.IUserRepository;
 import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.validator.Validator;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 
-@Singleton
+@Transactional
 public class UserService implements IUserService {
 
     @Inject
@@ -35,120 +32,60 @@ public class UserService implements IUserService {
     @Inject
     private Validator validator;
 
-    @Inject
-    private SessionFactory sessionFactory;
-
     @Override
     public User createUser(final User user) throws ObjectIsNotValidException {
         if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
-//        return userRepository.createUser(user);
-
-        try (final org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();
-            hibernateSession.save(user);
-            hibernateSession.getTransaction().commit();
-        }
-        return user;
+        return userRepository.save(user);
     }
 
     @Override
     public User updateUser(final User user) throws ObjectIsNotValidException {
         if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
-//        return userRepository.updateUser(user);
-
-        try (final org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();
-            hibernateSession.update(user);
-            hibernateSession.getTransaction().commit();
-        }
-        return user;
+        return userRepository.save(user);
     }
 
     @Override
     public User loadById(final String userId) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-//        return userRepository.findById(userId);
-
-        try (final org.hibernate.Session session = sessionFactory.openSession()) {
-            final User user = session.get(User.class, userId);
-            if (user == null) throw new ObjectNotFoundException();
-            return user;
-        }
+        final User user = userRepository.findBy(userId);
+        if (user == null) throw new ObjectNotFoundException();
+        return user;
     }
 
     @Override
     public User loadUserByLogin(final String login) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(login)) throw new InvalidArgumentException();
-        try (final org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();
-            final Query query = hibernateSession.createQuery("from User where login = :login");
-            query.setParameter("login", login);
-            final User user = (User) query.uniqueResult();
-            hibernateSession.getTransaction().commit();
-//            if (user == null) throw new ObjectNotFoundException();
-            return user;
-        }
+        final User user = userRepository.findByLogin(login);
+        if (user == null) throw new ObjectNotFoundException();
+        return user;
     }
 
     @Override
     public List<User> loadAllUser() {
-//        return userRepository.findAll();
-
-        try (final org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();
-            final Query query = hibernateSession.createQuery("from User");
-            final List<User> users = query.getResultList();
-            hibernateSession.getTransaction().commit();
-            return users;
-        }
+        return userRepository.findAll();
     }
 
     @Override
     public boolean addAllUser(final List<User> users) {
         if (users == null || users.isEmpty()) return false;
         users.removeAll(Collections.singleton(null));
-//        return userRepository.addAll(users);
-
-        try (final org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();
-            for (final User user : users) {
-                hibernateSession.save(user);
-            }
-            hibernateSession.getTransaction().commit();
+        for (final User user : users) {
+            userRepository.save(user);
         }
         return true;
     }
 
     @Override
-    public User deleteUser(final User user) throws ObjectIsNotValidException, ObjectNotFoundException {
+    public User deleteUser(final User user) throws ObjectIsNotValidException {
         if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
-//        return userRepository.deleteUser(user);
-
-        try (final org.hibernate.Session hibernateSession = sessionFactory.openSession()) {
-            hibernateSession.beginTransaction();
-            final Query query = hibernateSession.createQuery("from User where id = :userId");
-            query.setParameter("userId", user.getId());
-            final User persistentUser = (User) query.uniqueResult();
-            if (persistentUser == null) throw new ObjectNotFoundException();
-            hibernateSession.delete(persistentUser);
-            hibernateSession.getTransaction().commit();
-            return user;
-        }
+        userRepository.remove(user);
+        return user;
     }
 
     @Override
     public boolean deleteAllUser() {
-//        return userRepository.deleteAllUser();
-        return false;
-    }
-
-    @Override
-    public User getUserBySession(final Session session) throws ObjectIsNotValidException, ObjectNotFoundException {
-        if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
-//        final User user = userRepository.findBySession(session.getUserId());
-//        if (user == null) throw new ObjectNotFoundException();
-//        return user;
-        return null;
+        userRepository.deleteAllUser();
+        return true;
     }
 
     @Override

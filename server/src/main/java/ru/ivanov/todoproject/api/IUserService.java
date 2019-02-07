@@ -33,7 +33,5 @@ public interface IUserService {
 
     boolean deleteAllUser();
 
-    User getUserBySession(Session session) throws ObjectIsNotValidException, ObjectNotFoundException;
-
     void userInitialize(String login, String password) throws NoSuchAlgorithmException, JsonProcessingException, ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
 }

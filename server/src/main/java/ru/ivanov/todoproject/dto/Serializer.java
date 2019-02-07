@@ -14,10 +14,10 @@ public class Serializer {
 
     private Domain saveDataToDomain(final ServiceLocator serviceLocator) {
         final Domain domain = new Domain();
-        domain.setProjects(serviceLocator.getProjectService().loadAllProject());
-        domain.setTasks(serviceLocator.getTaskService().loadAllTask());
+        domain.setProjects(serviceLocator.getProjectService().findAllProject());
+        domain.setTasks(serviceLocator.getTaskService().findAllTask());
         domain.setUsers(serviceLocator.getUserService().loadAllUser());
-        domain.setSessions(serviceLocator.getSessionService().loadAllSession());
+        domain.setSessions(serviceLocator.getSessionService().findAllSession());
         return domain;
     }
 

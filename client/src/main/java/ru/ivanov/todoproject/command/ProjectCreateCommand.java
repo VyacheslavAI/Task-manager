@@ -33,9 +33,12 @@ public class ProjectCreateCommand extends AbstractCommand {
         final Session session = userData.getSession();
         print("Enter project name:");
         final String projectName = readString();
-        final Project project = new Project();
-        project.setName(projectName);
-        serviceLocator.getProjectSOAPEndpoint().createProject(session, project);
-        print(String.format("Project %s has been added", projectName));
+        for (int i = 0; i < 10; i++) {
+            final Project project = new Project();
+            project.setName(String.valueOf(i));
+            serviceLocator.getProjectSOAPEndpoint().createProject(session, project);
+            print(String.format("Project %s has been added", i));
+        }
+
     }
 }
