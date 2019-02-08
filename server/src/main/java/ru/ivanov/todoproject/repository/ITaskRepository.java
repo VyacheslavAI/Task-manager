@@ -9,11 +9,11 @@ import java.util.List;
 @Repository
 public interface ITaskRepository extends JpaRepository<Task, String> {
 
-    Task findTaskByName(String userId, String name);
+    Task findTaskByUserIdAndName(String userId, String name);
 
-    Task findTaskByNameAndProject(String userId, String projectId, String name);
+    Task findTaskByUserIdAndProjectIdAndName(String userId, String projectId, String name);
 
-    List<Task> findAllTask(String userId);
+    List<Task> findAllByUserId(String userId);
 
-    List<Task> findAllProjectTask(String userId, String projectId);
+    List<Task> findAllByUserIdAndProjectId(String userId, String projectId);
 }

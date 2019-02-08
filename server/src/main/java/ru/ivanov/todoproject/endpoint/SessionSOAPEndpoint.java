@@ -47,7 +47,7 @@ public class SessionSOAPEndpoint implements ISessionSOAPEndpoint {
     }
 
     @Override
-    public boolean logout(final Session session) throws AuthenticationException, ObjectIsNotValidException {
+    public boolean logout(final Session session) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException {
         if (!securityManager.isSessionVerified(session)) throw new AuthenticationException();
         serviceLocator.getSessionService().deleteSession(session);
         return true;

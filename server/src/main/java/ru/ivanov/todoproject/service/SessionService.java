@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.service;
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ivanov.todoproject.api.ISessionService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
@@ -35,21 +35,22 @@ public class SessionService implements ISessionService {
     @Override
     public Session findSessionById(final String sessionId) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(sessionId)) throw new InvalidArgumentException();
-        final Session session = sessionRepository.findBy(sessionId);
+        final Session session = sessionRepository.getById(sessionId);
         if (session == null) throw new ObjectNotFoundException();
         return session;
     }
 
     @Override
-    public Session deleteSession(final Session session) throws ObjectIsNotValidException {
+    public Session deleteSession(final Session session) throws ObjectIsNotValidException, ObjectNotFoundException {
         if (!validator.isSessionValid(session)) throw new ObjectIsNotValidException();
-        sessionRepository.attachAndRemove(session);
+        if (!sessionRepository.existsById(session.getId())) throw new ObjectNotFoundException();
+        sessionRepository.delete(session);
         return session;
     }
 
     @Override
     public boolean deleteAllSession() {
-        sessionRepository.deleteAllSession();
+        sessionRepository.deleteAllInBatch();
         return false;
     }
 
@@ -57,9 +58,7 @@ public class SessionService implements ISessionService {
     public boolean addAllSession(final List<Session> sessions) {
         if (sessions == null || sessions.isEmpty()) return false;
         sessions.removeAll(Collections.singletonList(null));
-        for (final Session session : sessions) {
-            sessionRepository.save(session);
-        }
+        sessionRepository.saveAll(sessions);
         return true;
     }
 

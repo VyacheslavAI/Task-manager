@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.service;
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ivanov.todoproject.api.ITaskService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
@@ -45,24 +45,21 @@ public class TaskService implements ITaskService {
     public boolean addAllTask(final List<Task> tasks) {
         if (tasks == null || tasks.isEmpty()) return false;
         tasks.removeAll(Collections.singleton(null));
-        for (final Task task : tasks) {
-            taskRepository.save(task);
-        }
+        taskRepository.saveAll(tasks);
         return true;
     }
 
     @Override
     public Task findTaskById(final String taskId) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(taskId)) throw new InvalidArgumentException();
-        final Task task = taskRepository.findBy(taskId);
-        if (task == null) throw new ObjectNotFoundException();
-        return task;
+        if (!taskRepository.existsById(taskId)) throw new ObjectNotFoundException();
+        return taskRepository.getOne(taskId);
     }
 
     @Override
     public Task findTaskByName(final String userId, final String name) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, name)) throw new InvalidArgumentException();
-        final Task task = taskRepository.findTaskByName(userId, name);
+        final Task task = taskRepository.findTaskByUserIdAndName(userId, name);
         if (task == null) throw new ObjectNotFoundException();
         return task;
     }
@@ -71,14 +68,14 @@ public class TaskService implements ITaskService {
     public List<Task> findAllTaskByProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-        return taskRepository.findAllProjectTask(userId, project.getId());
+        return taskRepository.findAllByUserIdAndProjectId(userId, project.getId());
     }
 
     @Override
     public Task findTaskByProject(final String userId, final Project project, final String taskName) throws InvalidArgumentException, ObjectIsNotValidException, ObjectNotFoundException {
         if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId, taskName)) throw new InvalidArgumentException();
-        final Task task = taskRepository.findTaskByNameAndProject(userId, project.getId(), taskName);
+        final Task task = taskRepository.findTaskByUserIdAndProjectIdAndName(userId, project.getId(), taskName);
         if (task == null) throw new ObjectNotFoundException();
         return task;
     }
@@ -91,21 +88,21 @@ public class TaskService implements ITaskService {
     @Override
     public List<Task> findAllUserTask(final String userId) throws InvalidArgumentException {
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-        return taskRepository.findAllTask(userId);
+        return taskRepository.findAllByUserId(userId);
     }
 
     @Override
     public boolean deleteTask(final String userId, final String projectId, final String taskName) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, projectId, taskName)) throw new InvalidArgumentException();
-        final Task task = taskRepository.findTaskByNameAndProject(userId, projectId, taskName);
+        final Task task = taskRepository.findTaskByUserIdAndProjectIdAndName(userId, projectId, taskName);
         if (task == null) throw new ObjectNotFoundException();
-        taskRepository.deleteTask(userId, projectId, taskName);
+        taskRepository.delete(task);
         return true;
     }
 
     @Override
     public boolean deleteAllTask() {
-        taskRepository.deleteAllTask();
+        taskRepository.deleteAllInBatch();
         return true;
     }
 }

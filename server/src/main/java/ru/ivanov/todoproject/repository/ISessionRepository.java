@@ -7,4 +7,5 @@ import ru.ivanov.todoproject.entity.Session;
 @Repository
 public interface ISessionRepository extends JpaRepository<Session, String> {
 
+    Session getById(String id);
 }

@@ -17,7 +17,7 @@ public interface ISessionService {
 
     Session findSessionById(String id) throws InvalidArgumentException, ObjectNotFoundException;
 
-    Session deleteSession(Session session) throws ObjectIsNotValidException;
+    Session deleteSession(Session session) throws ObjectIsNotValidException, ObjectNotFoundException;
 
     boolean deleteAllSession();
 

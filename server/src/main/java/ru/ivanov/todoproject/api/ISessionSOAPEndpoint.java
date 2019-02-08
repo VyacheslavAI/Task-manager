@@ -17,7 +17,7 @@ public interface ISessionSOAPEndpoint {
     Session login(String login, String password) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException, AuthorizationException;
 
     @WebMethod
-    boolean logout(Session session) throws AuthenticationException, ObjectIsNotValidException;
+    boolean logout(Session session) throws AuthenticationException, ObjectIsNotValidException, ObjectNotFoundException;
 
     @WebMethod
     boolean fullSignOut(Session session) throws AuthenticationException;

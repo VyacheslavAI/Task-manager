@@ -21,7 +21,7 @@ public interface IUserService {
 
     User updateUser(User user) throws ObjectIsNotValidException;
 
-    User loadById(String id) throws InvalidArgumentException, ObjectNotFoundException;
+    User findById(String id) throws InvalidArgumentException, ObjectNotFoundException;
 
     User loadUserByLogin(String login) throws InvalidArgumentException, ObjectNotFoundException;
 

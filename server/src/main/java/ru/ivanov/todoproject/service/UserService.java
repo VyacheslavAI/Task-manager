@@ -1,6 +1,6 @@
 package ru.ivanov.todoproject.service;
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Session;
@@ -45,11 +45,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User loadById(final String userId) throws InvalidArgumentException, ObjectNotFoundException {
+    public User findById(final String userId) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-        final User user = userRepository.findBy(userId);
-        if (user == null) throw new ObjectNotFoundException();
-        return user;
+        if (!userRepository.existsById(userId)) throw new ObjectNotFoundException();
+        return userRepository.getById(userId);
     }
 
     @Override
@@ -69,22 +68,21 @@ public class UserService implements IUserService {
     public boolean addAllUser(final List<User> users) {
         if (users == null || users.isEmpty()) return false;
         users.removeAll(Collections.singleton(null));
-        for (final User user : users) {
-            userRepository.save(user);
-        }
+        userRepository.saveAll(users);
         return true;
     }
 
     @Override
-    public User deleteUser(final User user) throws ObjectIsNotValidException {
+    public User deleteUser(final User user) throws ObjectIsNotValidException, ObjectNotFoundException {
         if (!validator.isUserValid(user)) throw new ObjectIsNotValidException();
-        userRepository.attachAndRemove(user);
+        if (!userRepository.existsById(user.getId())) throw new ObjectNotFoundException();
+        userRepository.delete(user);
         return user;
     }
 
     @Override
     public boolean deleteAllUser() {
-        userRepository.deleteAllUser();
+        userRepository.deleteAllInBatch();
         return true;
     }
 

@@ -1,7 +1,7 @@
 
 package ru.ivanov.todoproject.service;
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ivanov.todoproject.api.IProjectService;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
@@ -54,9 +54,8 @@ public class ProjectService implements IProjectService {
     @Override
     public Project findProjectById(final String userId, final String projectId) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(userId, projectId)) throw new InvalidArgumentException();
-        final Project project = projectRepository.get(projectId);
-        if (project == null) throw new ObjectNotFoundException();
-        return project;
+        if (!projectRepository.existsById(projectId)) throw new ObjectNotFoundException();
+        return projectRepository.findProjectByUserIdAndId(userId, projectId);
     }
 
     @Override
@@ -83,13 +82,13 @@ public class ProjectService implements IProjectService {
         if (!Validator.isArgumentsValid(userId, projectName)) throw new InvalidArgumentException();
         final Project project = projectRepository.findProjectByUserIdAndName(userId, projectName);
         if (project == null) throw new ObjectNotFoundException();
-        projectRepository.deleteProject(userId, projectName);
+        projectRepository.delete(project);
         return true;
     }
 
     @Override
     public boolean deleteAllProject() {
-        projectRepository.deleteAllProject();
+        projectRepository.deleteAllInBatch();
         return true;
     }
 }
