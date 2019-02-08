@@ -7,14 +7,12 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
 import java.security.NoSuchAlgorithmException;
 
 import static ru.ivanov.todoproject.util.ConsoleHelper.print;
 
-@ApplicationScoped
 public class Bootstrap implements ServiceLocator {
 
     @Inject
