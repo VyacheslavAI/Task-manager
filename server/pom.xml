@@ -20,7 +20,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.ivanov.todoproject.TaskManagerServer</mainClass>
+                            <!--<mainClass>ru.ivanov.todoproject.TaskManagerServer</mainClass>-->
                         </manifest>
                     </archive>
                 </configuration>
