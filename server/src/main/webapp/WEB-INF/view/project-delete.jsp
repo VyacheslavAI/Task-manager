@@ -11,6 +11,13 @@
     <title>Title</title>
 </head>
 <body>
-delete
+<form action="${pageContext.request.contextPath}/web//project/delete" method="post">
+    <label for="myTextBox1">
+        Enter Project Name:</label>
+    <input type="text" id="myTextBox1" name="projectName"/>
+    <p></p>
+    <input type="submit" value="submit"/>
+    <a href="${pageContext.request.contextPath}/web//project/menuproject">Back to project menu</a>
+</form>
 </body>
 </html>

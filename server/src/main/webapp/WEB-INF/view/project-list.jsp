@@ -1,7 +1,5 @@
 <%@ taglib prefix="c" uri="http://www.springframework.org/tags" %>
-<%@ page import="ru.ivanov.todoproject.entity.Project" %>
-<%@taglib prefix="cc" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="java.util.List" %>
+<%@taglib prefix="cc" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
 
   Created by IntelliJ IDEA.
@@ -16,12 +14,13 @@
     <title>Title</title>
 </head>
 <body>
- <table>
-     <cc:forEach items="${list}" var="project">
-         <tr>
-             <td>${project.name}</td>
-         </tr>
-     </cc:forEach>
- </table>
+<table>
+    <cc:forEach items="${projectlist}" var="project">
+        <tr>
+            <td>${project.name}</td>
+        </tr>
+    </cc:forEach>
+    <a href="${pageContext.request.contextPath}/web//project/menuproject">Back to project menu</a>
+</table>
 </body>
 </html>
