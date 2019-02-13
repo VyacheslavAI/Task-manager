@@ -1,12 +1,11 @@
 package ru.ivanov.todoproject.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
@@ -14,6 +13,8 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -43,70 +44,68 @@ public class ProjectController {
         return "project-update";
     }
 
-    @GetMapping("/deleteproject")
-    public String deletePage() {
-        return "project-delete";
-    }
-
     @PostMapping("/create")
     public String createProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                                final HttpServletRequest request) {
+    final HttpServletRequest request) throws ObjectIsNotValidException, InvalidArgumentException {
         if ("no".equals(cookie)) return "error";
         final String userId = cookie;
         final String projectName = request.getParameter("projectName");
         final Project project = new Project();
         project.setName(projectName);
-        try {
-            serviceLocator.getProjectService().createProject(userId, project);
-        } catch (ObjectIsNotValidException | InvalidArgumentException e) {
-            return "error";
-        }
+        serviceLocator.getProjectService().createProject(userId, project);
         return "redirect:list";
+    }
+
+    @GetMapping("/add")
+    public String addProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
+                             final Model model) throws InvalidArgumentException {
+        final String userId = cookie;
+        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
+        model.addAttribute("projectList", projectList);
+        return "project-create";
     }
 
     @GetMapping("/list")
     public String showAllProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                                 final Model model) {
+                                 final Model model) throws InvalidArgumentException {
         if ("no".equals(cookie)) return "error";
         final String userId = cookie;
-        final List<Project> projectList;
-        try {
-            projectList = serviceLocator.getProjectService().findAllUserProject(userId);
-        } catch (InvalidArgumentException e) {
-            return "error";
-        }
+        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
         model.addAttribute("projectlist", projectList);
         return "project-list";
     }
 
-    @PostMapping("/update")
+    @GetMapping("/update/{id}")
     public String updateProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                                final HttpServletRequest request) {
+                                @PathVariable("id") final String projectId, final Model model) throws InvalidArgumentException, ObjectNotFoundException {
         if ("no".equals(cookie)) return "error";
         final String userId = cookie;
-        final String projectName = request.getParameter("projectName");
-        final String newProjectName = request.getParameter("newProjectName");
-        try {
-            final Project project = serviceLocator.getProjectService().findProjectByName(userId, projectName);
-            project.setName(newProjectName);
-            serviceLocator.getProjectService().updateProject(project);
-            return "redirect:list";
-        } catch (Exception e) {
-            return "error";
-        }
+        final Project project = serviceLocator.getProjectService().findProjectById(userId, projectId);
+        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
+        model.addAttribute("project", project);
+        model.addAttribute("projectList", projectList);
+        return "project-update";
     }
 
-    @PostMapping("/delete")
-    public String deleteProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                                final HttpServletRequest request) {
-        if ("no".equals(cookie)) return "error";
-        final String userId = cookie;
-        final String projectName = request.getParameter("projectName");
-        try {
-            serviceLocator.getProjectService().deleteProject(userId, projectName);
-        } catch (ObjectNotFoundException | InvalidArgumentException e) {
-            return "error";
-        }
+    @PostMapping("/update")
+    public String editProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
+                              @ModelAttribute final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+        serviceLocator.getProjectService().updateProject(project);
         return "redirect:list";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
+                                @PathVariable("id") final String projectId) throws InvalidArgumentException, ObjectNotFoundException {
+        if ("no".equals(cookie)) return "error";
+        serviceLocator.getProjectService().deleteProject(projectId);
+        return "redirect:http://localhost:8080/web/project/list";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        sdf.setLenient(true);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
     }
 }

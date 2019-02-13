@@ -14,13 +14,26 @@
     <title>Title</title>
 </head>
 <body>
-<table>
+<h1>Project List</h1>
+<br/>
+<table border="1" cellpadding="10" cellspacing="5" width="700" bgcolor="#f0f8ff">
+    <tr>
+        <th>Name</th>
+        <th>ID</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
     <cc:forEach items="${projectlist}" var="project">
         <tr>
             <td>${project.name}</td>
+            <td>${project.id}</td>
+            <td><a href="/web//project/update/${project.id}">EDIT</a></td>
+            <td><a href="/web//project/delete/${project.id}">DELETE</a></td>
         </tr>
     </cc:forEach>
-    <a href="${pageContext.request.contextPath}/web//project/menuproject">Back to project menu</a>
 </table>
+<h3><a href="${pageContext.request.contextPath}/web//project/add">Add New Project</a></h3>
+<br/>
+<a href="${pageContext.request.contextPath}/web//project/menuproject">Back to project menu</a>
 </body>
 </html>

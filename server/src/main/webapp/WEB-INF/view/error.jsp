@@ -11,7 +11,8 @@
     <title>Title</title>
 </head>
 <body>
-Error page
 <a href="${pageContext.request.contextPath}/web//project/menuproject">Back to project menu</a>
+<br/>
+<img src="https://media.gettyimages.com/vectors/error-page-404-and-funny-black-monster-vector-id835459814" width="1200"/>
 </body>
 </html>

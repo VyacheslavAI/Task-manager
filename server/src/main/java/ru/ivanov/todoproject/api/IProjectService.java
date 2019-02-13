@@ -25,7 +25,7 @@ public interface IProjectService {
 
     List<Project> findAllProject();
 
-    boolean deleteProject(String userId, String projectName) throws ObjectNotFoundException, InvalidArgumentException;
+    boolean deleteProject(String projectId) throws InvalidArgumentException, ObjectNotFoundException;
 
     boolean deleteAllProject();
 }
