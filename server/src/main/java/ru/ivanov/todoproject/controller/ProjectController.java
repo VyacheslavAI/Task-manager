@@ -46,7 +46,7 @@ public class ProjectController {
 
     @PostMapping("/create")
     public String createProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-    final HttpServletRequest request) throws ObjectIsNotValidException, InvalidArgumentException {
+                                final HttpServletRequest request) throws ObjectIsNotValidException, InvalidArgumentException {
         if ("no".equals(cookie)) return "error";
         final String userId = cookie;
         final String projectName = request.getParameter("projectName");
