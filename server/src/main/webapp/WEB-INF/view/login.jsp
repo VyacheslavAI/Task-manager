@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/web//authentication" method="post">
+<form action="${pageContext.request.contextPath}/authentication" method="post">
     <label for="myTextBox1">
         Enter Login:</label>
     <input type="text" id="myTextBox1" name="login"/>

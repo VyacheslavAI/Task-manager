@@ -24,23 +24,35 @@ public class ProjectController {
     @Autowired
     private ServiceLocator serviceLocator;
 
-    @GetMapping("/menuproject")
-    public String menuPage() {
-        return "projectmenu";
-    }
-
-    @GetMapping("/createproject")
-    public String createPage() {
+    @GetMapping("/add")
+    public String createPage(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
+                             final Model model) throws InvalidArgumentException {
+        if ("no".equals(cookie)) return "error";
+        final String userId = cookie;
+        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
+        model.addAttribute("projectList", projectList);
         return "project-create";
     }
 
-    @GetMapping("/listproject")
-    public String listPage() {
-        return "redirect:list";
+    @GetMapping("/list")
+    public String listPage(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
+                           final Model model) throws InvalidArgumentException {
+        if ("no".equals(cookie)) return "error";
+        final String userId = cookie;
+        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
+        model.addAttribute("projectlist", projectList);
+        return "project-list";
     }
 
-    @GetMapping("/updateproject")
-    public String updatePage() {
+    @GetMapping("/update/{id}")
+    public String updatePage(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
+                             @PathVariable("id") final String projectId, final Model model) throws InvalidArgumentException, ObjectNotFoundException {
+        if ("no".equals(cookie)) return "error";
+        final String userId = cookie;
+        final Project project = serviceLocator.getProjectService().findProjectById(userId, projectId);
+        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
+        model.addAttribute("project", project);
+        model.addAttribute("projectList", projectList);
         return "project-update";
     }
 
@@ -56,40 +68,10 @@ public class ProjectController {
         return "redirect:list";
     }
 
-    @GetMapping("/add")
-    public String addProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                             final Model model) throws InvalidArgumentException {
-        final String userId = cookie;
-        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
-        model.addAttribute("projectList", projectList);
-        return "project-create";
-    }
-
-    @GetMapping("/list")
-    public String showAllProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                                 final Model model) throws InvalidArgumentException {
-        if ("no".equals(cookie)) return "error";
-        final String userId = cookie;
-        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
-        model.addAttribute("projectlist", projectList);
-        return "project-list";
-    }
-
-    @GetMapping("/update/{id}")
-    public String updateProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                                @PathVariable("id") final String projectId, final Model model) throws InvalidArgumentException, ObjectNotFoundException {
-        if ("no".equals(cookie)) return "error";
-        final String userId = cookie;
-        final Project project = serviceLocator.getProjectService().findProjectById(userId, projectId);
-        final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
-        model.addAttribute("project", project);
-        model.addAttribute("projectList", projectList);
-        return "project-update";
-    }
-
     @PostMapping("/update")
-    public String editProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
+    public String updateProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
                               @ModelAttribute final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+        if ("no".equals(cookie)) return "error";
         serviceLocator.getProjectService().updateProject(project);
         return "redirect:list";
     }
@@ -99,13 +81,13 @@ public class ProjectController {
                                 @PathVariable("id") final String projectId) throws InvalidArgumentException, ObjectNotFoundException {
         if ("no".equals(cookie)) return "error";
         serviceLocator.getProjectService().deleteProject(projectId);
-        return "redirect:http://localhost:8080/web/project/list";
+        return "redirect:http://localhost:8080/project/list";
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        sdf.setLenient(true);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+    public void initBinder(final WebDataBinder binder) {
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        dateFormat.setLenient(true);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 }

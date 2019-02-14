@@ -3,7 +3,6 @@ package ru.ivanov.todoproject.service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ivanov.todoproject.api.ITaskService;
 import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
@@ -65,17 +64,15 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<Task> findAllTaskByProject(final String userId, final Project project) throws ObjectIsNotValidException, InvalidArgumentException {
-        if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
-        if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
-        return taskRepository.findAllByUserIdAndProjectId(userId, project.getId());
+    public List<Task> findAllTaskByProject(final String userId, final String projectId) throws ObjectIsNotValidException, InvalidArgumentException {
+        if (!Validator.isArgumentsValid(userId, projectId)) throw new InvalidArgumentException();
+        return taskRepository.findAllByUserIdAndProjectId(userId, projectId);
     }
 
     @Override
-    public Task findTaskByProject(final String userId, final Project project, final String taskName) throws InvalidArgumentException, ObjectIsNotValidException, ObjectNotFoundException {
-        if (!validator.isProjectValid(project)) throw new ObjectIsNotValidException();
-        if (!Validator.isArgumentsValid(userId, taskName)) throw new InvalidArgumentException();
-        final Task task = taskRepository.findTaskByUserIdAndProjectIdAndName(userId, project.getId(), taskName);
+    public Task findTaskByProject(final String userId, final String projectId, final String taskId) throws InvalidArgumentException, ObjectIsNotValidException, ObjectNotFoundException {
+        if (!Validator.isArgumentsValid(userId, projectId, taskId)) throw new InvalidArgumentException();
+        final Task task = taskRepository.findTaskByUserIdAndProjectIdAndId(userId, projectId, taskId);
         if (task == null) throw new ObjectNotFoundException();
         return task;
     }
@@ -92,11 +89,9 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public boolean deleteTask(final String userId, final String projectId, final String taskName) throws InvalidArgumentException, ObjectNotFoundException {
-        if (!Validator.isArgumentsValid(userId, projectId, taskName)) throw new InvalidArgumentException();
-        final Task task = taskRepository.findTaskByUserIdAndProjectIdAndName(userId, projectId, taskName);
-        if (task == null) throw new ObjectNotFoundException();
-        taskRepository.delete(task);
+    public boolean deleteTask(final String taskId) throws InvalidArgumentException, ObjectNotFoundException {
+        if (!Validator.isArgumentsValid(taskId)) throw new InvalidArgumentException();
+        taskRepository.deleteById(taskId);
         return true;
     }
 

@@ -20,22 +20,20 @@
         <th>Delete</th>
     </tr>
     <cc:forEach items="${projectList}" var="project">
-    <tr>
-        <td>${project.name}</td>
-        <td>${project.id}</td>
-        <td><a href="/web//project/update/${project.id}">EDIT</a></td>
-        <td><a href="/web//project/delete/${project.id}">DELETE</a></td>
-    </tr>
+        <tr>
+            <td>${project.name}</td>
+            <td>${project.id}</td>
+            <td><a href="/web//project/update/${project.id}">EDIT</a></td>
+            <td><a href="/web//project/delete/${project.id}">DELETE</a></td>
+        </tr>
     </cc:forEach>
 </table>
 <br/>
 <br/>
-<form action="${pageContext.request.contextPath}/web/project/create" method="post">
+<form action="${pageContext.request.contextPath}/project/create" method="post">
     <label for="myTextBox1">Enter Project Name:</label>
     <input type="text" id="myTextBox1" name="projectName"/>
     <input type="submit" value="Add Project"/>
-    <p></p>
-    <h3><a href="/web//project/menuproject">Back to project menu</a></h3>
 </form>
 </body>
 </html>

@@ -34,7 +34,7 @@
 <br/>
 <br/>
 <br/>
-<form:form action="/web/project/update" modelAttribute="project">
+<form:form action="/project/update" modelAttribute="project">
     <tr>
         <td>
             <form:label path="id">

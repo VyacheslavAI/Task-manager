@@ -22,18 +22,18 @@
         <th>ID</th>
         <th>Edit</th>
         <th>Delete</th>
+        <th>Project Task</th>
     </tr>
     <cc:forEach items="${projectlist}" var="project">
         <tr>
             <td>${project.name}</td>
             <td>${project.id}</td>
-            <td><a href="/web//project/update/${project.id}">EDIT</a></td>
-            <td><a href="/web//project/delete/${project.id}">DELETE</a></td>
+            <td><a href="/project/update/${project.id}">EDIT</a></td>
+            <td><a href="/project/delete/${project.id}">DELETE</a></td>
+            <td><a href="/task/list/${project.id}">SHOW TASKS</a></td>
         </tr>
     </cc:forEach>
 </table>
-<h3><a href="${pageContext.request.contextPath}/web//project/add">Add New Project</a></h3>
-<br/>
-<a href="${pageContext.request.contextPath}/web//project/menuproject">Back to project menu</a>
+<h3><a href="${pageContext.request.contextPath}/project/add">Add New Project</a></h3>
 </body>
 </html>
