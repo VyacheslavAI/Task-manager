@@ -28,33 +28,11 @@ public class Bootstrap implements ServiceLocator {
     private ISessionService sessionService;
 
     @Inject
-    private IProjectSOAPEndpoint projectSOAPEndpoint;
-
-    @Inject
-    private ITaskSOAPEndpoint taskSOAPEndpoint;
-
-    @Inject
-    private IUserSOAPEndpoint userSOAPEndpoint;
-
-    @Inject
-    private ISessionSOAPEndpoint sessionSOAPEndpoint;
-
-    @Inject
     private Serializer serializer;
-
-    public void run() throws JsonProcessingException, NoSuchAlgorithmException, ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
-        userInitialization();
-        Endpoint.publish("http://localhost/8080/project", projectSOAPEndpoint);
-        Endpoint.publish("http://localhost/8080/task", taskSOAPEndpoint);
-        Endpoint.publish("http://localhost/8080/user", userSOAPEndpoint);
-        Endpoint.publish("http://localhost/8080/session", sessionSOAPEndpoint);
-        print("Server started successfully");
-    }
 
     private void userInitialization() throws InvalidArgumentException, NoSuchAlgorithmException, ObjectIsNotValidException, JsonProcessingException, ObjectNotFoundException {
         userService.userInitialize("admin", "admin");
         userService.userInitialize("root", "root");
-        print("Users initialized successfully");
     }
 
     @Override
