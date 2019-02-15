@@ -70,7 +70,7 @@ public class ProjectController {
 
     @PostMapping("/update")
     public String updateProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                              @ModelAttribute final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+                                @ModelAttribute final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if ("no".equals(cookie)) return "error";
         serviceLocator.getProjectService().updateProject(project);
         return "redirect:list";
