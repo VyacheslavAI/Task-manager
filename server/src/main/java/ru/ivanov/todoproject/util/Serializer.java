@@ -1,6 +1,7 @@
-package ru.ivanov.todoproject.dto;
+package ru.ivanov.todoproject.util;
 
 import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.dto.Domain;
 
 import javax.inject.Singleton;
 import java.io.*;

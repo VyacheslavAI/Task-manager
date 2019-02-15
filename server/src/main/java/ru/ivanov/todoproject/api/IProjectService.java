@@ -8,7 +8,6 @@ import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
-@XmlJavaTypeAdapter(ServiceLocator.ProjectServiceAdapter.class)
 public interface IProjectService {
 
     Project createProject(String userId, Project project) throws ObjectIsNotValidException, InvalidArgumentException;

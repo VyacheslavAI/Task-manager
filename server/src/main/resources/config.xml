@@ -12,9 +12,9 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
         <bean class="ru.ivanov.todoproject.service.TaskService"/>
         <bean class="ru.ivanov.todoproject.service.UserService"/>
         <bean class="ru.ivanov.todoproject.service.SessionService"/>
-
-        <bean class="ru.ivanov.todoproject.validator.Validator"/>
+        <bean class="ru.ivanov.todoproject.util.Validator"/>
         <bean class="ru.ivanov.todoproject.security.SecurityServerManager"/>
-        <bean class="ru.ivanov.todoproject.dto.Serializer"/>
+        <bean class="ru.ivanov.todoproject.util.Serializer"/>
+        <bean class="ru.ivanov.todoproject.util.EntityBoundMapperFacade"/>
     </beans>
 </beans>

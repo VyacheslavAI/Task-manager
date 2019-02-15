@@ -10,7 +10,7 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.IUserRepository;
 import ru.ivanov.todoproject.security.SecurityServerManager;
-import ru.ivanov.todoproject.validator.Validator;
+import ru.ivanov.todoproject.util.Validator;
 
 import javax.inject.Inject;
 import java.security.NoSuchAlgorithmException;

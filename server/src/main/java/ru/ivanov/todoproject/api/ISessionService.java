@@ -1,16 +1,12 @@
 package ru.ivanov.todoproject.api;
 
-import org.hibernate.SessionFactory;
 import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
-import ru.ivanov.todoproject.validator.Validator;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 
-@XmlJavaTypeAdapter(ServiceLocator.SessionServiceAdapter.class)
 public interface ISessionService {
 
     Session createSession(Session session) throws ObjectIsNotValidException;

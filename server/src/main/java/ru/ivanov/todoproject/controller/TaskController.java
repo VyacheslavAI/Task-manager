@@ -7,11 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.dto.ProjectDTO;
+import ru.ivanov.todoproject.dto.TaskDTO;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
+import ru.ivanov.todoproject.util.EntityBoundMapperFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -25,6 +28,9 @@ public class TaskController {
     @Autowired
     private ServiceLocator serviceLocator;
 
+    @Autowired
+    private EntityBoundMapperFacade entityBoundMapperFacade;
+
     @GetMapping("/add/{projectId}")
     public String createPage(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
                              @PathVariable("projectId") final String projectId, final Model model) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
@@ -32,8 +38,10 @@ public class TaskController {
         final String userId = cookie;
         final Project project = serviceLocator.getProjectService().findProjectById(userId, projectId);
         final List<Task> taskList = serviceLocator.getTaskService().findAllTaskByProject(userId, projectId);
-        model.addAttribute("taskList", taskList);
-        model.addAttribute("project", project);
+        final ProjectDTO projectDTO = entityBoundMapperFacade.getProjectDTO(project);
+        final List<TaskDTO> taskDTOList = entityBoundMapperFacade.getListTaskDTO(taskList);
+        model.addAttribute("taskList", taskDTOList);
+        model.addAttribute("project", projectDTO);
         return "task-create";
     }
 
@@ -44,8 +52,10 @@ public class TaskController {
         final String userId = cookie;
         final Project project = serviceLocator.getProjectService().findProjectById(userId, projectId);
         final List<Task> taskList = serviceLocator.getTaskService().findAllTaskByProject(userId, projectId);
-        model.addAttribute("taskList", taskList);
-        model.addAttribute("project", project);
+        final ProjectDTO projectDTO = entityBoundMapperFacade.getProjectDTO(project);
+        final List<TaskDTO> taskDTOList = entityBoundMapperFacade.getListTaskDTO(taskList);
+        model.addAttribute("taskList", taskDTOList);
+        model.addAttribute("project", projectDTO);
         return "task-list";
     }
 
@@ -57,9 +67,12 @@ public class TaskController {
         final Project project = serviceLocator.getProjectService().findProjectById(userId, projectId);
         final Task task = serviceLocator.getTaskService().findTaskByProject(userId, projectId, taskId);
         final List<Task> taskList = serviceLocator.getTaskService().findAllTaskByProject(userId, projectId);
-        model.addAttribute("taskList", taskList);
-        model.addAttribute("task", task);
-        model.addAttribute("project", project);
+        final ProjectDTO projectDTO = entityBoundMapperFacade.getProjectDTO(project);
+        final TaskDTO taskDTO = entityBoundMapperFacade.getTaskDTO(task);
+        final List<TaskDTO> taskDTOList = entityBoundMapperFacade.getListTaskDTO(taskList);
+        model.addAttribute("taskList", taskDTOList);
+        model.addAttribute("project", projectDTO);
+        model.addAttribute("task", taskDTO);
         return "task-update";
     }
 
@@ -71,18 +84,18 @@ public class TaskController {
         final String projectId = request.getParameter("projectId");
         final String taskName = request.getParameter("taskName");
         final Task task = new Task();
-        task.setProjectId(projectId);
         task.setName(taskName);
-        serviceLocator.getTaskService().createTask(userId, task);
+        serviceLocator.getTaskService().createTask(userId, projectId, task);
         return "redirect:list/" + projectId;
     }
 
     @PostMapping("/update")
     public String updateTask(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
-                             @ModelAttribute final Task task) throws ObjectNotFoundException, InvalidArgumentException, ObjectIsNotValidException {
+                             @ModelAttribute final TaskDTO taskDTO) throws ObjectNotFoundException, InvalidArgumentException, ObjectIsNotValidException {
         if ("no".equals(cookie)) return "error";
         final String userId = cookie;
-        final String projectId = task.getProjectId();
+        final String projectId = taskDTO.getProjectId();
+        final Task task = entityBoundMapperFacade.getTaskFromDTO(taskDTO);
         serviceLocator.getTaskService().updateTask(task);
         return "redirect:list/" + projectId;
     }

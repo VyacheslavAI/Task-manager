@@ -1,4 +1,4 @@
-package ru.ivanov.todoproject.validator;
+package ru.ivanov.todoproject.util;
 
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Session;
@@ -21,10 +21,8 @@ public class Validator {
     public boolean isTaskValid(final Task task) {
         if (task == null) return false;
         final String id = task.getId();
-        final String projectId = task.getProjectId();
         final String name = task.getName();
         if (id == null || id.isEmpty()) return false;
-        if (projectId == null) return false;
         return name != null;
     }
 

@@ -9,7 +9,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @ComponentScan(basePackages = "ru.ivanov.todoproject")
-@ImportResource(locations = "classpath*:config.xml")
 public class WebApplicationConfig {
 
     @Bean

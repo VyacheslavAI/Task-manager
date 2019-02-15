@@ -7,10 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.dto.ProjectDTO;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
+import ru.ivanov.todoproject.util.EntityBoundMapperFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -24,13 +26,17 @@ public class ProjectController {
     @Autowired
     private ServiceLocator serviceLocator;
 
+    @Autowired
+    private EntityBoundMapperFacade entityBoundMapperFacade;
+
     @GetMapping("/add")
     public String createPage(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
                              final Model model) throws InvalidArgumentException {
         if ("no".equals(cookie)) return "error";
         final String userId = cookie;
         final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
-        model.addAttribute("projectList", projectList);
+        final List<ProjectDTO> projectDTOList = entityBoundMapperFacade.getListProjectDTO(projectList);
+        model.addAttribute("projectList", projectDTOList);
         return "project-create";
     }
 
@@ -40,7 +46,8 @@ public class ProjectController {
         if ("no".equals(cookie)) return "error";
         final String userId = cookie;
         final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
-        model.addAttribute("projectlist", projectList);
+        final List<ProjectDTO> projectDTOList = entityBoundMapperFacade.getListProjectDTO(projectList);
+        model.addAttribute("projectList", projectDTOList);
         return "project-list";
     }
 
@@ -51,8 +58,10 @@ public class ProjectController {
         final String userId = cookie;
         final Project project = serviceLocator.getProjectService().findProjectById(userId, projectId);
         final List<Project> projectList = serviceLocator.getProjectService().findAllUserProject(userId);
-        model.addAttribute("project", project);
-        model.addAttribute("projectList", projectList);
+        final ProjectDTO projectDTO = entityBoundMapperFacade.getProjectDTO(project);
+        final List<ProjectDTO> projectDTOList = entityBoundMapperFacade.getListProjectDTO(projectList);
+        model.addAttribute("project", projectDTO);
+        model.addAttribute("projectList", projectDTOList);
         return "project-update";
     }
 
@@ -72,6 +81,7 @@ public class ProjectController {
     public String updateProject(@CookieValue(value = "cookie", defaultValue = "no") final String cookie,
                                 @ModelAttribute final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         if ("no".equals(cookie)) return "error";
+        System.out.println(project.getTasks());
         serviceLocator.getProjectService().updateProject(project);
         return "redirect:list";
     }

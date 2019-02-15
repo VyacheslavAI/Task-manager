@@ -9,7 +9,7 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.IProjectRepository;
-import ru.ivanov.todoproject.validator.Validator;
+import ru.ivanov.todoproject.util.Validator;
 
 import javax.inject.Inject;
 import java.util.Collections;

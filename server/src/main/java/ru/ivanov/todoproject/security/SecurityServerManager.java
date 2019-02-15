@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import ru.ivanov.todoproject.entity.Session;
-import ru.ivanov.todoproject.validator.Validator;
+import ru.ivanov.todoproject.util.Validator;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

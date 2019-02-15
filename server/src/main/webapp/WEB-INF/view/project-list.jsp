@@ -128,7 +128,7 @@
         <th>Delete</th>
         <th>Project Task</th>
     </tr>
-    <cc:forEach items="${projectlist}" var="project">
+    <cc:forEach items="${projectList}" var="project">
         <tr>
             <td>${project.name}</td>
             <td>${project.id}</td>

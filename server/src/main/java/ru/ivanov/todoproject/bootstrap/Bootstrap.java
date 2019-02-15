@@ -2,7 +2,7 @@ package ru.ivanov.todoproject.bootstrap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ru.ivanov.todoproject.api.*;
-import ru.ivanov.todoproject.dto.Serializer;
+import ru.ivanov.todoproject.util.Serializer;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;

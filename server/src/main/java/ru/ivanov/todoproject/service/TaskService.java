@@ -3,12 +3,13 @@ package ru.ivanov.todoproject.service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ivanov.todoproject.api.ITaskService;
 import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.ITaskRepository;
-import ru.ivanov.todoproject.validator.Validator;
+import ru.ivanov.todoproject.util.Validator;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -27,10 +28,12 @@ public class TaskService implements ITaskService {
     private Validator validator;
 
     @Override
-    public Task createTask(final String userId, final Task task) throws ObjectIsNotValidException, InvalidArgumentException {
+    public Task createTask(final String userId, final String projectId, final Task task) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
         if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
         if (!Validator.isArgumentsValid(userId)) throw new InvalidArgumentException();
+        final Project project = serviceLocator.getProjectService().findProjectById(userId, projectId);
         task.setUserId(userId);
+        task.setProject(project);
         return taskRepository.save(task);
     }
 
