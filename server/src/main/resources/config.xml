@@ -8,11 +8,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 
     <beans>
         <bean id="bootstrap" class="ru.ivanov.todoproject.bootstrap.Bootstrap"/>
-        <bean class="ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint"/>
-        <bean class="ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint"/>
-        <bean class="ru.ivanov.todoproject.endpoint.UserSOAPEndpoint"/>
-        <bean class="ru.ivanov.todoproject.endpoint.SessionSOAPEndpoint"/>
-
         <bean class="ru.ivanov.todoproject.service.ProjectService"/>
         <bean class="ru.ivanov.todoproject.service.TaskService"/>
         <bean class="ru.ivanov.todoproject.service.UserService"/>

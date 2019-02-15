@@ -7,6 +7,7 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.security.NoSuchAlgorithmException;
 
@@ -27,6 +28,7 @@ public class Bootstrap implements ServiceLocator {
     @Inject
     private Serializer serializer;
 
+    @PostConstruct
     private void userInitialization() throws InvalidArgumentException, NoSuchAlgorithmException, ObjectIsNotValidException, JsonProcessingException, ObjectNotFoundException {
         userService.userInitialize("admin", "admin");
         userService.userInitialize("root", "root");
