@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.facesbean;
 
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,7 @@ import java.util.List;
 @ManagedBean
 @ViewScoped
 @Component
+@URLMapping(id = "project-list", pattern = "/project-list", viewId = "view/project-list.xhtml")
 public class ProjectListBean {
 
     @Autowired
@@ -44,7 +46,7 @@ public class ProjectListBean {
 
     public void showProjects() throws IOException, InvalidArgumentException {
         final ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        context.redirect(context.getRequestContextPath() + "/view/project-list.xhtml");
+        context.redirect(context.getRequestContextPath() + "/project-list");
     }
 
     public void createProject() throws UnsupportedEncodingException, ObjectIsNotValidException, InvalidArgumentException {

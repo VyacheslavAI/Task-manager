@@ -1,5 +1,6 @@
 package ru.ivanov.todoproject.facesbean;
 
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.ivanov.todoproject.api.ServiceLocator;
@@ -23,6 +24,7 @@ import java.util.Map;
 @ManagedBean(name = "authenticationBean", eager = true)
 @Component
 @RequestScoped
+@URLMapping(id = "authentication", pattern = "/login", viewId = "login.xhtml")
 public class AuthenticationBean {
 
     @Autowired

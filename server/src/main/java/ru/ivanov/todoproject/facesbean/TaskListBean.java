@@ -1,10 +1,10 @@
 package ru.ivanov.todoproject.facesbean;
 
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
@@ -24,6 +24,7 @@ import java.util.List;
 @ManagedBean
 @ViewScoped
 @Component
+@URLMapping(id = "task-list", pattern = "/task-list", viewId = "view/task-list.xhtml")
 public class TaskListBean {
 
     @Autowired
@@ -49,7 +50,7 @@ public class TaskListBean {
         this.projectId = projectId;
         updateTaskList(projectId);
         final ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        context.redirect(context.getRequestContextPath() + "/view/task-list.xhtml");
+        context.redirect(context.getRequestContextPath() + "/task-list");
     }
 
     public void createTask() throws UnsupportedEncodingException, ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
