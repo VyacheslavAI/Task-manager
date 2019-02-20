@@ -15,5 +15,7 @@
         <bean class="ru.ivanov.todoproject.util.Serializer"/>
         <bean class="ru.ivanov.todoproject.util.EntityBoundMapperFacade"/>
         <bean class="ru.ivanov.todoproject.facesbean.AuthenticationBean"/>
+
+
     </beans>
 </beans>

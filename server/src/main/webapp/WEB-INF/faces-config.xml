@@ -9,11 +9,15 @@
 
     <navigation-rule>
         <from-view-id>*</from-view-id>
-
         <navigation-case>
-            <from-outcome>nextPage</from-outcome>
-            <to-view-id>/view/secondPage.task-list.xhtml</to-view-id>
+            <from-outcome>taskPage</from-outcome>
+            <to-view-id>/view/task-list.xhtml</to-view-id>
         </navigation-case>
 
+        <navigation-case>
+            <from-outcome>projectPage</from-outcome>
+            <to-view-id>/view/project-list.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
+
 </faces-config>
