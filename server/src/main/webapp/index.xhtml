@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:body>
+    <h:form>
+        <h3>Enter Login</h3>
+        <h:inputText value="#{authenticationBean.login}" title="Enter your login" required="true"/>
+        <h3>Enter Password</h3>
+        <h:inputSecret value="#{authenticationBean.password}" title="Enter your password" required="true"/>
+        <h:commandButton value="Login" action="#{authenticationBean.authorization}"/>
+    </h:form>
+</h:body>
+</html>

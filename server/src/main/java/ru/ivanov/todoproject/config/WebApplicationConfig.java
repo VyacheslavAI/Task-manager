@@ -7,11 +7,11 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-@Configuration
-@ComponentScan(basePackages = "ru.ivanov.todoproject")
+//@Configuration
+//@ComponentScan(basePackages = "ru.ivanov.todoproject")
 public class WebApplicationConfig {
 
-    @Bean
+//    @Bean
     public ViewResolver createInternalResourceViewResolver() {
         final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/view/");

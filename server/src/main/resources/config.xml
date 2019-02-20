@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-    <context:component-scan base-package="ru.ivanov.todoproject"/>
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <!--<context:component-scan base-package="ru.ivanov.todoproject"/>-->
 
     <beans>
         <bean id="bootstrap" class="ru.ivanov.todoproject.bootstrap.Bootstrap"/>
@@ -16,5 +14,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
         <bean class="ru.ivanov.todoproject.security.SecurityServerManager"/>
         <bean class="ru.ivanov.todoproject.util.Serializer"/>
         <bean class="ru.ivanov.todoproject.util.EntityBoundMapperFacade"/>
+        <bean class="ru.ivanov.todoproject.facesbean.AuthenticationBean"/>
     </beans>
 </beans>

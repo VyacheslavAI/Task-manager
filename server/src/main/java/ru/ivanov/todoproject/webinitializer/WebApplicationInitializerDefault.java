@@ -4,19 +4,16 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import ru.ivanov.todoproject.config.JpaConfig;
 import ru.ivanov.todoproject.config.WebApplicationConfig;
 
-public class WebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebApplicationInitializerDefault {//extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{JpaConfig.class};
     }
 
-    @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{WebApplicationConfig.class};
     }
 
-    @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
