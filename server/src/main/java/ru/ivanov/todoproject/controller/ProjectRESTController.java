@@ -8,14 +8,19 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 
-@RestController("/project-rest")
+@RestController
+@RequestMapping("/project-test")
 public class ProjectRESTController {
 
     @Autowired
     private ServiceLocator serviceLocator;
 
+    @RequestMapping(path = "/test2")
+    public Project test() {
+        return new Project();
+    }
+
     @PostMapping("/projectcreate")
-    @ResponseBody
     public Project createProject(final String userId, final String projectName) throws ObjectIsNotValidException, InvalidArgumentException {
         final Project project = new Project();
         project.setName(projectName);
@@ -23,19 +28,16 @@ public class ProjectRESTController {
     }
 
     @PutMapping("/projectupdate")
-    @ResponseBody
     public Project updateProject(@RequestBody final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         return serviceLocator.getProjectService().updateProject(project);
     }
 
     @GetMapping("/projectread")
-    @ResponseBody
     public Project readProject(final String userId, final String projectId) throws InvalidArgumentException, ObjectNotFoundException {
         return serviceLocator.getProjectService().findProjectById(userId, projectId);
     }
 
     @DeleteMapping("/projectdelete")
-    @ResponseBody
     public boolean deleteProject(final String projectId) throws ObjectNotFoundException, InvalidArgumentException {
         return serviceLocator.getProjectService().deleteProject(projectId);
     }

@@ -8,6 +8,7 @@
         <module>server</module>
         <module>springtest</module>
         <module>springWeb</module>
+        <module>resttest</module>
     </modules>
 
     <properties>

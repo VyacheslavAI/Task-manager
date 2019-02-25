@@ -15,7 +15,6 @@ public class TaskRESTController {
     private ServiceLocator serviceLocator;
 
     @PostMapping("/taskcreate")
-    @ResponseBody
     public Task createTask(final String userId, final String projectId, final String taskName) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
         final Task task = new Task();
         task.setName(taskName);
@@ -23,19 +22,16 @@ public class TaskRESTController {
     }
 
     @PutMapping("/taskupdate")
-    @ResponseBody
     public Task updateProject(@RequestBody final Task task) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
         return serviceLocator.getTaskService().updateTask(task);
     }
 
     @GetMapping("/taskread")
-    @ResponseBody
     public Task readProject(final String taskId) throws InvalidArgumentException, ObjectNotFoundException {
         return serviceLocator.getTaskService().findTaskById(taskId);
     }
 
     @DeleteMapping("/taskdelete")
-    @ResponseBody
     public boolean deleteProject(final String taskId) throws ObjectNotFoundException, InvalidArgumentException {
         return serviceLocator.getTaskService().deleteTask(taskId);
     }
