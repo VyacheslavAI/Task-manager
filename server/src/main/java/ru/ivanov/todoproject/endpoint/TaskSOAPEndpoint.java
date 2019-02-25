@@ -17,7 +17,9 @@ public class TaskSOAPEndpoint implements ITaskSOAPEndpoint {
     private ServiceLocator serviceLocator;
 
     @Override
-    public Task createTask(String userId, String projectId, Task task) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
+    public Task createTask(String userId, String projectId, String taskName) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
+        final Task task = new Task();
+        task.setName(taskName);
         return serviceLocator.getTaskService().createTask(userId, projectId, task);
     }
 

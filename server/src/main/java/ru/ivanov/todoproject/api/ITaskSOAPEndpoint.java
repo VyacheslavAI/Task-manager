@@ -16,7 +16,7 @@ public interface ITaskSOAPEndpoint {
     Task createTask(
             @WebParam(name = "userId") String userId,
             @WebParam(name = "projectId") String projectId,
-            @WebParam(name = "task") Task task) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
+            @WebParam(name = "task") String taskName) throws ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
 
     @WebMethod
     Task updateTask(
@@ -24,7 +24,7 @@ public interface ITaskSOAPEndpoint {
 
     @WebMethod
     Task findTaskById(
-            @WebParam(name = "taskId")  String taskId) throws InvalidArgumentException, ObjectNotFoundException;
+            @WebParam(name = "taskId") String taskId) throws InvalidArgumentException, ObjectNotFoundException;
 
     @WebMethod
     boolean deleteTask(

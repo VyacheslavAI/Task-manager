@@ -25,12 +25,13 @@ public class WebAppInitializerForJSF extends FacesInitializer implements WebAppl
         context.setServletContext(servletContext);
         servletContext.addListener(new ContextLoaderListener(context));
         servletContext.addListener(new RequestContextListener());
+        servletContext.setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
         final ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(context));
         final ServletRegistration.Dynamic cxf = servletContext.addServlet("cxf", new CXFServlet());
         final ServletRegistration.Dynamic faces = servletContext.addServlet("faces", new FacesServlet());
         dispatcher.addMapping("/disp/*");
         cxf.addMapping("/ws/*");
-        faces.addMapping("/faces/*");
+        faces.addMapping("*.xhtml");
         dispatcher.setLoadOnStartup(1);
         cxf.setLoadOnStartup(1);
         faces.setLoadOnStartup(1);
