@@ -69,7 +69,7 @@ public class AuthenticationBean {
         this.securityServerManager = securityServerManager;
     }
 
-    public void authorization() throws ObjectNotFoundException, InvalidArgumentException, NoSuchAlgorithmException, IOException, ObjectIsNotValidException {
+    public void authorization() throws ObjectNotFoundException, InvalidArgumentException, NoSuchAlgorithmException, IOException {
         final User user = serviceLocator.getUserService().loadUserByLogin(login);
         final String userPasswordHash = user.getPasswordHash();
         final String transferredPasswordHash = securityServerManager.getPasswordHash(password);

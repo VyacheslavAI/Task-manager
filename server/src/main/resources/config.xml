@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-    <!--<context:component-scan base-package="ru.ivanov.todoproject"/>-->
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
     <beans>
         <bean id="bootstrap" class="ru.ivanov.todoproject.bootstrap.Bootstrap"/>
@@ -15,7 +14,17 @@
         <bean class="ru.ivanov.todoproject.util.Serializer"/>
         <bean class="ru.ivanov.todoproject.util.EntityBoundMapperFacade"/>
         <bean class="ru.ivanov.todoproject.facesbean.AuthenticationBean"/>
+        <bean class="ru.ivanov.todoproject.facesbean.ProjectListBean"/>
+        <bean class="ru.ivanov.todoproject.facesbean.TaskListBean"/>
 
+        <jaxws:endpoint
+                id="project-list"
+                implementor="ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint"
+                address="/project-list"/>
 
+        <jaxws:endpoint
+                id="task-list"
+                implementor="ru.ivanov.todoproject.endpoint.TaskSOAPEndpoint"
+                address="/task-list"/>
     </beans>
 </beans>

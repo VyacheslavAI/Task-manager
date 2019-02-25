@@ -1,6 +1,5 @@
 package ru.ivanov.todoproject.webinitializer;
 
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 import ru.ivanov.todoproject.config.JpaConfig;
 import ru.ivanov.todoproject.config.WebApplicationConfig;
 

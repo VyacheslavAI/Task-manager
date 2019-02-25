@@ -58,7 +58,7 @@ public class ProjectListBean {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
-    public void deleteProject(final String id) throws ObjectNotFoundException, InvalidArgumentException, UnsupportedEncodingException, ObjectIsNotValidException {
+    public void deleteProject(final String id) throws ObjectNotFoundException, InvalidArgumentException, UnsupportedEncodingException {
         serviceLocator.getProjectService().deleteProject(id);
         updateProjectList();
         final FacesMessage message = new FacesMessage("Project Deleted", null);
