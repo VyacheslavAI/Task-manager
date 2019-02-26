@@ -3,10 +3,13 @@ package ru.ivanov.todoproject.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.ivanov.todoproject.api.ServiceLocator;
+import ru.ivanov.todoproject.dto.Result;
 import ru.ivanov.todoproject.entity.Project;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/project-rest")
@@ -21,16 +24,17 @@ public class ProjectRESTController {
     }
 
     @PostMapping(value = "/projectcreate")
-    public Project createProject(@RequestBody final String userId, @RequestBody final String projectName) throws ObjectIsNotValidException, InvalidArgumentException {
+    public Project createProject(@RequestBody final Result result) throws ObjectIsNotValidException, InvalidArgumentException {
         final Project project = new Project();
+        final String userId = result.get("userId");
+        final String projectName = result.get("projectName");
         project.setName(projectName);
-        System.out.println(userId);
-        System.out.println(projectName);
         return serviceLocator.getProjectService().createProject(userId, project);
     }
 
     @PutMapping("/projectupdate")
-    public Project updateProject(@RequestBody final Project project) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+    public Project updateProject(@RequestBody final Result result) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException {
+        
         return serviceLocator.getProjectService().updateProject(project);
     }
 
