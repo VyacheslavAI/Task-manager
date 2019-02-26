@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import ru.ivanov.todoproject.dto.ProjectDTO;
 import ru.ivanov.todoproject.dto.TaskDTO;
 import ru.ivanov.todoproject.entity.Project;
@@ -19,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Configuration
+@EnableWebMvc
 @ImportResource(locations = "classpath*:config.xml")
 @ComponentScan("ru.ivanov")
 public class RootApplicationConfig {

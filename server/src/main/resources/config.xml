@@ -17,6 +17,17 @@
         <bean class="ru.ivanov.todoproject.facesbean.ProjectListBean"/>
         <bean class="ru.ivanov.todoproject.facesbean.TaskListBean"/>
 
+        <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+            <property name="messageConverters">
+                <list>
+                    <ref bean="jsonMessageConverter"/>
+                </list>
+            </property>
+        </bean>
+
+        <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+
+
         <jaxws:endpoint
                 id="project-list"
                 implementor="ru.ivanov.todoproject.endpoint.ProjectSOAPEndpoint"

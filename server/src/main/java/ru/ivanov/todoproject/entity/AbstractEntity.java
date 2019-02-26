@@ -1,5 +1,8 @@
 package ru.ivanov.todoproject.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -27,6 +30,7 @@ public abstract class AbstractEntity implements Serializable {
         this.id = id;
     }
 
+    @JsonSerialize(using = DateSerializer.class)
     public Date getCreated() {
         return created;
     }

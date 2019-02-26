@@ -9,7 +9,7 @@ import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 
 @RestController
-@RequestMapping("/project-test")
+@RequestMapping("/project-rest")
 public class ProjectRESTController {
 
     @Autowired
@@ -20,10 +20,12 @@ public class ProjectRESTController {
         return new Project();
     }
 
-    @PostMapping("/projectcreate")
-    public Project createProject(final String userId, final String projectName) throws ObjectIsNotValidException, InvalidArgumentException {
+    @PostMapping(value = "/projectcreate")
+    public Project createProject(@RequestBody final String userId, @RequestBody final String projectName) throws ObjectIsNotValidException, InvalidArgumentException {
         final Project project = new Project();
         project.setName(projectName);
+        System.out.println(userId);
+        System.out.println(projectName);
         return serviceLocator.getProjectService().createProject(userId, project);
     }
 
