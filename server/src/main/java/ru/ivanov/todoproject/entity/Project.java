@@ -40,7 +40,6 @@ public class Project extends AbstractEntity {
     }
 
     public void setTasks(List<Task> tasks) {
-        this.tasks.clear();
-        if (tasks != null) this.tasks.addAll(tasks);
+        this.tasks = tasks;
     }
 }
