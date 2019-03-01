@@ -1,4 +1,4 @@
-package ru.ivanov.todoproject.controller;
+package ru.ivanov.todoproject.controller.restcontroller;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;

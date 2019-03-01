@@ -11,7 +11,7 @@ public class Task extends AbstractEntity {
 
     private String userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Project project;
 
     public Task() {

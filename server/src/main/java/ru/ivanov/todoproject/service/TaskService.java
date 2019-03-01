@@ -40,7 +40,11 @@ public class TaskService implements ITaskService {
     @Override
     public Task updateTask(final Task task) throws ObjectIsNotValidException {
         if (!validator.isTaskValid(task)) throw new ObjectIsNotValidException();
-        return taskRepository.save(task);
+        final Task persistentTask = taskRepository.getOne(task.getId());
+        persistentTask.setName(task.getName());
+        persistentTask.setUserId(task.getUserId());
+        persistentTask.setCreated(task.getCreated());
+        return taskRepository.save(persistentTask);
     }
 
     @Override
@@ -55,7 +59,7 @@ public class TaskService implements ITaskService {
     public Task findTaskById(final String taskId) throws InvalidArgumentException, ObjectNotFoundException {
         if (!Validator.isArgumentsValid(taskId)) throw new InvalidArgumentException();
         if (!taskRepository.existsById(taskId)) throw new ObjectNotFoundException();
-        return taskRepository.getOne(taskId);
+        return taskRepository.findTaskById(taskId);
     }
 
     @Override
