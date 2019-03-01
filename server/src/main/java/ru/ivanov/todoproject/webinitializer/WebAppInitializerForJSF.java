@@ -9,6 +9,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 import ru.ivanov.todoproject.config.JpaConfig;
 import ru.ivanov.todoproject.config.RootApplicationConfig;
+import ru.ivanov.todoproject.config.SecurityApplicationConfig;
 import ru.ivanov.todoproject.config.WebApplicationConfig;
 
 import javax.faces.webapp.FacesServlet;
@@ -24,6 +25,7 @@ public class WebAppInitializerForJSF extends FacesInitializer implements WebAppl
         context.register(RootApplicationConfig.class);
         context.register(JpaConfig.class);
         context.register(WebApplicationConfig.class);
+        context.register(SecurityApplicationConfig.class);
         context.setServletContext(servletContext);
         servletContext.addListener(new ContextLoaderListener(context));
         servletContext.addListener(new RequestContextListener());
