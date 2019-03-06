@@ -1,41 +1,41 @@
 package ru.ivanov.todoproject.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-//@Import(RootApplicationConfig.class)
 public class SecurityApplicationConfig extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(final AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        authenticationManagerBuilder.inMemoryAuthentication()
-                .withUser("user")
-                .password(passwordEncoder.encode("user"))
-                .roles("USER");
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests()
-                .anyRequest()
-                .authenticated()
+        httpSecurity.authorizeRequests().anyRequest().hasAnyRole("ADMIN", "USER")
                 .and()
-                .httpBasic()
+                .authorizeRequests().antMatchers("/login**").permitAll()
                 .and()
-                .formLogin()
+                .formLogin().loginPage("/login").loginProcessingUrl("/loginAction").permitAll()
+                .and()
+                .logout().logoutSuccessUrl("/login").permitAll()
                 .and()
                 .csrf().disable();
     }
