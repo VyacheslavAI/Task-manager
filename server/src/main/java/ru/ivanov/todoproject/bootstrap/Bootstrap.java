@@ -23,9 +23,6 @@ public class Bootstrap implements ServiceLocator {
     private IUserService userService;
 
     @Inject
-    private ISessionService sessionService;
-
-    @Inject
     private Serializer serializer;
 
     @PostConstruct
@@ -47,10 +44,5 @@ public class Bootstrap implements ServiceLocator {
     @Override
     public ITaskService getTaskService() {
         return taskService;
-    }
-
-    @Override
-    public ISessionService getSessionService() {
-        return sessionService;
     }
 }

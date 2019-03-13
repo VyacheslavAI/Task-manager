@@ -3,9 +3,12 @@ package ru.ivanov.todoproject.facesbean;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Project;
+import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
@@ -15,10 +18,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 
 @ManagedBean
@@ -32,14 +33,18 @@ public class ProjectListBean {
 
     private List<Project> projectList;
 
-    public String getCookieValue() throws UnsupportedEncodingException {
-        final ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        final Cookie cookie = (Cookie) context.getRequestCookieMap().get("userId");
-        if (cookie == null) throw new RuntimeException();
-        return URLDecoder.decode(cookie.getValue(), "UTF-8");
+    public String getCookieValue() throws UnsupportedEncodingException, ObjectNotFoundException, InvalidArgumentException {
+//        final ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+//        final Cookie cookie = (Cookie) context.getRequestCookieMap().get("userId");
+//        if (cookie == null) throw new RuntimeException();
+//        return URLDecoder.decode(cookie.getValue(), "UTF-8");
+
+        final UserDetails details = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = serviceLocator.getUserService().loadUserByLogin(details.getUsername());
+        return user.getId();
     }
 
-    public void updateProjectList() throws InvalidArgumentException, UnsupportedEncodingException {
+    public void updateProjectList() throws InvalidArgumentException, UnsupportedEncodingException, ObjectNotFoundException {
         final String userId = getCookieValue();
         projectList = serviceLocator.getProjectService().findAllUserProject(userId);
     }
@@ -49,7 +54,7 @@ public class ProjectListBean {
         context.redirect(context.getRequestContextPath() + "/project-list");
     }
 
-    public void createProject() throws UnsupportedEncodingException, ObjectIsNotValidException, InvalidArgumentException {
+    public void createProject() throws UnsupportedEncodingException, ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException {
         final String userId = getCookieValue();
         final Project project = new Project();
         serviceLocator.getProjectService().createProject(userId, project);
@@ -60,7 +65,12 @@ public class ProjectListBean {
 
     public void deleteProject(final String id) throws ObjectNotFoundException, InvalidArgumentException, UnsupportedEncodingException {
         serviceLocator.getProjectService().deleteProject(id);
-        updateProjectList();
+//        updateProjectList();
+        Project project = null;
+        for (Project test : projectList)
+            if (test.getId().equals(id))
+                project = test;
+        projectList.remove(project);
         final FacesMessage message = new FacesMessage("Project Deleted", null);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }

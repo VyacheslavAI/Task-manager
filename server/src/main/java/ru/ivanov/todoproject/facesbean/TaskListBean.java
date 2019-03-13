@@ -3,9 +3,12 @@ package ru.ivanov.todoproject.facesbean;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.ivanov.todoproject.api.ServiceLocator;
 import ru.ivanov.todoproject.entity.Task;
+import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
@@ -34,19 +37,23 @@ public class TaskListBean {
 
     private String projectId;
 
-    public String getCookieValue() throws UnsupportedEncodingException {
-        final ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        final Cookie cookie = (Cookie) context.getRequestCookieMap().get("userId");
-        if (cookie == null) throw new RuntimeException();
-        return URLDecoder.decode(cookie.getValue(), "UTF-8");
+    public String getCookieValue() throws UnsupportedEncodingException, ObjectNotFoundException, InvalidArgumentException {
+//        final ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+//        final Cookie cookie = (Cookie) context.getRequestCookieMap().get("userId");
+//        if (cookie == null) throw new RuntimeException();
+//        return URLDecoder.decode(cookie.getValue(), "UTF-8");
+
+        final UserDetails details = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final User user = serviceLocator.getUserService().loadUserByLogin(details.getUsername());
+        return user.getId();
     }
 
-    public void updateTaskList(final String projectId) throws InvalidArgumentException, UnsupportedEncodingException, ObjectIsNotValidException {
+    public void updateTaskList(final String projectId) throws InvalidArgumentException, UnsupportedEncodingException, ObjectIsNotValidException, ObjectNotFoundException {
         final String userId = getCookieValue();
         taskList = serviceLocator.getTaskService().findAllTaskByProject(userId, projectId);
     }
 
-    public void showTasks(final String projectId) throws ObjectIsNotValidException, IOException, InvalidArgumentException {
+    public void showTasks(final String projectId) throws ObjectIsNotValidException, IOException, InvalidArgumentException, ObjectNotFoundException {
         this.projectId = projectId;
         updateTaskList(projectId);
         final ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();

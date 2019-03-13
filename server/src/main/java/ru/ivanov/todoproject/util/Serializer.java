@@ -18,7 +18,6 @@ public class Serializer {
         domain.setProjects(serviceLocator.getProjectService().findAllProject());
         domain.setTasks(serviceLocator.getTaskService().findAllTask());
         domain.setUsers(serviceLocator.getUserService().loadAllUser());
-        domain.setSessions(serviceLocator.getSessionService().findAllSession());
         return domain;
     }
 
@@ -26,7 +25,6 @@ public class Serializer {
         serviceLocator.getUserService().addAllUser(domain.getUsers());
         serviceLocator.getProjectService().addAllProject(domain.getProjects());
         serviceLocator.getTaskService().addAllTask(domain.getTasks());
-        serviceLocator.getSessionService().addAllSession(domain.getSessions());
     }
 
     public void saveApplicationDataInBinary(final ServiceLocator serviceLocator) {

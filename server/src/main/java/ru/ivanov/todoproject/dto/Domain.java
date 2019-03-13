@@ -1,7 +1,6 @@
 package ru.ivanov.todoproject.dto;
 
 import ru.ivanov.todoproject.entity.Project;
-import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
@@ -15,8 +14,6 @@ public class Domain implements Serializable {
     private List<Task> tasks;
 
     private List<User> users;
-
-    private List<Session> sessions;
 
     public List<Project> getProjects() {
         return projects;
@@ -40,14 +37,6 @@ public class Domain implements Serializable {
 
     public void setUsers(List<User> users) {
         this.users = users;
-    }
-
-    public List<Session> getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(List<Session> sessions) {
-        this.sessions = sessions;
     }
 
     public Domain() {

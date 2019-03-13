@@ -1,6 +1,7 @@
 package ru.ivanov.todoproject.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
@@ -27,5 +28,5 @@ public interface IUserService {
 
     boolean deleteAllUser();
 
-    void userInitialize(String login, String password) throws NoSuchAlgorithmException, JsonProcessingException, ObjectIsNotValidException, InvalidArgumentException, ObjectNotFoundException;
+    void userInitialize(String login, String password) throws ObjectIsNotValidException, InvalidArgumentException, NoSuchAlgorithmException, ObjectNotFoundException;
 }

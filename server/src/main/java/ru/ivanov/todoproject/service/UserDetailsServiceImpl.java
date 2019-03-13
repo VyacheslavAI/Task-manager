@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         for (final Authority authority : user.getAuthorities()) {
             authorities.add(authority.getAuthority());
         }
-        userBuilder.authorities(authorities.toArray(new String[authorities.size()]));
+        userBuilder.authorities(authorities.toArray(new String[0]));
         return userBuilder.build();
     }
 }

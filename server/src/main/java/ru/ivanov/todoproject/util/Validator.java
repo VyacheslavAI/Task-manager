@@ -1,7 +1,6 @@
 package ru.ivanov.todoproject.util;
 
 import ru.ivanov.todoproject.entity.Project;
-import ru.ivanov.todoproject.entity.Session;
 import ru.ivanov.todoproject.entity.Task;
 import ru.ivanov.todoproject.entity.User;
 
@@ -34,18 +33,6 @@ public class Validator {
         if (id == null || id.isEmpty()) return false;
         if (login == null || login.isEmpty()) return false;
         return passwordHash != null;
-    }
-
-    public boolean isSessionValid(final Session session) {
-        if (session == null) return false;
-        final String id = session.getId();
-        final long timestamp = session.getTimestamp();
-        final String userId = session.getUserId();
-        final String signature = session.getSignature();
-        if (id == null || id.isEmpty()) return false;
-        if (timestamp <= 0) return false;
-        if (userId == null) return false;
-        return signature != null && !signature.isEmpty();
     }
 
     public static boolean isArgumentsValid(String...args) {

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/classic/theme-classic/resources/theme-classic-all.css"
+          rel="stylesheet"/>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/extjs/6.0.0/ext-all.js"></script>
+
+    <script type="text/javascript">
+
+
+        Ext.define('Project', {
+            extend: 'Ext.data.Model',
+            fields: ['name', 'userId', 'id', 'created'],
+
+            proxy: {
+                type: 'rest',
+                url: 'http://localhost:8080/disp/project-rest/projectcreate',
+                appendId: false
+            }
+        });
+
+        Ext.onReady(function () {
+
+            var gridStore = Ext.create('Ext.data.JsonStore', {
+                autoLoad: true,
+                autoSync: true,
+                model: 'Project',
+                proxy: {
+                    type: 'rest',
+                    url: 'disp/project-rest/projectlist/f1c46dbd-d06b-4784-893c-3b67b0e9da90',
+                    writer: {
+                        writeAllFields: true
+                    },
+                    api: {
+                        create: 'disp/project-rest/projectcreate',
+                        read: 'disp/project-rest/projectlist/f1c46dbd-d06b-4784-893c-3b67b0e9da90',
+                        update: 'disp/project-rest/projectupdate',
+                        destroy: 'disp/project-rest/projectdelete'
+                    }
+                }
+            });
+
+            var rowEditing = Ext.create('Ext.grid.plugin.RowEditing');
+
+            var grid = Ext.create('Ext.grid.Panel', {
+                id: 'gridId',
+                store: gridStore,
+                region: 'center',
+                stripeRows: true,
+                title: 'Project Grid',  // Title for the grid
+                renderTo: 'gridDiv',         // Div id where the grid has to be rendered
+                plugins: [
+                    Ext.create('Ext.grid.plugin.RowEditing', {
+                        clicksToEdit: 2,
+
+                        listeners: {
+                            edit: {
+                                fn: function (editor, e) {
+                                }
+                            }
+                        }
+
+                    })
+                ],
+                frame: true,
+                width: 1200,
+                height: 500,
+                collapsible: true,             // property to collapse grid
+                enableColumnMove: true,              // property which allows column to move to different position by dragging that column.
+                enableColumnResize: true,        // property which allows to resize column run time.
+
+                columns:
+                    [{
+                        header: "Id",
+                        dataIndex: 'id',
+                        id: 'id',
+                        flex: .5,
+                        sortable: true,
+                        hideable: true
+                    }, {
+                        header: "Name",
+                        dataIndex: 'name',
+                        flex: .5,
+                        sortable: true,
+                        hideable: false,   // this column will not be available to be hidden.
+                        editor: {
+                            xtype: 'textfield',
+                            allowBlank: false
+                        }
+                    }, {
+                        header: "UserId",
+                        dataIndex: 'userId',
+                        id: 'userId',
+                        flex: .5,
+                        sortable: true,
+                        editor: {
+                            xtype: 'textfield',
+                            allowBlank: false
+                        }
+                    }, {
+                        header: 'Created',
+                        dataIndex: 'created',
+                        xtype:'datecolumn',
+                        // format: 'd/m/Y',
+                        flex: .5,
+                        editor: {
+                            xtype: 'datefield',
+                            allowBlank: true
+                        }
+                    }],
+                dockedItems: [{
+                    xtype: 'toolbar',
+                    items: [{
+                        text: 'Add',
+                        iconCls: 'icon-add',
+                        handler: function () {
+                            var project = Ext.create('Project', {
+                                userId: 'f1c46dbd-d06b-4784-893c-3b67b0e9da90',
+                                projectName: 'no name ext'
+                            });
+                            gridStore.insert(0, project);
+                        }
+                    }, '-', {
+                        text: 'Delete',
+                        iconCls: 'icon-delete',
+                        handler: function () {
+                            var selection = grid.getView().getSelectionModel().getSelection()[0];
+                            if (selection) {
+                                gridStore.remove(selection);
+                            }
+                        }
+                    }]
+                }]
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div id="gridDiv"></div>
+</body>
+</html>

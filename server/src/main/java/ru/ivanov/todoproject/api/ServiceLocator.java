@@ -7,7 +7,5 @@ public interface ServiceLocator {
     IProjectService getProjectService();
 
     ITaskService getTaskService();
-
-    ISessionService getSessionService();
 }
 

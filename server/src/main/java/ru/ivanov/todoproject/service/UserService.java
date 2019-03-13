@@ -1,21 +1,23 @@
 package ru.ivanov.todoproject.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ivanov.todoproject.api.IUserService;
 import ru.ivanov.todoproject.api.ServiceLocator;
-import ru.ivanov.todoproject.entity.Session;
+import ru.ivanov.todoproject.entity.Authority;
 import ru.ivanov.todoproject.entity.User;
 import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 import ru.ivanov.todoproject.repository.IUserRepository;
-import ru.ivanov.todoproject.security.SecurityServerManager;
 import ru.ivanov.todoproject.util.Validator;
 
 import javax.inject.Inject;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 public class UserService implements IUserService {
@@ -25,9 +27,6 @@ public class UserService implements IUserService {
 
     @Inject
     private ServiceLocator serviceLocator;
-
-    @Inject
-    private SecurityServerManager securityManager;
 
     @Inject
     private Validator validator;
@@ -91,16 +90,21 @@ public class UserService implements IUserService {
         if (!Validator.isArgumentsValid(login, password)) throw new InvalidArgumentException();
         if (isUserExists(login)) return;
         final User user = new User();
-        final String hashPassword = securityManager.getPasswordHash(password);
         user.setLogin(login);
-        user.setPasswordHash(hashPassword);
-        final Session session = new Session();
-        final long currentTimeMillis = System.currentTimeMillis();
-        session.setTimestamp(currentTimeMillis);
-        session.setUserId(user.getId());
-        session.setSignature(securityManager.sign(session));
+        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPasswordHash(encoder.encode(password));
+        final Set<Authority> authoritySet = new HashSet<>();
+        final Authority adminAuthority = new Authority();
+        adminAuthority.setAuthority("ROLE_ADMIN");
+        adminAuthority.setUser(user);
+        final Authority userAuthority = new Authority();
+        userAuthority.setAuthority("ROLE_USER");
+        userAuthority.setUser(user);
+        authoritySet.add(adminAuthority);
+        authoritySet.add(userAuthority);
+        user.setAuthorities(authoritySet);
+        user.setEnabled(true);
         createUser(user);
-        serviceLocator.getSessionService().createSession(session);
     }
 
     private boolean isUserExists(final String login) {
