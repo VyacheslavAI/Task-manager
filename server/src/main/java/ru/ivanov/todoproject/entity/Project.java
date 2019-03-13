@@ -13,7 +13,7 @@ public class Project extends AbstractEntity {
 
     private String userId;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "project", fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "project", fetch = FetchType.EAGER)
     private List<Task> tasks;
 
     public Project() {

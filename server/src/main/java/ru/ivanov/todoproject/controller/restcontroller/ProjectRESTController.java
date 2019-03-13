@@ -33,20 +33,21 @@ public class ProjectRESTController {
     }
 
     @PostMapping(value = "/projectcreate")
-    public Project createProject(@RequestBody final Result result) throws ObjectIsNotValidException, InvalidArgumentException {
+    public ProjectDTO createProject(@RequestBody final Result result) throws ObjectIsNotValidException, InvalidArgumentException {
         final Project project = new Project();
         final String userId = (String) result.get("userId");
         final String projectName = (String) result.get("projectName");
         project.setName(projectName);
-        return serviceLocator.getProjectService().createProject(userId, project);
+        return entityBoundMapperFacade.getProjectDTO(serviceLocator.getProjectService().createProject(userId, project));
     }
 
     @PutMapping("/projectupdate/{id}")
-    public Project updateProject(@PathVariable final String id, @RequestBody final ProjectDTO result, final ObjectMapper objectMapper) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException, IOException {
+    public ProjectDTO updateProject(@PathVariable final String id, @RequestBody final ProjectDTO result, final ObjectMapper objectMapper) throws ObjectIsNotValidException, ObjectNotFoundException, InvalidArgumentException, IOException {
         final Project persistentProject = serviceLocator.getProjectService().findProjectById(result.getUserId(), result.getId());
         persistentProject.setName(result.getName());
         persistentProject.setUserId(result.getUserId());
-        return serviceLocator.getProjectService().updateProject(persistentProject);
+        persistentProject.setCreated(result.getCreated());
+        return entityBoundMapperFacade.getProjectDTO(serviceLocator.getProjectService().updateProject(persistentProject));
     }
 
     @GetMapping("/projectread/{userId}/{projectId}")

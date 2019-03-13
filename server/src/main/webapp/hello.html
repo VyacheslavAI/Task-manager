@@ -11,7 +11,7 @@
 
         Ext.define('Project', {
             extend: 'Ext.data.Model',
-            fields: ['name', 'userId', 'id', 'created'],
+            fields: ['name', 'userId', 'id', {name: 'created', type: 'date', dateFormat: 'Y-m-d H:i:s'}],
 
             proxy: {
                 type: 'rest',
@@ -41,7 +41,7 @@
                 }
             });
 
-            var rowEditing = Ext.create('Ext.grid.plugin.RowEditing');
+            var rowEditing = Ext.create('Ext.grid.plugin.CellEditing');
 
             var grid = Ext.create('Ext.grid.Panel', {
                 id: 'gridId',
@@ -51,7 +51,7 @@
                 title: 'Project Grid',  // Title for the grid
                 renderTo: 'gridDiv',         // Div id where the grid has to be rendered
                 plugins: [
-                    Ext.create('Ext.grid.plugin.RowEditing', {
+                    Ext.create('Ext.grid.plugin.CellEditing', {
                         clicksToEdit: 2,
 
                         listeners: {
@@ -101,12 +101,13 @@
                     }, {
                         header: 'Created',
                         dataIndex: 'created',
-                        xtype:'datecolumn',
-                        format: 'd/m/Y',
+                        renderer: Ext.util.Format.dateRenderer('Y-m-d H:i:s'),
                         flex: .5,
                         editor: {
+                            editable: false,
                             xtype: 'datefield',
-                            allowBlank: true
+                            allowBlank: false,
+                            minValue: Ext.Date.add(new Date())
                         }
                     }],
                 dockedItems: [{
