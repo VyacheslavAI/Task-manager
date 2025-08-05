@@ -1,0 +1,10 @@
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/config/WebConfig.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/controller/MyController.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/entity/User.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/repository/MyRepository.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/repository/UserRepository.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/servlet/MyAnnotatedServlet.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/servlet/MyServlet.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/webinitializer/AnnotationWebInitializer.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/webinitializer/MyDispatcherInitializer.java
+/home/runner/work/Task-manager/Task-manager/springWeb/src/main/java/com/slava/webinitializer/XmlWebInitializer.java

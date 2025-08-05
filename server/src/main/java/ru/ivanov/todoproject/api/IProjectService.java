@@ -5,7 +5,7 @@ import ru.ivanov.todoproject.exception.InvalidArgumentException;
 import ru.ivanov.todoproject.exception.ObjectIsNotValidException;
 import ru.ivanov.todoproject.exception.ObjectNotFoundException;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.util.List;
 
 public interface IProjectService {
