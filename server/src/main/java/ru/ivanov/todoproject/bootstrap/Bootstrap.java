@@ -29,6 +29,25 @@ public class Bootstrap implements ServiceLocator {
     private void userInitialization() throws InvalidArgumentException, NoSuchAlgorithmException, ObjectIsNotValidException, JsonProcessingException, ObjectNotFoundException {
         userService.userInitialize("admin", "admin");
         userService.userInitialize("root", "root");
+        
+        // Demonstrate Cyrillic text support by creating a project with Cyrillic name
+        initializeCyrillicDemo();
+    }
+    
+    private void initializeCyrillicDemo() {
+        try {
+            // Create a demo project with Cyrillic name "цвфц"
+            ru.ivanov.todoproject.entity.Project cyrillicProject = new ru.ivanov.todoproject.entity.Project();
+            cyrillicProject.setName("цвфц");
+            cyrillicProject.setUserId("admin");
+            
+            projectService.createProject("admin", cyrillicProject);
+            
+            System.out.println("Successfully created demo project with Cyrillic name: цвфц");
+        } catch (Exception e) {
+            System.err.println("Failed to create Cyrillic demo project: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
