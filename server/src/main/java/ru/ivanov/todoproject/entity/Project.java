@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Project extends AbstractEntity {
 
-    private String name = "no name";
+    private String name = "цйупц";
 
     private String userId;
 

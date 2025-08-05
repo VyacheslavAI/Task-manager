@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Task extends AbstractEntity {
 
-    private String name = "no name";
+    private String name = "цйупц";
 
     private String userId;
 
